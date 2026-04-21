@@ -49,13 +49,14 @@ Plans:
   3. Developer can run migrations that create durable tables for wallets, scans, trades, simulations, prices, correlations, notifications, heartbeats, and validation evidence.
   4. Developer can rely on transactional repository methods and schema uniqueness for idempotent writes and restart safety.
   5. Developer can inspect a validation index that assigns every `VAL-*` assertion to one owner phase and evidence path.
-**Plans**: 5 plans
+**Plans**: 6 plans
 Plans:
 - [ ] 02-01-PLAN.md — Create typed settings, central redaction, and safe startup integration.
 - [ ] 02-02-PLAN.md — Create zero-execution scans and reconcile active/disabled environment contracts.
-- [ ] 02-03-PLAN.md — Create SQLAlchemy/Alembic schema metadata and baseline migration.
-- [ ] 02-04-PLAN.md — Create idempotent repository primitives for wallets, trades, watermarks, simulations, notifications, and validation evidence.
-- [ ] 02-05-PLAN.md — Create Redis coordination locks, heartbeat repository, validation index coverage, and integrated checks.
+- [ ] 02-03-PLAN.md — Create database dependency, session, and Alembic substrate.
+- [ ] 02-04-PLAN.md — Create SQLAlchemy schema metadata, baseline migration, and schema coverage tests.
+- [ ] 02-05-PLAN.md — Create idempotent repository primitives for wallets, trades, watermarks, simulations, notifications, and validation evidence.
+- [ ] 02-06-PLAN.md — Create Redis coordination locks, heartbeat repository, validation index coverage, and integrated checks.
 
 ### Phase 3: Provider Fixtures & Domain Math
 **Goal**: Provider parsing and financial calculations are deterministic before worker behavior depends on them.
@@ -159,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
-| 2. Safety, Configuration & Data Backbone | 0/5 | Not started | - |
+| 2. Safety, Configuration & Data Backbone | 0/6 | Not started | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
 | 5. Trade Tracker | 0/TBD | Not started | - |

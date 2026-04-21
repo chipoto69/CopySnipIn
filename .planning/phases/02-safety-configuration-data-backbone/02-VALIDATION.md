@@ -42,13 +42,15 @@ created: 2026-04-21
 | 02-01-02 | 01 | 1 | SAFE-01, SAFE-05 | T-02-01 | Missing/invalid active settings fail with redacted errors and inactive variables stay outside startup requirements | unit | `uv run pytest tests/copysnipin/test_config.py tests/copysnipin/test_redaction.py -q` | W0 | pending |
 | 02-02-01 | 02 | 2 | SAFE-03 | T-02-04 | No active route, command, import, or config path can execute trades; policy declaration self-match is narrowly excluded | static/unit | `uv run pytest tests/copysnipin/test_zero_execution.py tests/copysnipin/test_safety_scaffold.py -q` | W0 | pending |
 | 02-02-02 | 02 | 2 | SAFE-04, SAFE-05 | T-02-05 | Active and disabled env vars are explicitly reconciled | unit/docs | `uv run pytest tests/copysnipin/test_environment_contract.py -q` | W0 | pending |
-| 02-03-01 | 03 | 2 | DATA-01 | T-02-06 | SQLAlchemy/Alembic substrate imports cleanly without live DB | unit/schema | `uv run python -c "from copysnipin.db.models import Base; print(Base.metadata.naming_convention)"` | W0 | pending |
-| 02-03-02 | 03 | 2 | DATA-01 | T-02-06 | Required durable tables and constraints exist in metadata/migration | unit/schema | `uv run pytest tests/copysnipin/test_db_metadata.py -q` | W0 | pending |
-| 02-04-01 | 04 | 3 | DATA-02 | T-02-09 | Wallet, trade, and watermark repository writes are transactional and idempotent | unit | `uv run pytest tests/copysnipin/test_repositories.py -q` | W0 | pending |
-| 02-04-02 | 04 | 3 | DATA-02 | T-02-09 | Simulation, notification, and validation evidence repository writes are transactional and idempotent | unit | `uv run pytest tests/copysnipin/test_repositories.py -q` | W0 | pending |
-| 02-05-01 | 05 | 4 | DATA-03 | T-02-12 | Redis locks use owner tokens and do not store durable state | unit | `uv run pytest tests/copysnipin/test_redis_locks.py -q` | W0 | pending |
-| 02-05-02 | 05 | 4 | DATA-04 | T-02-13 | Heartbeat rows persist success/error/degraded freshness state | unit | `uv run pytest tests/copysnipin/test_heartbeats.py -q` | W0 | pending |
-| 02-05-03 | 05 | 4 | VAL-01 | T-02-14 | Every validation assertion has exactly one owner/evidence row | unit/docs | `uv run pytest tests/copysnipin/test_validation_index.py -q` | W0 | pending |
+| 02-03-01 | 03 | 2 | DATA-01 | T-02-06 | SQLAlchemy/Alembic dependencies are locked through uv | import/unit | `uv run python -c "import sqlalchemy, alembic, psycopg; print(sqlalchemy.__version__)"` | W0 | pending |
+| 02-03-02 | 03 | 2 | DATA-01 | T-02-06 | SQLAlchemy/Alembic substrate imports cleanly without live DB | unit/schema | `uv run python -c "from copysnipin.db.models import Base; print(Base.metadata.naming_convention)"` | W0 | pending |
+| 02-04-01 | 04 | 3 | DATA-01 | T-02-06 | Required durable table metadata and uniqueness/index contracts exist | unit/schema | `uv run pytest tests/copysnipin/test_db_metadata.py -q` | W0 | pending |
+| 02-04-02 | 04 | 3 | DATA-01 | T-02-06 | Baseline migration covers required tables and constraints without live DB | unit/schema | `uv run pytest tests/copysnipin/test_db_metadata.py -q` | W0 | pending |
+| 02-05-01 | 05 | 4 | DATA-02 | T-02-10 | Wallet, trade, and watermark repository writes are transactional and idempotent | unit | `uv run pytest tests/copysnipin/test_repositories.py -q` | W0 | pending |
+| 02-05-02 | 05 | 4 | DATA-02 | T-02-10 | Simulation, notification, and validation evidence repository writes are transactional and idempotent | unit | `uv run pytest tests/copysnipin/test_repositories.py -q` | W0 | pending |
+| 02-06-01 | 06 | 5 | DATA-03 | T-02-13 | Redis locks use owner tokens and do not store durable state | unit | `uv run pytest tests/copysnipin/test_redis_locks.py -q` | W0 | pending |
+| 02-06-02 | 06 | 5 | DATA-04 | T-02-14 | Heartbeat rows persist success/error/degraded freshness state | unit | `uv run pytest tests/copysnipin/test_heartbeats.py -q` | W0 | pending |
+| 02-06-03 | 06 | 5 | VAL-01 | T-02-15 | Every validation assertion has exactly one owner/evidence row | unit/docs | `uv run pytest tests/copysnipin/test_validation_index.py -q` | W0 | pending |
 
 *Status: pending until execution creates the referenced tests and code.*
 
