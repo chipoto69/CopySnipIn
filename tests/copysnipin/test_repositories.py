@@ -10,7 +10,10 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql.dml import Insert
 
 from copysnipin.repositories import RepositoryWriteResult
+from copysnipin.repositories.notifications import NotificationRepository
+from copysnipin.repositories.simulations import SimulationRepository
 from copysnipin.repositories.trades import TradeRepository
+from copysnipin.repositories.validation import ValidationEvidenceRepository
 from copysnipin.repositories.wallets import WalletRepository
 from copysnipin.repositories.watermarks import WatermarkRepository
 
@@ -169,3 +172,101 @@ def test_watermark_writes_use_wallet_component_source_conflict_target(
         "uq_watermarks_wallet_id_component_source DO UPDATE"
     ) in sql
     assert "RETURNING watermarks.id" in sql
+
+
+def test_simulation_portfolio_upsert_uses_name_conflict_target() -> None:
+    factory = RecordingSessionFactory()
+    repository = SimulationRepository(factory)
+
+    result = repository.upsert_portfolio(
+        name="fixed-25",
+        strategy="fixed_amount",
+        seed_amount_usd=Decimal("1000"),
+        cash_balance_usd=Decimal("1000"),
+        status="active",
+    )
+
+    statement = assert_single_transaction(factory, result)
+    sql = normalize_sql(statement)
+
+    assert "INSERT INTO simulation_portfolios" in sql
+    assert (
+        "ON CONFLICT ON CONSTRAINT uq_simulation_portfolios_name DO UPDATE"
+    ) in sql
+    assert "RETURNING simulation_portfolios.id" in sql
+
+
+def test_simulated_trade_record_uses_source_trade_conflict_target() -> None:
+    factory = RecordingSessionFactory()
+    repository = SimulationRepository(factory)
+
+    result = repository.record_simulated_trade(
+        portfolio_id=3,
+        source_trade_id=11,
+        wallet_id=7,
+        market_id="market-1",
+        side="BUY",
+        simulated_size=Decimal("10"),
+        simulated_price=Decimal("0.42"),
+        notional_usd=Decimal("4.20"),
+        realized_pnl_usd=None,
+        skipped_reason=None,
+    )
+
+    statement = assert_single_transaction(factory, result)
+    sql = normalize_sql(statement)
+
+    assert "INSERT INTO simulated_trades" in sql
+    assert (
+        "ON CONFLICT ON CONSTRAINT "
+        "uq_simulated_trades_portfolio_id_source_trade_id DO UPDATE"
+    ) in sql
+    assert "RETURNING simulated_trades.id" in sql
+
+
+def test_notification_record_uses_idempotency_key_without_provider_calls() -> None:
+    factory = RecordingSessionFactory()
+    repository = NotificationRepository(factory)
+
+    result = repository.record_notification_attempt(
+        wallet_id=7,
+        channel="discord",
+        event_type="wallet_qualified",
+        idempotency_key="wallet-7:scan-3",
+        status="failed",
+        sent_at=None,
+        error_message="webhook unavailable",
+        payload_ref="scan-3",
+    )
+
+    statement = assert_single_transaction(factory, result)
+    sql = normalize_sql(statement)
+
+    assert repository.__dict__ == {"_session_factory": factory}
+    assert "INSERT INTO notifications" in sql
+    assert "ON CONFLICT ON CONSTRAINT uq_notifications_idempotency_key DO UPDATE" in sql
+    assert "RETURNING notifications.id" in sql
+
+
+def test_validation_evidence_upsert_uses_assertion_evidence_conflict_target() -> None:
+    factory = RecordingSessionFactory()
+    repository = ValidationEvidenceRepository(factory)
+
+    result = repository.upsert_evidence(
+        assertion_id="VAL-TRACK-04",
+        evidence_key="pytest:dedupe",
+        owner_phase="05",
+        status="passing",
+        evidence_path="tests/copysnipin/test_repositories.py",
+        details={"command": "uv run pytest tests/copysnipin/test_repositories.py"},
+    )
+
+    statement = assert_single_transaction(factory, result)
+    sql = normalize_sql(statement)
+
+    assert "INSERT INTO validation_evidence" in sql
+    assert (
+        "ON CONFLICT ON CONSTRAINT "
+        "uq_validation_evidence_assertion_id_evidence_key DO UPDATE"
+    ) in sql
+    assert "RETURNING validation_evidence.id" in sql
