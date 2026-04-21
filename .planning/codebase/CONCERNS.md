@@ -10,15 +10,17 @@
 - Impact: Future agents can accidentally treat scaffold entry points as implemented scanner, tracker, simulator, Pyth, API read-model, or dashboard behavior.
 - Fix approach: Preserve explicit `status=scaffold` and `not_implemented` states until the owner phase replaces each stub with tested behavior.
 
+## Recently Resolved
+
 **Hard-coded checkout path mismatch (RESOLVED):**
 - Issue: Project commands pointed to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
-- Files: `.factory/init.sh`, `.factory/services.yaml`
-- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. `.factory/services.yaml` commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. The hard-coded path has been removed.
+- Files: `AGENTS.md`, `.factory/init.sh`, `.factory/services.yaml`
+- Resolution: Fixed using `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` pattern with script-directory fallback in `.factory/init.sh` and `ROOT="$(git rev-parse --show-toplevel)"` pattern in `.factory/services.yaml`.
 
 **Factory service commands portability (RESOLVED - Plan 03 completed):**
-- Issue: Factory commands required `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and used the old absolute checkout path.
-- Files: `.factory/services.yaml`, `.factory/init.sh`
-- Resolution: Plan 03 replaced absolute paths with repository-root discovery. All factory commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. Commands work correctly from the active workspace.
+- Issue: Factory commands required `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and the package tooling now exists, but the factory commands used the old absolute checkout path.
+- Files: `.factory/services.yaml`, `.factory/init.sh`, `AGENTS.md`, `.factory/skills/python-worker/SKILL.md`
+- Resolution: Plan 03 replaced absolute paths with repository-root discovery using the `ROOT="$(git rev-parse --show-toplevel)"` pattern and verified commands work from the active workspace.
 
 **Validation contract surface is far larger than the current project substrate:**
 - Issue: The validation docs define 148 unique assertion IDs across dashboard, Pyth, cross-area flows, scanner, tracker, and simulation, but no test harness or source implementation is tracked.
@@ -58,10 +60,10 @@
 - Trigger: A dead scanner or dashboard can still appear healthy if the API is healthy or the echo command succeeds.
 - Workaround: Add process-specific health signals, such as scanner heartbeat state and dashboard launch/snapshot checks.
 
-**Factory init directory resolution (RESOLVED):**
+**Factory init portability (RESOLVED):**
 - Symptoms: `.factory/init.sh` changed directory to the hard-coded organized checkout path before checking tools, database, dependencies, or `.env`.
 - Files: `.factory/init.sh`
-- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. The hard-coded `PROJECT_DIR` has been replaced with repository-root discovery.
+- Resolution: Replaced the hard-coded `PROJECT_DIR` with repository-root discovery using `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback.
 
 ## Security Considerations
 
