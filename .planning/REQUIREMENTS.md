@@ -150,78 +150,81 @@ Explicitly excluded from v1.
 
 ## Traceability
 
-Initial mapping for roadmap creation. Roadmapper may refine phase names and statuses.
+Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one phase.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUND-01 | TBD | Pending |
-| FOUND-02 | TBD | Pending |
-| FOUND-03 | TBD | Pending |
-| FOUND-04 | TBD | Pending |
-| FOUND-05 | TBD | Pending |
-| SAFE-01 | TBD | Pending |
-| SAFE-02 | TBD | Pending |
-| SAFE-03 | TBD | Pending |
-| SAFE-04 | TBD | Pending |
-| SAFE-05 | TBD | Pending |
-| DATA-01 | TBD | Pending |
-| DATA-02 | TBD | Pending |
-| DATA-03 | TBD | Pending |
-| DATA-04 | TBD | Pending |
-| MATH-01 | TBD | Pending |
-| MATH-02 | TBD | Pending |
-| MATH-03 | TBD | Pending |
-| MATH-04 | TBD | Pending |
-| MATH-05 | TBD | Pending |
-| MATH-06 | TBD | Pending |
-| SCAN-01 | TBD | Pending |
-| SCAN-02 | TBD | Pending |
-| SCAN-03 | TBD | Pending |
-| SCAN-04 | TBD | Pending |
-| SCAN-05 | TBD | Pending |
-| SCAN-06 | TBD | Pending |
-| SCAN-07 | TBD | Pending |
-| TRACK-01 | TBD | Pending |
-| TRACK-02 | TBD | Pending |
-| TRACK-03 | TBD | Pending |
-| TRACK-04 | TBD | Pending |
-| TRACK-05 | TBD | Pending |
-| TRACK-06 | TBD | Pending |
-| SIM-01 | TBD | Pending |
-| SIM-02 | TBD | Pending |
-| SIM-03 | TBD | Pending |
-| SIM-04 | TBD | Pending |
-| SIM-05 | TBD | Pending |
-| SIM-06 | TBD | Pending |
-| SIM-07 | TBD | Pending |
-| API-01 | TBD | Pending |
-| API-02 | TBD | Pending |
-| API-03 | TBD | Pending |
-| API-04 | TBD | Pending |
-| API-05 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| DASH-04 | TBD | Pending |
-| DASH-05 | TBD | Pending |
-| DASH-06 | TBD | Pending |
-| DASH-07 | TBD | Pending |
-| PYTH-01 | TBD | Pending |
-| PYTH-02 | TBD | Pending |
-| PYTH-03 | TBD | Pending |
-| PYTH-04 | TBD | Pending |
-| PYTH-05 | TBD | Pending |
-| VAL-01 | TBD | Pending |
-| VAL-02 | TBD | Pending |
-| VAL-03 | TBD | Pending |
-| VAL-04 | TBD | Pending |
-| VAL-05 | TBD | Pending |
+| FOUND-01 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| FOUND-02 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| FOUND-03 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| FOUND-04 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| FOUND-05 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| SAFE-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| MATH-01 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-02 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-03 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-04 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-05 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-06 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| SCAN-01 | Phase 4: Hermes Scanner | Pending |
+| SCAN-02 | Phase 4: Hermes Scanner | Pending |
+| SCAN-03 | Phase 4: Hermes Scanner | Pending |
+| SCAN-04 | Phase 4: Hermes Scanner | Pending |
+| SCAN-05 | Phase 4: Hermes Scanner | Pending |
+| SCAN-06 | Phase 4: Hermes Scanner | Pending |
+| SCAN-07 | Phase 4: Hermes Scanner | Pending |
+| TRACK-01 | Phase 5: Trade Tracker | Pending |
+| TRACK-02 | Phase 5: Trade Tracker | Pending |
+| TRACK-03 | Phase 5: Trade Tracker | Pending |
+| TRACK-04 | Phase 5: Trade Tracker | Pending |
+| TRACK-05 | Phase 5: Trade Tracker | Pending |
+| TRACK-06 | Phase 5: Trade Tracker | Pending |
+| SIM-01 | Phase 6: Simulation Engine | Pending |
+| SIM-02 | Phase 6: Simulation Engine | Pending |
+| SIM-03 | Phase 6: Simulation Engine | Pending |
+| SIM-04 | Phase 6: Simulation Engine | Pending |
+| SIM-05 | Phase 6: Simulation Engine | Pending |
+| SIM-06 | Phase 6: Simulation Engine | Pending |
+| SIM-07 | Phase 6: Simulation Engine | Pending |
+| API-01 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| API-02 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| API-03 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| API-04 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| API-05 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-01 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-02 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-03 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-04 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-05 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-06 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| DASH-07 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| PYTH-01 | Phase 7: Pyth Feed & Correlation | Pending |
+| PYTH-02 | Phase 7: Pyth Feed & Correlation | Pending |
+| PYTH-03 | Phase 7: Pyth Feed & Correlation | Pending |
+| PYTH-04 | Phase 7: Pyth Feed & Correlation | Pending |
+| PYTH-05 | Phase 7: Pyth Feed & Correlation | Pending |
+| VAL-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| VAL-02 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| VAL-03 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| VAL-04 | Phase 8: API, Dashboard & Validation Evidence | Pending |
+| VAL-05 | Phase 8: API, Dashboard & Validation Evidence | Pending |
 
 **Coverage:**
-- v1 requirements: 57 total
-- Mapped to phases: 0
-- Unmapped: 57
+- v1 requirements in file: 62 total
+- Mapped to phases: 62
+- Unmapped: 0
+- Duplicate mappings: 0
+
+**Count note:** The roadmap request referenced 57 v1 requirements, but this file contains 62 v1 requirement IDs. The file-defined requirements are treated as authoritative.
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-21 after project research*
+*Last updated: 2026-04-21 after roadmap creation*
