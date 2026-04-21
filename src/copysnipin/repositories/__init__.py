@@ -23,6 +23,7 @@ class SessionFactory(Protocol):
 
 __all__ = [
     "RepositoryWriteResult",
+    "HeartbeatRepository",
     "NotificationRepository",
     "SessionFactory",
     "SimulationRepository",
@@ -34,6 +35,10 @@ __all__ = [
 
 
 def __getattr__(name: str) -> object:
+    if name == "HeartbeatRepository":
+        from copysnipin.repositories.heartbeats import HeartbeatRepository
+
+        return HeartbeatRepository
     if name == "TradeRepository":
         from copysnipin.repositories.trades import TradeRepository
 

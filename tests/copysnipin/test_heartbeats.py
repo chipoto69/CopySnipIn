@@ -124,9 +124,7 @@ def test_error_heartbeat_redacts_error_snippet_before_persistence() -> None:
     assert params["last_success_at"] is None
     assert params["last_error_at"] == NOW
     assert "super-secret" not in str(params["last_error"])
-    assert "postgresql://***@localhost:5432/copysnipin" in str(
-        params["last_error"]
-    )
+    assert "postgresql://***@localhost:5432/copysnipin" in str(params["last_error"])
 
 
 def test_degraded_and_stale_heartbeats_persist_freshness_states() -> None:
