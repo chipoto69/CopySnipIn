@@ -23,7 +23,7 @@ services:
 
   api:
     start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090
-    stop: PIDS="$(lsof -ti :8090 || true)"; if [ -n "$PIDS" ]; then kill $PIDS; fi
+    stop: pkill -f "uvicorn copysnipin.main:app" || true
     healthcheck: curl -sf http://localhost:8090/health
     port: 8090
     depends_on: [postgres, redis]

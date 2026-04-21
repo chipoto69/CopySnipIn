@@ -22,9 +22,19 @@ fi
 echo "uv: $(uv --version)"
 
 # Create database if not exists
-if ! psql -h localhost -p 5432 -lqt 2>/dev/null | cut -d \| -f 1 | grep -qw copysnipin; then
+if ! command -v psql &>/dev/null || ! command -v createdb &>/dev/null || ! command -v pg_isready &>/dev/null; then
+    echo "ERROR: PostgreSQL client tools not found"
+    exit 1
+fi
+
+if ! pg_isready -h localhost -p 5432 &>/dev/null; then
+    echo "ERROR: PostgreSQL not responding on localhost:5432"
+    exit 1
+fi
+
+if ! psql -h localhost -p 5432 -lqt | cut -d \| -f 1 | grep -qw copysnipin; then
     echo "Creating database 'copysnipin'..."
-    createdb copysnipin 2>/dev/null || echo "Database may already exist"
+    createdb -h localhost -p 5432 copysnipin
 else
     echo "Database 'copysnipin' exists"
 fi

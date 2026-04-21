@@ -33,6 +33,11 @@ def test_init_script_uses_portable_root_discovery_and_locked_sync() -> None:
     assert INIT_ROOT_DISCOVERY in init_text
     assert 'SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"' in init_text
     assert "uv sync --locked" in init_text
+    assert "command -v psql" in init_text
+    assert "command -v createdb" in init_text
+    assert "command -v pg_isready" in init_text
+    assert "pg_isready -h localhost -p 5432" in init_text
+    assert "Database may already exist" not in init_text
 
 
 def test_services_use_portable_root_discovery_and_scaffold_targets() -> None:
@@ -54,3 +59,16 @@ def test_scanner_stop_does_not_clean_up_api_port() -> None:
     assert "lsof -ti :8090" not in scanner_block
     assert "lsof" not in scanner_stop_line
     assert ":8090" not in scanner_stop_line
+
+
+def test_api_stop_targets_scaffold_api_command_not_port() -> None:
+    services_text = read_project_file(SERVICES_YAML)
+    api_block = services_text.split("\n  api:\n", 1)[1]
+    api_block = api_block.split("\n  scanner:\n", 1)[0]
+    api_stop_line = next(
+        line for line in api_block.splitlines() if line.strip().startswith("stop:")
+    )
+
+    assert "uvicorn copysnipin.main:app" in api_stop_line
+    assert "lsof" not in api_stop_line
+    assert ":8090" not in api_stop_line
