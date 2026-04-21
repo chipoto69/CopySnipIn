@@ -45,9 +45,7 @@ def test_environment_docs_match_active_and_future_scope_variables() -> None:
 
 
 def test_factory_inline_defaults_use_only_active_runtime_variables() -> None:
-    services_text = (ROOT / ".factory" / "services.yaml").read_text(
-        encoding="utf-8"
-    )
+    services_text = (ROOT / ".factory" / "services.yaml").read_text(encoding="utf-8")
     defaults = _parse_service_inline_defaults(services_text)
     active_names = set(ACTIVE_ENV_VARS)
     future_names = {setting.env_var for setting in FUTURE_SCOPE_SETTINGS}
@@ -87,7 +85,9 @@ def _parse_env_example_sections(path: Path) -> dict[str, tuple[str, ...]]:
 
 
 def _markdown_section_vars(text: str, heading: str) -> set[str]:
-    pattern = re.compile(rf"^## {re.escape(heading)}\n(?P<body>.*?)(?=^## |\Z)", re.S | re.M)
+    pattern = re.compile(
+        rf"^## {re.escape(heading)}\n(?P<body>.*?)(?=^## |\Z)", re.S | re.M
+    )
     match = pattern.search(text)
     if match is None:
         return set()

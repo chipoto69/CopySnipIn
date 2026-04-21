@@ -4,18 +4,18 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
-ZERO_EXECUTION_POLICY_DECLARATION_START = "__" + "_".join(
-    ("COPYSNIPIN", "ZERO", "EXECUTION", "POLICY", "START")
-) + "__"
-ZERO_EXECUTION_POLICY_DECLARATION_END = "__" + "_".join(
-    ("COPYSNIPIN", "ZERO", "EXECUTION", "POLICY", "END")
-) + "__"
-FUTURE_SCOPE_CLASSIFICATION_START = "__" + "_".join(
-    ("COPYSNIPIN", "FUTURE", "SCOPE", "START")
-) + "__"
-FUTURE_SCOPE_CLASSIFICATION_END = "__" + "_".join(
-    ("COPYSNIPIN", "FUTURE", "SCOPE", "END")
-) + "__"
+ZERO_EXECUTION_POLICY_DECLARATION_START = (
+    "__" + "_".join(("COPYSNIPIN", "ZERO", "EXECUTION", "POLICY", "START")) + "__"
+)
+ZERO_EXECUTION_POLICY_DECLARATION_END = (
+    "__" + "_".join(("COPYSNIPIN", "ZERO", "EXECUTION", "POLICY", "END")) + "__"
+)
+FUTURE_SCOPE_CLASSIFICATION_START = (
+    "__" + "_".join(("COPYSNIPIN", "FUTURE", "SCOPE", "START")) + "__"
+)
+FUTURE_SCOPE_CLASSIFICATION_END = (
+    "__" + "_".join(("COPYSNIPIN", "FUTURE", "SCOPE", "END")) + "__"
+)
 
 # __COPYSNIPIN_ZERO_EXECUTION_POLICY_START__
 BANNED_EXECUTION_TOKENS = (

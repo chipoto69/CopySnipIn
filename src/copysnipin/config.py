@@ -50,12 +50,17 @@ FUTURE_SCOPE_SETTINGS = (
     FutureScopeSetting(
         env_var=_future_env_name("POLYMARKET", "WS", "URL"),
         disabled=True,
-        reason="Disabled future scope; v1 scanner/tracker fixtures use HTTP data APIs first.",
+        reason=(
+            "Disabled future scope; v1 scanner/tracker fixtures use "
+            "HTTP data APIs first."
+        ),
     ),
     FutureScopeSetting(
         env_var=_future_env_name("PYTH", "TOKEN"),
         disabled=True,
-        reason="Disabled future scope; current scaffold does not open provider streams.",
+        reason=(
+            "Disabled future scope; current scaffold does not open provider streams."
+        ),
     ),
     FutureScopeSetting(
         env_var=_future_env_name("SOLANA", "PRIVATE", "KEY"),
