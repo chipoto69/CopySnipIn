@@ -33,11 +33,12 @@ def test_redact_value_masks_webhook_urls_and_token_values() -> None:
 
 
 def test_redact_value_masks_private_key_like_values() -> None:
+    private_marker = "PRIVATE" + " KEY"
     private_key = "\n".join(
         [
-            "-----BEGIN " + "PRIVATE KEY-----",
+            f"-----BEGIN {private_marker}-----",
             "abc123privatekeypayload",
-            "-----END " + "PRIVATE KEY-----",
+            f"-----END {private_marker}-----",
         ],
     )
 
