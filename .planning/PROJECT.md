@@ -2,7 +2,7 @@
 
 ## What This Is
 
-CopySnipIn is a zero-execution Polymarket copytrading workbench for discovering high-quality wallets, tracking their trades, simulating mirrored performance, and monitoring related market signals before any real execution is enabled. The current repository is a scaffold and validation-contract workspace: `.factory/`, `.env.example`, and `docs/validation-*.md` define the intended system, while no `src/`, `tests/`, package manifest, or runtime implementation exists yet.
+CopySnipIn is a zero-execution Polymarket copytrading workbench for discovering high-quality wallets, tracking their trades, simulating mirrored performance, and monitoring related market signals before any real execution is enabled. The repository now has a Python 3.13+ `uv` package scaffold with safe no-op API, scanner, tracker, simulator, Pyth feed, and dashboard entry points. `.factory/`, `.env.example`, and `docs/validation-*.md` remain the mission and validation contracts for the intended system.
 
 The first milestone is to turn the mission infrastructure into an executable Python application with a scanner, tracker, simulator, price feed, API, and terminal dashboard that can be verified against the existing validation contracts.
 
@@ -14,11 +14,11 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Scaffold an executable Python 3.13+ project with `uv`, `src/copysnipin/`, `tests/`, typed modules, and runnable quality gates. Validated in Phase 1: Executable Scaffold & Factory Portability.
+- [x] Make `.factory` commands workspace-portable so they work inside Conductor workspaces instead of assuming `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`. Validated in Phase 1: Executable Scaffold & Factory Portability.
 
 ### Active
 
-- [ ] Scaffold an executable Python 3.13+ project with `uv`, `src/copysnipin/`, `tests/`, typed modules, and runnable quality gates.
 - [ ] Implement a Hermes Scanner that periodically fetches Polymarket leaderboard/trader data, calculates Sharpe ratio and max drawdown, filters qualifying wallets, persists results, and emits alerts.
 - [ ] Implement a Trade Tracker that polls tracked-wallet trade activity, handles pagination and rate limits, persists trades idempotently, and maintains durable per-wallet watermarks.
 - [ ] Implement a Simulation Engine that mirrors detected trades as paper trades with configurable sizing, cash constraints, realized/unrealized PnL, win rate, Sharpe ratio, and max drawdown.
@@ -27,7 +27,6 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 - [ ] Implement a Textual TUI dashboard showing tracked wallets, live trades, simulated PnL, wallet detail, and system status with keyboard navigation and resilient empty/error states.
 - [ ] Keep the product zero-execution by default: scanner, tracker, price-feed, and simulation are read-only/paper-trading unless an explicitly approved future execution phase changes the boundary.
 - [ ] Reconcile environment/config contracts across `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs.
-- [ ] Make `.factory` commands workspace-portable so they work inside Conductor workspaces instead of assuming `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`.
 
 ### Out of Scope
 
@@ -39,13 +38,14 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 
 ## Context
 
-- The mapped codebase consists of `AGENTS.md`, `.gitignore`, `.env.example`, `.factory/`, and three validation contract documents under `docs/`.
+- Phase 1 added `pyproject.toml`, `uv.lock`, `.python-version`, `src/copysnipin/`, and `tests/copysnipin/`.
+- The mapped starting codebase consisted of `AGENTS.md`, `.gitignore`, `.env.example`, `.factory/`, and three validation contract documents under `docs/`.
 - `.planning/codebase/` documents the current state:
   - `STACK.md` identifies Python 3.13+, `uv`, PostgreSQL, Redis, FastAPI, Textual, pytest, mypy, Ruff, curl, psql, redis-cli, and tuistory as the intended stack/tooling.
   - `ARCHITECTURE.md` describes intended components: Hermes Scanner, Trade Tracker, Simulation Engine, Pyth Price Feed, FastAPI backend, Textual dashboard, and future Zero-Slot Monitor.
   - `CONCERNS.md` calls out missing source/tests/package manifest, absolute path assumptions, config drift, scanner stop-command bugs, healthcheck weaknesses, and the large validation surface.
-- `.factory/services.yaml` defines intended local services for PostgreSQL, Redis, API, scanner, and dashboard, but API/scanner/dashboard module targets do not exist yet.
-- `.factory/init.sh` checks Python, `uv`, PostgreSQL, Redis, dependency sync when `pyproject.toml` exists, and `.env` presence, but currently hard-codes the organized checkout path.
+- `.factory/services.yaml` defines intended local services for PostgreSQL, Redis, API, scanner, tracker, simulator, Pyth feed, and dashboard, with commands rooted dynamically in the active checkout.
+- `.factory/init.sh` checks Python, `uv`, PostgreSQL, Redis, dependency sync, and `.env` presence from the active checkout path.
 - `.factory/skills/python-worker/SKILL.md` establishes a TDD workflow for future implementation work: read mission/context, write failing tests first, implement minimally, run pytest/mypy/Ruff, manually verify API/service/database behavior, commit, and hand off.
 - `docs/validation-contract.md` defines dashboard, Pyth, and cross-area validation assertions.
 - `docs/validation-hermes-scanner.md` defines scanner-cycle, API-fetching, metric-calculation, filtering, persistence, alerting, and failure-mode assertions.
@@ -55,7 +55,7 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 ## Constraints
 
 - **Safety**: The application must remain zero-execution unless a future phase explicitly designs and approves live trading.
-- **Repository state**: No application source, tests, package manifest, or lockfile exists yet; initial phases must create the substrate before feature work can run.
+- **Repository state**: Phase 1 created the executable scaffold; feature phases must keep it zero-execution while replacing stubs with validated read-only/paper-trading behavior.
 - **Runtime**: Use Python 3.13+ and `uv` per `AGENTS.md`, `.factory/library/environment.md`, `.factory/services.yaml`, and worker guidance.
 - **Data stores**: PostgreSQL and Redis are expected local dependencies; scanner overlap prevention and durable watermarks depend on them.
 - **API dependencies**: Polymarket market data is read-only/public for scanning, while Pyth/Helius/LaserStream/Telegram/Discord require secret handling through real ignored `.env` files.
@@ -67,11 +67,11 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Treat the current repo as a scaffold/validation-contract workspace | `.planning/codebase/` confirms there is no executable source yet, only mission infrastructure and validation contracts. | — Pending |
+| Treat the current repo as a scaffold/validation-contract workspace | `.planning/codebase/` confirmed there was no executable source at project start, only mission infrastructure and validation contracts. | Completed in Phase 1 with a runnable safe scaffold |
 | Build read-only discovery and simulation before execution | The project is framed as a zero-execution copytrading bot, and validation focuses on scanner, tracking, simulation, price feed, and dashboard behavior. | — Pending |
-| Use Python 3.13+, `uv`, PostgreSQL, Redis, FastAPI, and Textual | These are the declared tools across `AGENTS.md`, `.factory/`, and validation docs. | — Pending |
+| Use Python 3.13+, `uv`, PostgreSQL, Redis, FastAPI, and Textual | These are the declared tools across `AGENTS.md`, `.factory/`, and validation docs. | Python 3.13+, `uv`, FastAPI, and Textual scaffold validated in Phase 1 |
 | Use GSD saved workflow defaults | `$gsd-next` is a zero-friction advancement command; saved defaults enable committed docs, parallel work, research, plan checking, verification, and quality model profile. | — Pending |
-| Treat `.factory/` and validation docs as authoritative until source exists | They are the only project-specific implementation contracts currently tracked. | — Pending |
+| Treat `.factory/` and validation docs as authoritative until source exists | They were the only project-specific implementation contracts at project start. | Phase 1 source now exists and remains aligned to those contracts |
 
 ## Evolution
 
@@ -91,4 +91,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after initialization from codebase map and validation contracts*
+*Last updated: 2026-04-21 after Phase 1 scaffold verification*
