@@ -32,7 +32,14 @@ if ! pg_isready -h localhost -p 5432 &>/dev/null; then
     exit 1
 fi
 
-if ! psql -h localhost -p 5432 -lqt | cut -d \| -f 1 | grep -qw copysnipin; then
+# Test PostgreSQL credentials first
+if ! psql -h localhost -p 5432 -d postgres -c "SELECT 1" &>/dev/null; then
+    echo "ERROR: Cannot authenticate to PostgreSQL. Check credentials or pg_hba.conf."
+    exit 1
+fi
+
+# Check if copysnipin database exists
+if ! psql -h localhost -p 5432 -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='copysnipin'" | grep -q 1; then
     echo "Creating database 'copysnipin'..."
     createdb -h localhost -p 5432 copysnipin
 else

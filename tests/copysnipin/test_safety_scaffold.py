@@ -23,7 +23,7 @@ BANNED_TOKENS = (
 
 
 def test_scaffold_source_has_no_execution_capable_tokens() -> None:
-    for source_file in sorted((ROOT / "src" / "copysnipin").glob("*.py")):
+    for source_file in sorted((ROOT / "src" / "copysnipin").rglob("*.py")):
         source_text = source_file.read_text(encoding="utf-8").lower()
         found_tokens = [token for token in BANNED_TOKENS if token in source_text]
         if found_tokens:

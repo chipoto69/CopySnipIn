@@ -10,17 +10,15 @@
 - Impact: Future agents can accidentally treat scaffold entry points as implemented scanner, tracker, simulator, Pyth, API read-model, or dashboard behavior.
 - Fix approach: Preserve explicit `status=scaffold` and `not_implemented` states until the owner phase replaces each stub with tested behavior.
 
-**Hard-coded checkout path mismatch:**
-- Issue: Project commands point to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
-- Files: `AGENTS.md`, `.factory/init.sh`, `.factory/services.yaml`
-- Impact: `.factory/init.sh` and every `.factory/services.yaml` command can operate in the wrong checkout or fail before reaching the current workspace. This also makes worker reproducibility fragile across Conductor workspaces.
-- Fix approach: Resolve paths relative to the repository root, for example with `git rev-parse --show-toplevel` or the script directory, and remove absolute checkout paths from service definitions.
+**Hard-coded checkout path mismatch (RESOLVED):**
+- Issue: Project commands pointed to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
+- Files: `.factory/init.sh`, `.factory/services.yaml`
+- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. `.factory/services.yaml` commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. The hard-coded path has been removed.
 
-**Factory service commands still need portability fixes:**
-- Issue: Factory commands require `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and the package tooling now exists, but the factory commands still use the old absolute checkout path.
-- Files: `.factory/services.yaml`, `.factory/init.sh`, `AGENTS.md`, `.factory/skills/python-worker/SKILL.md`
-- Impact: Install, build, test, typecheck, lint, and service start commands can run in the wrong checkout or fail from Conductor workspaces.
-- Fix approach: Plan 03 should replace absolute paths with repository-root discovery and verify commands from the active workspace.
+**Factory service commands portability (RESOLVED - Plan 03 completed):**
+- Issue: Factory commands required `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and used the old absolute checkout path.
+- Files: `.factory/services.yaml`, `.factory/init.sh`
+- Resolution: Plan 03 replaced absolute paths with repository-root discovery. All factory commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. Commands work correctly from the active workspace.
 
 **Validation contract surface is far larger than the current project substrate:**
 - Issue: The validation docs define 148 unique assertion IDs across dashboard, Pyth, cross-area flows, scanner, tracker, and simulation, but no test harness or source implementation is tracked.
@@ -60,11 +58,10 @@
 - Trigger: A dead scanner or dashboard can still appear healthy if the API is healthy or the echo command succeeds.
 - Workaround: Add process-specific health signals, such as scanner heartbeat state and dashboard launch/snapshot checks.
 
-**Factory init can run against the wrong directory:**
-- Symptoms: `.factory/init.sh` changes directory to the hard-coded organized checkout path before checking tools, database, dependencies, or `.env`.
+**Factory init directory resolution (RESOLVED):**
+- Symptoms: `.factory/init.sh` changed directory to the hard-coded organized checkout path before checking tools, database, dependencies, or `.env`.
 - Files: `.factory/init.sh`
-- Trigger: Running setup from the Conductor workspace.
-- Workaround: Replace the hard-coded `PROJECT_DIR` with repository-root discovery.
+- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. The hard-coded `PROJECT_DIR` has been replaced with repository-root discovery.
 
 ## Security Considerations
 

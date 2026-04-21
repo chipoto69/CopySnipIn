@@ -189,21 +189,21 @@
 
 **Intended API Service:**
 - Location: `.factory/services.yaml`
-- Triggers: `uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090`
+- Triggers: `uv run uvicorn copysnipin.main:app --host 127.0.0.1 --port 8090`
 - Responsibilities: Serve FastAPI backend and `/health`.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Scaffold implementation exists with /health endpoint; database, worker, and read-model integration not yet implemented.
 
 **Intended Scanner Service:**
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.scanner`
 - Responsibilities: Run Hermes Scanner cycle.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Scaffold module exists (scanner.py); worker logic not yet implemented.
 
 **Intended Dashboard Service:**
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.dashboard`
 - Responsibilities: Launch Textual dashboard.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Scaffold module exists (dashboard.py, tracker.py, simulator.py, pyth_feed.py); worker logic not yet implemented.
 
 **Validation Entry Points:**
 - Location: `.factory/library/user-testing.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`

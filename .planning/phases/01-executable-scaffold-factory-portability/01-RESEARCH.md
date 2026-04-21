@@ -76,6 +76,7 @@ Source for this entire block: `.planning/phases/01-executable-scaffold-factory-p
 | FOUND-03 | Developer can run `uv run pytest`, `uv run mypy`, `uv run ruff check`, and `uv run ruff format --check` successfully on the scaffold. [VERIFIED: `.planning/REQUIREMENTS.md`] | Configure pytest, mypy, and Ruff in `pyproject.toml`; avoid strict mypy settings that conflict with thin stubs. [VERIFIED: `.planning/phases/01-executable-scaffold-factory-portability/01-CONTEXT.md`; CITED: https://mypy.readthedocs.io/en/stable/config_file.html; CITED: https://docs.astral.sh/ruff/configuration/] |
 | FOUND-04 | `.factory/init.sh` and `.factory/services.yaml` resolve the active repository root dynamically instead of hard-coding an absolute checkout path. [VERIFIED: `.planning/REQUIREMENTS.md`] | Replace the organized checkout path with `git rev-parse --show-toplevel` and script-directory fallback in `init.sh`; use repo-root `cd` wrappers in service commands. [VERIFIED: `.factory/init.sh`; VERIFIED: `.factory/services.yaml`; VERIFIED: local command `git rev-parse --show-toplevel`] |
 | FOUND-05 | The repository contains a committed `tests/` tree mirroring the `src/copysnipin/` package layout. [VERIFIED: `.planning/REQUIREMENTS.md`] | Use `tests/copysnipin/` with smoke tests for imports, health, entry points, and factory path guards. [VERIFIED: `AGENTS.md`; VERIFIED: `.factory/skills/python-worker/SKILL.md`] |
+
 </phase_requirements>
 
 ## Summary

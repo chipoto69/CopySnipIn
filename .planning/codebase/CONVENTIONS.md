@@ -123,9 +123,9 @@
 
 ## Module Design
 
-**Exports:** Not detected. No tracked Python source modules exist in the mapped scope.
+**Exports:** Package exports defined in `src/copysnipin/__init__.py` for version metadata. Scaffold modules exist for main, scanner, tracker, simulator, pyth_feed, and dashboard.
 
-**Barrel Files:** Not detected. No tracked package structure exists in the mapped scope.
+**Barrel Files:** Not used in the current scaffold structure. Individual modules are imported directly.
 
 **Intended package boundaries:**
 - Place application source in `src/copysnipin/`, matching `.factory/skills/python-worker/SKILL.md` and `.factory/services.yaml`.

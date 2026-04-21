@@ -190,8 +190,8 @@ raleigh/
 - Contract: `docs/validation-tracker-simulation.md`.
 
 **Simulation Engine Implementation:**
-- Primary code: `src/copysnipin/simulation/` or `src/copysnipin/simulation.py`.
-- Tests: `tests/test_simulation_*.py` or mirrored package tests under `tests/simulation/`.
+- Primary code: `src/copysnipin/simulator/` or `src/copysnipin/simulator.py`.
+- Tests: `tests/test_simulator_*.py` or mirrored package tests under `tests/simulator/`.
 - Contract: `docs/validation-tracker-simulation.md`.
 
 **Pyth Price Feed Implementation:**
