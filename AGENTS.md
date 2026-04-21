@@ -2,28 +2,31 @@
 
 ## Project Overview
 
-This repository serves as a working directory. The project is initialized and ready for development.
+CopySnipIn is a zero-execution Polymarket copytrading workbench. The repository now contains a Python 3.13+ `uv` scaffold with safe no-op service entry points and validation-focused tests.
 
 ## Project Structure
 
 ```
-/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN/
-├── AGENTS.md              # This file — AI agent contributor guidelines
-├── README.md              # Project documentation (to be created)
-├── .gitignore             # Git ignore patterns
-├── src/                   # Source code (to be organized)
-├── tests/                 # Test files (to be organized)
-└── docs/                  # Documentation (to be created)
+repo root
+├── AGENTS.md              # AI agent contributor guidelines
+├── pyproject.toml         # Python package and tool configuration
+├── uv.lock                # Locked Python dependency graph
+├── src/copysnipin/        # Safe scaffold package entry points
+├── tests/copysnipin/      # Tests mirroring the scaffold package
+├── .factory/              # Local setup and service commands
+└── docs/                  # Validation contracts
 ```
 
 ## Build, Test, and Development Commands
 
 | Command | Description |
 |---------|-------------|
-| `python3 -m pytest` | Run test suite |
-| `python3 -m mypy src/` | Run type checking |
-| `python3 -m ruff check .` | Run linting with ruff |
-| `python3 -m ruff format .` | Auto-format code |
+| `uv sync --locked` | Install locked dependencies |
+| `uv run pytest` | Run test suite |
+| `python3 -m pytest` | Run tests with the ambient interpreter; must remain supported |
+| `uv run mypy src/` | Run type checking |
+| `uv run ruff check .` | Run linting with Ruff |
+| `uv run ruff format .` | Auto-format code |
 
 ## Coding Style
 
@@ -74,8 +77,8 @@ docs(readme): update installation steps
 ## Environment Setup
 
 - **Python**: 3.13+
-- **Dependency management**: `pip` or `uv`
-- **Install dependencies**: `pip install -r requirements.txt` (when created)
+- **Dependency management**: `uv`
+- **Install dependencies**: `uv sync --locked`
 
 ## Agent-Specific Instructions
 
@@ -91,7 +94,7 @@ When making changes:
 
 **CopySnipIn**
 
-CopySnipIn is a zero-execution Polymarket copytrading workbench for discovering high-quality wallets, tracking their trades, simulating mirrored performance, and monitoring related market signals before any real execution is enabled. The current repository is a scaffold and validation-contract workspace: `.factory/`, `.env.example`, and `docs/validation-*.md` define the intended system, while no `src/`, `tests/`, package manifest, or runtime implementation exists yet.
+CopySnipIn is a zero-execution Polymarket copytrading workbench for discovering high-quality wallets, tracking their trades, simulating mirrored performance, and monitoring related market signals before any real execution is enabled. The repository now has a Python 3.13+ `uv` package scaffold with safe no-op API, scanner, tracker, simulator, Pyth feed, and dashboard entry points. `.factory/`, `.env.example`, and `docs/validation-*.md` remain the mission and validation contracts for the intended system.
 
 The first milestone is to turn the mission infrastructure into an executable Python application with a scanner, tracker, simulator, price feed, API, and terminal dashboard that can be verified against the existing validation contracts.
 
@@ -100,7 +103,7 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 ### Constraints
 
 - **Safety**: The application must remain zero-execution unless a future phase explicitly designs and approves live trading.
-- **Repository state**: No application source, tests, package manifest, or lockfile exists yet; initial phases must create the substrate before feature work can run.
+- **Repository state**: Phase 1 created the executable scaffold; feature phases must keep it zero-execution while replacing stubs with validated read-only/paper-trading behavior.
 - **Runtime**: Use Python 3.13+ and `uv` per `AGENTS.md`, `.factory/library/environment.md`, `.factory/services.yaml`, and worker guidance.
 - **Data stores**: PostgreSQL and Redis are expected local dependencies; scanner overlap prevention and durable watermarks depend on them.
 - **API dependencies**: Polymarket market data is read-only/public for scanning, while Pyth/Helius/LaserStream/Telegram/Discord require secret handling through real ignored `.env` files.
@@ -113,23 +116,23 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 ## Technology Stack
 
 ## Languages
-- Python 3.13+ - Planned primary implementation language for CopySnipIn services. Source code is expected under `src/copysnipin/`, but `src/` is not present in this workspace.
+- Python 3.13+ - Primary implementation language for CopySnipIn services. The tracked scaffold package lives under `src/copysnipin/`.
 - Bash - Setup automation in `.factory/init.sh`.
 - YAML - Factory service orchestration in `.factory/services.yaml`.
 - Markdown - Project guidance and validation contracts in `AGENTS.md`, `.factory/library/architecture.md`, `.factory/library/environment.md`, `.factory/library/user-testing.md`, `.factory/skills/python-worker/SKILL.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, and `docs/validation-tracker-simulation.md`.
 - Rust/Cargo - Mentioned as available for future performance-critical modules in `.factory/library/environment.md`, but no Rust manifest or source is present.
 ## Runtime
 - Python 3.13+ is the intended runtime according to `AGENTS.md` and `.factory/library/environment.md`.
-- The workspace currently has no runtime implementation: no `src/`, no `tests/`, no `pyproject.toml`, no `requirements.txt`, no `package.json`, no lockfile, and no package manifest.
-- `.factory/init.sh` checks for `python3`, `uv`, PostgreSQL, Redis, and `.env`; it only runs `uv sync` when `pyproject.toml` exists.
+- The workspace currently has a scaffold runtime implementation: `src/copysnipin/`, `tests/copysnipin/`, `pyproject.toml`, `.python-version`, and `uv.lock` are tracked.
+- `.factory/init.sh` checks for `python3`, `uv`, PostgreSQL, Redis, and `.env`; it runs `uv sync --locked` when `uv.lock` exists.
 - Intended: `uv`, documented in `.factory/library/environment.md` and used by `.factory/services.yaml`.
 - Alternative mentioned: `pip`, documented in `AGENTS.md` for a future `requirements.txt`.
-- Lockfile: missing. No `uv.lock`, `requirements.txt`, `pyproject.toml`, `package-lock.json`, `pnpm-lock.yaml`, or `yarn.lock` exists in the tracked project scope.
+- Lockfile: `uv.lock` is tracked and should be kept in sync with `pyproject.toml`.
 ## Frameworks
-- FastAPI - Planned backend framework. `.factory/library/architecture.md` defines a FastAPI backend reading PostgreSQL and serving the TUI dashboard via REST/WebSocket, and `.factory/services.yaml` configures `uvicorn copysnipin.main:app` on port `8090`. No `copysnipin.main` implementation exists in the workspace.
-- Textual - Planned terminal UI framework. `.factory/library/architecture.md` and `docs/validation-contract.md` define a Textual-based TUI dashboard. No dashboard module exists in the workspace.
+- FastAPI - Backend framework. `.factory/library/architecture.md` defines a future database-backed FastAPI backend, while the current `copysnipin.main` module exposes a safe scaffold app and `/health` route.
+- Textual - Planned terminal UI framework. The current `copysnipin.dashboard` module imports Textual and exposes a safe scaffold entry point without launching the interactive app.
 - Python worker pattern - `.factory/skills/python-worker/SKILL.md` defines the expected implementation workflow for FastAPI endpoints, scanner services, trade tracking, simulation logic, database models, and calculation utilities.
-- pytest - Planned test runner in `AGENTS.md`, `.factory/services.yaml`, `.factory/skills/python-worker/SKILL.md`, and validation contracts. No `tests/` directory exists in the workspace.
+- pytest - Test runner in `AGENTS.md`, `.factory/services.yaml`, `.factory/skills/python-worker/SKILL.md`, and validation contracts. The current scaffold tests live under `tests/copysnipin/`.
 - tuistory - Planned TUI validation tool in `.factory/library/user-testing.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, and `docs/validation-tracker-simulation.md`.
 - curl - Planned API validation tool in `.factory/library/user-testing.md` and validation contracts.
 - psql - Planned database verification tool in `.factory/library/user-testing.md` and `.factory/init.sh`.
@@ -137,13 +140,13 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - uv - Planned dependency sync, command runner, and package builder. `.factory/services.yaml` defines `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff` commands.
 - mypy - Planned static type checker. `AGENTS.md` and `.factory/services.yaml` target `src/`; `.factory/skills/python-worker/SKILL.md` targets `src/copysnipin/`.
 - ruff - Planned linter and formatter. `AGENTS.md`, `.factory/services.yaml`, and `.factory/skills/python-worker/SKILL.md` define ruff checks and formatting.
-- uvicorn - Planned ASGI server for the FastAPI backend in `.factory/services.yaml`. The package is not declared in a manifest because no manifest exists.
+- uvicorn - ASGI server for the FastAPI scaffold in `.factory/services.yaml` and `pyproject.toml`.
 ## Key Dependencies
-- No dependency versions are pinned in the workspace because there is no `pyproject.toml`, `requirements.txt`, lockfile, or package manifest.
+- Python dependencies are declared in `pyproject.toml` and locked in `uv.lock`.
 - PostgreSQL - Planned durable data store for tracked wallets, trades, simulated trades, Pyth prices, price correlations, and persistent watermarks. Defined in `.factory/library/architecture.md`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation contracts.
 - Redis - Planned distributed lock and cache layer. `.factory/library/architecture.md` defines scanner overlap prevention and caching; `docs/validation-hermes-scanner.md` specifies a Redis scanner lock.
-- FastAPI/uvicorn - Planned API runtime, configured in `.factory/services.yaml` but not declared in a package manifest.
-- Textual - Planned TUI runtime, specified in `.factory/library/architecture.md` and `docs/validation-contract.md` but not declared in a package manifest.
+- FastAPI/uvicorn - API scaffold runtime, configured in `.factory/services.yaml` and declared in `pyproject.toml`.
+- Textual - TUI scaffold runtime, specified in `.factory/library/architecture.md`, `docs/validation-contract.md`, and declared in `pyproject.toml`.
 - PostgreSQL on `localhost:5432` - `.factory/services.yaml` treats it as already running and `.factory/init.sh` creates/checks the `copysnipin` database.
 - Redis on `localhost:6379` - `.factory/services.yaml` treats it as already running and `.factory/init.sh` checks it with `redis-cli ping`.
 - Local FastAPI port `8090` - `.factory/services.yaml` configures the API healthcheck at `http://localhost:8090/health`.
@@ -157,15 +160,15 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Scanner/filter variables: `SCAN_INTERVAL_SECS`, `MIN_SHARPE_RATIO`, `MAX_DRAWDOWN_PCT`, `MIN_TRADES`, and `MIN_VOLUME_USD`.
 - Simulation variable: `SIMULATION_SEED_USD` is documented in `.factory/library/environment.md` but is absent from `.env.example`.
 - Notification variables: `DISCORD_WEBHOOK_URL` and `TELEGRAM_BOT_TOKEN`.
-- `.factory/services.yaml` includes inline local defaults for `DATABASE_URL` and `REDIS_URL` when launching planned `api`, `scanner`, and `dashboard` services.
-- No build configuration exists in the workspace because `pyproject.toml` is absent.
-- `.factory/services.yaml` defines planned commands for `install`, `typecheck`, `build`, `test`, `lint`, and `lint-fix`.
-- `.factory/init.sh` explicitly reports that dependencies are not installed until scaffolding adds `pyproject.toml`.
+- `.factory/services.yaml` includes inline local defaults for `DATABASE_URL` and `REDIS_URL` when launching scaffold `api`, `scanner`, `tracker`, `simulator`, `pyth_feed`, and `dashboard` services.
+- Build and tool configuration exists in `pyproject.toml`.
+- `.factory/services.yaml` defines commands for `install`, `typecheck`, `build`, `test`, `lint`, and `lint-fix`.
+- `.factory/init.sh` installs locked dependencies with `uv sync --locked` when `uv.lock` is present.
 - `.gitignore` excludes `.env`, local env variants, Python caches/build outputs, Node outputs, Rust `target/`, local databases, logs, and test coverage artifacts.
 ## Platform Requirements
 - macOS/Apple Silicon development environment is documented in `.factory/library/environment.md`.
 - Required local tools: `python3`, `uv`, `psql`/PostgreSQL, `redis-cli`/Redis, `curl`, and `tuistory` for validation.
-- Run `.factory/init.sh` only after confirming the canonical project path expected by the script; it changes directory to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while this analyzed workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
+- `.factory/init.sh` resolves the active checkout root dynamically and is expected to work inside Conductor workspaces.
 - Deployment target is not detected in the tracked project files.
 - CI/CD configuration is not detected in the tracked project files.
 - Runtime service definitions are local factory commands in `.factory/services.yaml`, not production deployment manifests.
@@ -187,10 +190,10 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - `docs/validation-contract.md`
 - `docs/validation-hermes-scanner.md`
 - `docs/validation-tracker-simulation.md`
-- No tracked `src/` package is present in the mapped scope.
-- No tracked `tests/` directory is present in the mapped scope.
-- No tracked `pyproject.toml`, `requirements.txt`, `pytest.ini`, `mypy.ini`, or `ruff.toml` is present in the mapped scope.
-- Treat `.factory/` and `docs/validation-*.md` as the authoritative current project shape until source code is scaffolded.
+- A tracked `src/copysnipin/` package is present in the mapped scope.
+- A tracked `tests/copysnipin/` directory is present in the mapped scope.
+- Tracked Python project configuration exists in `pyproject.toml`; pytest, mypy, and Ruff are configured there.
+- Treat `.factory/`, `src/copysnipin/`, `tests/copysnipin/`, and `docs/validation-*.md` as the authoritative current project shape.
 ## Naming Patterns
 - Use lowercase `snake_case` for Python modules under the intended `src/copysnipin/` package. This follows the module/function naming rule in `AGENTS.md` and the worker target package in `.factory/skills/python-worker/SKILL.md`.
 - Place Python tests under `tests/` and name them `test_<module>.py`, as required by `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
@@ -216,7 +219,7 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Type annotations are mandatory for public and internal function signatures under the intended `src/copysnipin/` package.
 ## Import Organization
 - No Python path aliases are defined in the mapped tracked files.
-- No `pyproject.toml` or tool configuration file is present in the mapped tracked files.
+- Tool configuration is centralized in `pyproject.toml`.
 - Use the intended package import root `copysnipin` once `src/copysnipin/` exists; this package name is referenced by `.factory/services.yaml` service commands and `.factory/skills/python-worker/SKILL.md`.
 ## Error Handling
 - Do not crash on external service failure. `docs/validation-hermes-scanner.md` requires scanner handling for database failure, Polymarket API rate limits, malformed API responses, total API failure, and individual trader fetch failure.
@@ -290,9 +293,9 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Environment contract: `.factory/library/environment.md`, `.env.example`
 - Validation contracts: `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`
 - Implementation workflow: `.factory/skills/python-worker/SKILL.md`
-- Implemented source modules are not detected in tracked files. There is no tracked `src/`, `tests/`, `pyproject.toml`, or `copysnipin/` package in this workspace.
-- Module paths in `.factory/services.yaml` such as `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard` are intended launch targets only.
-- Future code should treat `.factory/` and `docs/validation-*.md` as the current project contract, not as evidence of implemented Python modules.
+- Implemented scaffold modules are tracked under `src/copysnipin/`, with tests under `tests/copysnipin/` and package configuration in `pyproject.toml`.
+- Module paths in `.factory/services.yaml` such as `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard` are current safe scaffold launch targets.
+- Future code should treat `.factory/`, `src/copysnipin/`, `tests/copysnipin/`, and `docs/validation-*.md` as the current project contract.
 ## Pattern Overview
 - Event pipeline is intended to flow from wallet discovery to trade tracking to paper-trade simulation to dashboard display, as documented in `.factory/library/architecture.md`.
 - PostgreSQL is intended as the shared durable store for wallets, trades, simulated trades, Pyth prices, correlations, and watermarks.
@@ -305,7 +308,7 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Contains: `.factory/services.yaml`, `.factory/init.sh`, `.factory/skills/python-worker/SKILL.md`
 - Depends on: Python 3.13+, `uv`, local PostgreSQL on port 5432, local Redis on port 6379.
 - Used by: Agents and developers starting intended services and implementing features.
-- Implementation status: Shell/YAML control files exist; referenced Python package targets are not implemented in tracked source.
+- Implementation status: Shell/YAML control files exist and referenced Python package targets are implemented as safe scaffold entry points.
 - Purpose: Define required environment variables and external dependency expectations.
 - Location: `.factory/library/environment.md`, `.env.example`
 - Contains: Database URLs, Redis URL, Polymarket API endpoints, Pyth token, Helius/LaserStream/Jito placeholders, scanner thresholds, notification settings, dashboard/API ports.
@@ -317,37 +320,37 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Contains: Scheduler contract, overlap guard, Polymarket API fetching, Sharpe/drawdown calculations, threshold filtering, wallet persistence, Discord/Telegram alerting, startup/shutdown behavior.
 - Depends on: Polymarket Gamma/Data APIs, PostgreSQL, Redis lock key `hermes:scanner:lock`, scanner threshold env vars, optional `DISCORD_WEBHOOK_URL`, optional `TELEGRAM_BOT_TOKEN`.
 - Used by: Trade Tracker, Dashboard, and Cross-Area validation flows.
-- Implementation status: No tracked `copysnipin.scanner` module exists; `.factory/services.yaml` only defines the intended command.
+- Implementation status: `copysnipin.scanner` exists as a safe scaffold entry point; real scanner cycles are future work.
 - Purpose: Poll tracked wallets for recent Polymarket trades, detect new trades with persistent watermarks, deduplicate, and persist all detected trades.
 - Location: Intended behavior in `.factory/library/architecture.md` and `docs/validation-tracker-simulation.md`
 - Contains: New trade detection, BUY/SELL parsing, precise trade field storage, duplicate detection, multi-wallet polling, rate limit handling, DB buffering, query indexes.
 - Depends on: PostgreSQL tracked-wallet store, Polymarket Data API, per-wallet watermark persistence, rate-limit configuration.
 - Used by: Simulation Engine and Dashboard trade feed.
-- Implementation status: No tracked trade tracker source module exists.
+- Implementation status: `copysnipin.tracker` exists as a safe scaffold entry point; real trade polling is future work.
 - Purpose: Mirror detected trades into one or more paper-trade strategies and compute portfolio performance.
 - Location: Intended behavior in `.factory/library/architecture.md` and `docs/validation-tracker-simulation.md`
 - Contains: Trade mirroring, sell inventory validation, fixed-amount and portfolio-percent sizing, cash/position accounting, realized/unrealized PnL, win rate, Sharpe, drawdown, actual-vs-simulated comparison, strategy isolation.
 - Depends on: `trades` data, `simulated_trades` storage, market prices from Pyth or latest trade prices, `SIMULATION_SEED_USD`.
 - Used by: FastAPI Backend, TUI Dashboard, Cross-Area validation flows.
-- Implementation status: No tracked simulation source module exists.
+- Implementation status: `copysnipin.simulator` exists as a safe scaffold entry point; real paper-trading behavior is future work.
 - Purpose: Subscribe to Pyth Pro WebSocket price updates, store high-resolution price history, and correlate Pyth movements with Polymarket market changes.
 - Location: Intended behavior in `.factory/library/architecture.md` and `docs/validation-contract.md`
 - Contains: WebSocket connection/reconnect, price decoding, confidence interval storage, staleness detection, 200 ms update handling, latency measurement, price correlation records.
 - Depends on: `PYTH_TOKEN`, configured Pyth assets, PostgreSQL `pyth_prices` and `price_correlations` stores.
 - Used by: Simulation Engine, Dashboard status, Cross-Area Pyth-to-trade validation.
-- Implementation status: No tracked Pyth feed source module exists.
+- Implementation status: `copysnipin.pyth_feed` exists as a safe scaffold entry point; real Pyth subscription behavior is future work.
 - Purpose: Expose API endpoints and likely WebSocket updates for health, wallet lists, trades, simulation summaries, Pyth status, metrics, and dashboard reads.
 - Location: Intended service target in `.factory/services.yaml`; validation surface in `.factory/library/user-testing.md` and `docs/validation-contract.md`
 - Contains: Intended health endpoint at `http://localhost:8090/health` and API surfaces for wallet/trade/simulation/Pyth data.
 - Depends on: PostgreSQL, Redis, scanner/tracker/simulation/Pyth persisted data.
 - Used by: TUI Dashboard and curl-based validation.
-- Implementation status: No tracked `copysnipin.main:app` source exists.
+- Implementation status: `copysnipin.main:app` exists as a safe scaffold FastAPI app with `/health`; database-backed API behavior is future work.
 - Purpose: Provide a Textual-based terminal dashboard for tracked wallets, live trades, simulation PnL, wallet detail, and system status.
 - Location: Intended behavior in `.factory/library/architecture.md`, `.factory/library/user-testing.md`, and `docs/validation-contract.md`
 - Contains: Wallet table, trade feed, simulation PnL panel, wallet detail view, status panel, auto-refresh, keyboard navigation.
 - Depends on: FastAPI Backend, dashboard refresh config, current DB-backed state.
 - Used by: Operators and `tuistory` validation.
-- Implementation status: No tracked `copysnipin.dashboard` source exists.
+- Implementation status: `copysnipin.dashboard` exists as a safe scaffold Textual module; the interactive dashboard is future work.
 - Purpose: Persist system state and coordinate background work.
 - Location: Intended stores documented in `.factory/library/architecture.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`, and `docs/validation-contract.md`
 - Contains: Intended tables/stores including `tracked_wallets`, `qualifying_wallets`, `trades`, `simulated_trades`, `pyth_prices`, `price_correlations`, per-wallet watermarks, scanner locks, buffered events.
@@ -395,17 +398,17 @@ The first milestone is to turn the mission infrastructure into an executable Pyt
 - Location: `.factory/services.yaml`
 - Triggers: `uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090`
 - Responsibilities: Serve FastAPI backend and `/health`.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Target module is present as a safe scaffold FastAPI app.
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.scanner`
 - Responsibilities: Run Hermes Scanner cycle.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Target module is present as a safe scaffold scanner entry point.
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.dashboard`
 - Responsibilities: Launch Textual dashboard.
-- Implementation status: Target module is not present in tracked files.
+- Implementation status: Target module is present as a safe scaffold dashboard entry point.
 - Location: `.factory/library/user-testing.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`
-- Triggers: `curl`, `tuistory`, `psql`, `redis-cli`, unit tests once implementation exists.
+- Triggers: `curl`, `tuistory`, `psql`, `redis-cli`, and unit tests.
 - Responsibilities: Verify API, TUI, full-pipeline, scanner, tracker, simulation, Pyth, and cross-area behavior.
 ## Error Handling
 - Scanner API failures skip the affected trader or cycle and continue scheduling next cycles, as required by `docs/validation-hermes-scanner.md`.
