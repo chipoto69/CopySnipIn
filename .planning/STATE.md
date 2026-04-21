@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-04-21T12:49:40.772Z"
-last_activity: 2026-04-21
+status: ready_to_plan
+stopped_at: Phase 1 verified and complete; next step is `/gsd-discuss-phase 2`.
+last_updated: "2026-04-21T13:09:42Z"
+last_activity: 2026-04-21 - Phase 1 completed and verified; ready to discuss Phase 2.
 progress:
   total_phases: 8
   completed_phases: 1
   total_plans: 3
   completed_plans: 3
-  percent: 100
+  percent: 13
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Operators can reliably identify qualifying Polymarket wallets and validate copytrading decisions through read-only tracking and paper-trading before risking capital.
-**Current focus:** Phase 01 — executable-scaffold-factory-portability
+**Current focus:** Phase 2 - Safety, Configuration & Data Backbone
 
 ## Current Position
 
-Phase: 01 (executable-scaffold-factory-portability) — COMPLETE
-Plan: 3 of 3
-Status: Phase complete — ready for verification
-Last activity: 2026-04-21
+Phase: 2 of 8 (Safety, Configuration & Data Backbone)
+Plan: TBD in current phase
+Status: Ready to plan
+Last activity: 2026-04-21 - Phase 1 completed and verified; ready to discuss Phase 2.
 
-Progress: [██████████] 100%
+Progress: [█---------] 13%
 
 ## Performance Metrics
 
@@ -70,7 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01 Plan 02]: Kept `/health` in scaffold mode and marked deferred systems `not_implemented` instead of probing PostgreSQL, Redis, providers, or workers.
 - [Phase 01 Plan 02]: Imported Textual for the dashboard shell without calling `App.run()` during smoke execution.
 - [Phase 01 Plan 03]: Kept factory commands pointed only at scaffold entry points and local development service URLs.
-- [Phase 01 Plan 03]: Used process-specific worker stop commands so scanner shutdown no longer touches API port 8090.
+- [Phase 01 Plan 03]: Used process-specific stop commands so API and worker shutdown no longer kills arbitrary processes by API port 8090.
+- [Phase 01 Plan 03]: Hardened factory setup so missing PostgreSQL client tools or unavailable localhost PostgreSQL fail clearly instead of being masked as success.
 - [Phase 01 Plan 03]: Kept the old checkout path only as an intentional regression-test constant, never in factory runtime files.
 
 ### Pending Todos
@@ -94,6 +95,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-21T12:49:40.768Z
-Stopped at: Completed 01-03-PLAN.md
-Resume file: None
+Last session: 2026-04-21T13:09:42Z
+Stopped at: Phase 1 verified and complete; next step is `/gsd-discuss-phase 2`.
+Resume file: .planning/ROADMAP.md
