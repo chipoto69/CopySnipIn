@@ -210,9 +210,7 @@ class SimulationPortfolio(Base):
     """Paper-trading portfolio state for a simulation strategy."""
 
     __tablename__ = "simulation_portfolios"
-    __table_args__ = (
-        UniqueConstraint("name", name="uq_simulation_portfolios_name"),
-    )
+    __table_args__ = (UniqueConstraint("name", name="uq_simulation_portfolios_name"),)
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     name: Mapped[str] = mapped_column(String(128), nullable=False)
