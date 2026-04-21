@@ -152,7 +152,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Executable Scaffold & Factory Portability | 0/TBD | Not started | - |
+| 1. Executable Scaffold & Factory Portability | 0/3 | Planned | - |
 | 2. Safety, Configuration & Data Backbone | 0/TBD | Not started | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
