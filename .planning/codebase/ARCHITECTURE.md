@@ -12,9 +12,9 @@
 - Implementation workflow: `.factory/skills/python-worker/SKILL.md`
 
 **Implemented Source Status:**
-- Implemented source modules are not detected in tracked files. There is no tracked `src/`, `tests/`, `pyproject.toml`, or `copysnipin/` package in this workspace.
-- Module paths in `.factory/services.yaml` such as `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard` are intended launch targets only.
-- Future code should treat `.factory/` and `docs/validation-*.md` as the current project contract, not as evidence of implemented Python modules.
+- The package substrate exists: `pyproject.toml`, `uv.lock`, `src/copysnipin/__init__.py`, `src/copysnipin/py.typed`, and `tests/copysnipin/test_imports.py`.
+- Module paths in `.factory/services.yaml` and `pyproject.toml` such as `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard` are still intended launch targets only until Plan 02 creates safe scaffold modules.
+- Future code should treat `.factory/`, `docs/validation-*.md`, `pyproject.toml`, and the base `src/copysnipin/` package as the current project contract.
 
 ## Pattern Overview
 
@@ -35,7 +35,7 @@
 - Contains: `.factory/services.yaml`, `.factory/init.sh`, `.factory/skills/python-worker/SKILL.md`
 - Depends on: Python 3.13+, `uv`, local PostgreSQL on port 5432, local Redis on port 6379.
 - Used by: Agents and developers starting intended services and implementing features.
-- Implementation status: Shell/YAML control files exist; referenced Python package targets are not implemented in tracked source.
+- Implementation status: Shell/YAML control files and package metadata exist; referenced service module targets are not implemented in tracked source yet.
 
 **Environment Configuration Layer:**
 - Purpose: Define required environment variables and external dependency expectations.

@@ -6,42 +6,42 @@
 
 **Polymarket:**
 - Polymarket CLOB API - Planned market/order-book API integration.
-  - SDK/Client: Not declared; no package manifest exists.
+  - SDK/Client: No Polymarket SDK/client dependency is declared in `pyproject.toml`.
   - Auth: Not detected in tracked files; `.factory/library/environment.md` indicates Polymarket market data is public/read-only for scanning.
   - Configuration: `POLYMARKET_CLOB_URL` in `.factory/library/environment.md`.
 - Polymarket Gamma API - Planned leaderboard and trader profile source for Hermes Scanner.
-  - SDK/Client: Not declared; no package manifest exists.
+  - SDK/Client: No Polymarket SDK/client dependency is declared in `pyproject.toml`.
   - Auth: Not detected.
   - Configuration: `POLYMARKET_GAMMA_URL` in `.factory/library/environment.md`; `docs/validation-hermes-scanner.md` references leaderboard fetches.
 - Polymarket Data API - Planned positions, trades, PnL history, and trade tracker source.
-  - SDK/Client: Not declared; no package manifest exists.
+  - SDK/Client: No Polymarket SDK/client dependency is declared in `pyproject.toml`.
   - Auth: Not detected.
   - Configuration: `POLYMARKET_DATA_URL` in `.factory/library/environment.md`; `docs/validation-hermes-scanner.md` and `docs/validation-tracker-simulation.md` define expected data-fetch behavior.
 
 **Market Data:**
 - Pyth Pro / Pyth Network WebSocket - Planned real-time price feed with approximately 200 ms updates.
-  - SDK/Client: Not declared; no package manifest exists.
+  - SDK/Client: No Pyth SDK/client dependency is declared in `pyproject.toml`.
   - Auth: `PYTH_TOKEN` in `.factory/library/environment.md`.
   - Configuration: `PYTH_ASSETS` is referenced by `docs/validation-contract.md`, but it is not listed in `.factory/library/environment.md`.
   - Behavior contract: `docs/validation-contract.md` defines WebSocket connection, reconnection, price decoding, microsecond timestamp storage, latency metrics, and correlation with Polymarket.
 - Helius LaserStream gRPC - Planned future same-slot Solana transaction monitoring.
-  - SDK/Client: Not declared; no package manifest exists.
+  - SDK/Client: No Helius or LaserStream SDK/client dependency is declared in `pyproject.toml`.
   - Auth: `HELIUS_API_KEY` in `.factory/library/environment.md`.
   - Status: Future/read-only infrastructure in `.factory/library/architecture.md`; no implementation exists in the workspace.
 
 **Notifications:**
 - Discord webhook - Planned alert channel for newly qualifying wallets.
-  - SDK/Client: HTTP webhook; no package manifest exists.
+  - SDK/Client: HTTP webhook only; no Discord-specific dependency is declared in `pyproject.toml`.
   - Auth: `DISCORD_WEBHOOK_URL` in `.factory/library/environment.md`.
   - Contract: `docs/validation-hermes-scanner.md` requires non-blocking alerting with retry/rate-limit handling.
 - Telegram Bot API - Planned alert channel for newly qualifying wallets.
-  - SDK/Client: HTTP API; no package manifest exists.
+  - SDK/Client: HTTP API only; no Telegram-specific dependency is declared in `pyproject.toml`.
   - Auth: `TELEGRAM_BOT_TOKEN` in `.factory/library/environment.md`.
   - Contract: `docs/validation-hermes-scanner.md` requires warning-only behavior when the token is missing or API errors occur.
 
 **Internal/Local API:**
 - FastAPI backend - Planned local REST/WebSocket API for dashboard, health, metrics, wallet, trade, simulation, and Pyth status queries.
-  - SDK/Client: FastAPI/uvicorn planned by `.factory/services.yaml`; package versions are not declared.
+  - SDK/Client: FastAPI and uvicorn are declared in `pyproject.toml`; `copysnipin.main` is still pending Plan 02.
   - Auth: Not detected in tracked files.
   - Local URL: `http://localhost:8090/health` in `.factory/services.yaml`.
 
@@ -51,7 +51,7 @@
 - PostgreSQL - Planned shared durable store for all modules.
   - Connection: `DATABASE_URL` in `.factory/library/environment.md`.
   - Local service: `.factory/services.yaml` expects PostgreSQL on `localhost:5432`.
-  - Client: Not declared; no package manifest or implementation exists.
+  - Client: No PostgreSQL Python client dependency or implementation exists yet.
   - Planned tables/data areas: `tracked_wallets`, qualifying wallets, `trades`, `simulated_trades`, `pyth_prices`, `price_correlations`, persistent scanner/tracker watermarks, and simulation results are specified across `.factory/library/architecture.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, and `docs/validation-tracker-simulation.md`.
 
 **File Storage:**

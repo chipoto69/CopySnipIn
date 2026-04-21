@@ -19,10 +19,10 @@
 - `docs/validation-tracker-simulation.md`
 
 **Current implementation status:**
-- No tracked `src/` package is present in the mapped scope.
-- No tracked `tests/` directory is present in the mapped scope.
-- No tracked `pyproject.toml`, `requirements.txt`, `pytest.ini`, `mypy.ini`, or `ruff.toml` is present in the mapped scope.
-- Treat `.factory/` and `docs/validation-*.md` as the authoritative current project shape until source code is scaffolded.
+- `src/copysnipin/` is present with the base package version contract and typed-package marker.
+- `tests/copysnipin/` is present with initial mirrored import smoke coverage.
+- `pyproject.toml` is present with package metadata plus pytest, mypy, and Ruff configuration.
+- Treat `.factory/`, `docs/validation-*.md`, `pyproject.toml`, and `src/copysnipin/` as the current project shape until service modules are scaffolded.
 
 ## Naming Patterns
 
@@ -71,9 +71,9 @@
 3. First-party imports from the intended `copysnipin` package.
 
 **Path Aliases:**
-- No Python path aliases are defined in the mapped tracked files.
-- No `pyproject.toml` or tool configuration file is present in the mapped tracked files.
-- Use the intended package import root `copysnipin` once `src/copysnipin/` exists; this package name is referenced by `.factory/services.yaml` service commands and `.factory/skills/python-worker/SKILL.md`.
+- No Python path aliases are defined beyond `pythonpath = ["src"]` for pytest in `pyproject.toml`.
+- `pyproject.toml` centralizes pytest, mypy, and Ruff configuration.
+- Use the package import root `copysnipin`; this package name is referenced by `.factory/services.yaml`, `pyproject.toml` console scripts, and `.factory/skills/python-worker/SKILL.md`.
 
 ## Error Handling
 

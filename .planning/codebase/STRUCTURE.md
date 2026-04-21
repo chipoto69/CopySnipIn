@@ -14,6 +14,12 @@ This structure map covers tracked/project files only:
 - `.factory/library/environment.md`
 - `.factory/library/user-testing.md`
 - `.factory/skills/python-worker/SKILL.md`
+- `.python-version`
+- `pyproject.toml`
+- `uv.lock`
+- `src/copysnipin/__init__.py`
+- `src/copysnipin/py.typed`
+- `tests/copysnipin/test_imports.py`
 - `docs/validation-contract.md`
 - `docs/validation-hermes-scanner.md`
 - `docs/validation-tracker-simulation.md`
@@ -25,6 +31,9 @@ Excluded from this map: `.omc/`, `.claude/`, `.context/`, raw session or memory 
 ```text
 raleigh/
 ├── AGENTS.md                              # Repository guidelines and intended Python conventions
+├── .python-version                        # uv/Python selector for Python 3.13
+├── pyproject.toml                         # Python package metadata, dependencies, scripts, and tool config
+├── uv.lock                                # uv-managed dependency lockfile
 ├── .env.example                           # Example environment contract; copy to untracked .env for real secrets
 ├── .factory/                              # Authoritative project factory, service, architecture, and worker instructions
 │   ├── init.sh                            # Environment bootstrap script
@@ -37,6 +46,13 @@ raleigh/
 │       └── python-worker/
 │           └── SKILL.md                   # Project-specific implementation procedure for Python workers
 ├── .gitignore                             # Ignore rules for secrets, Python/Node/Rust outputs, IDE files, data, logs, test cache
+├── src/
+│   └── copysnipin/
+│       ├── __init__.py                    # Base package version export
+│       └── py.typed                       # PEP 561 typed-package marker
+├── tests/
+│   └── copysnipin/
+│       └── test_imports.py                # Import and package metadata smoke tests
 └── docs/                                  # Behavioral validation contracts
     ├── validation-contract.md             # Dashboard, Pyth, and cross-area validation assertions
     ├── validation-hermes-scanner.md       # Hermes Scanner validation assertions
@@ -47,9 +63,9 @@ raleigh/
 
 **Project Root:**
 - Purpose: Holds repository guidance, environment example, ignore rules, factory metadata, and validation contracts.
-- Contains: `AGENTS.md`, `.env.example`, `.gitignore`, `.factory/`, `docs/`.
-- Key files: `AGENTS.md`, `.factory/services.yaml`, `.factory/library/architecture.md`, `docs/validation-contract.md`.
-- Implementation status: No tracked `src/`, `tests/`, `README.md`, `pyproject.toml`, or package implementation exists.
+- Contains: `AGENTS.md`, `.python-version`, `pyproject.toml`, `uv.lock`, `.env.example`, `.gitignore`, `.factory/`, `src/`, `tests/`, `docs/`.
+- Key files: `pyproject.toml`, `uv.lock`, `src/copysnipin/__init__.py`, `tests/copysnipin/test_imports.py`, `.factory/services.yaml`, `.factory/library/architecture.md`, `docs/validation-contract.md`.
+- Implementation status: Package substrate exists; process entry modules, README, factory portability changes, API, scanner, tracker, simulator, Pyth feed, dashboard behavior, persistence, and provider logic are still pending later plans/phases.
 
 **`.factory/`:**
 - Purpose: Current authoritative project shape for service orchestration and implementation guidance.
@@ -79,11 +95,15 @@ raleigh/
 
 **Entry Points:**
 - `.factory/init.sh`: Actual tracked setup script for checking Python/uv, creating the `copysnipin` database, checking Redis, running `uv sync` when `pyproject.toml` exists, and warning about missing real `.env`.
+- `pyproject.toml`: Declares console scripts for API, scanner, tracker, simulator, Pyth feed, and dashboard. The script targets are scaffold names for Plan 02; modules beyond the base package are not implemented yet.
 - `.factory/services.yaml`: Intended service runner contract for install, typecheck, build, test, lint, PostgreSQL, Redis, API, scanner, and dashboard.
 - `.factory/services.yaml`: Defines intended API target `copysnipin.main:app`, scanner target `copysnipin.scanner`, and dashboard target `copysnipin.dashboard`; these module paths are not implemented in tracked files.
 
 **Configuration:**
 - `.env.example`: Example configuration for Polymarket URLs, Helius, LaserStream, Jito, PostgreSQL, Redis, dashboard/API, scanner thresholds, and notifications.
+- `.python-version`: Selects Python 3.13 for uv workflows.
+- `pyproject.toml`: Central package, dependency, build, pytest, mypy, and Ruff configuration.
+- `uv.lock`: Reproducible uv dependency lockfile generated from `pyproject.toml`.
 - `.factory/library/environment.md`: Required environment variable documentation and platform notes.
 - `.gitignore`: Ensures real `.env`, keys, Python build artifacts, virtualenvs, Node outputs, Rust `target/`, data files, logs, and test caches are not tracked.
 - `AGENTS.md`: Repository-level coding, testing, git, and environment guidance.
@@ -97,6 +117,7 @@ raleigh/
 **Testing:**
 - `.factory/library/user-testing.md`: Defines validation surfaces for FastAPI Backend, TUI Dashboard, and Full Pipeline; tools are `curl`, `tuistory`, log analysis, `psql`, and `redis-cli`.
 - `.factory/skills/python-worker/SKILL.md`: Defines future TDD workflow with tests under `tests/`, `uv run pytest`, `uv run mypy`, `uv run ruff check`, and `uv run ruff format --check`.
+- `tests/copysnipin/test_imports.py`: Initial executable pytest smoke coverage for package import and installed metadata version.
 - `docs/validation-contract.md`: Defines `VAL-DASH-*`, `VAL-PYTH-*`, and `VAL-CROSS-*` assertions.
 - `docs/validation-hermes-scanner.md`: Defines `VAL-SCAN-*` assertions.
 - `docs/validation-tracker-simulation.md`: Defines `VAL-TRACK-*` and `VAL-SIM-*` assertions.
@@ -112,8 +133,8 @@ raleigh/
 **Directories:**
 - Factory metadata lives under `.factory/`.
 - Human-readable validation contracts live under `docs/`.
-- Future source should live under `src/`, with package code expected under `src/copysnipin/` according to `.factory/skills/python-worker/SKILL.md`.
-- Future tests should live under `tests/`, mirroring `src/`, according to `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
+- Source lives under `src/`, with package code under `src/copysnipin/` according to `.factory/skills/python-worker/SKILL.md`.
+- Tests live under `tests/`, mirroring `src/`, according to `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
 
 **Service Names:**
 - Intended services in `.factory/services.yaml` are `postgres`, `redis`, `api`, `scanner`, and `dashboard`.
@@ -122,7 +143,7 @@ raleigh/
 ## Where to Add New Code
 
 **New Feature:**
-- Primary code: `src/copysnipin/` once the source tree is created.
+- Primary code: `src/copysnipin/`.
 - Tests: `tests/` mirroring `src/`, with filenames like `tests/test_<module>.py`.
 - Contract references: Read `.factory/library/architecture.md` and the relevant `docs/validation-*.md` file before implementation.
 
@@ -190,14 +211,14 @@ raleigh/
 - Committed: Yes
 
 **`src/`:**
-- Purpose: Future source directory referenced by `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
-- Generated: Not applicable; directory is not present in tracked files.
-- Committed: No tracked `src/` directory is detected.
+- Purpose: Source directory referenced by `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
+- Generated: No
+- Committed: Yes; currently contains the base `copysnipin` package contract and typed-package marker.
 
 **`tests/`:**
-- Purpose: Future test directory referenced by `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
-- Generated: Not applicable; directory is not present in tracked files.
-- Committed: No tracked `tests/` directory is detected.
+- Purpose: Test directory referenced by `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
+- Generated: No
+- Committed: Yes; currently contains mirrored package import smoke coverage.
 
 ---
 

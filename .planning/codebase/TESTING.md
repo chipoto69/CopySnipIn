@@ -19,18 +19,18 @@
 - `docs/validation-tracker-simulation.md`
 
 **Current executable test status:**
-- No tracked `tests/` directory is present in the mapped project files.
-- No tracked Python test files matching `test_*.py`, `*_test.py`, `*.test.*`, or `*.spec.*` are present in the mapped project files.
-- No tracked `src/` directory or `src/copysnipin/` package is present in the mapped project files.
-- No tracked `pyproject.toml`, `pytest.ini`, `mypy.ini`, `ruff.toml`, or equivalent executable test configuration is present in the mapped project files.
-- Current testing assets are validation contracts and factory procedures, not runnable tests.
+- `tests/copysnipin/test_imports.py` is present and verifies package import plus installed metadata version.
+- `src/copysnipin/` is present with the base package version contract and `py.typed` marker.
+- `pyproject.toml` configures pytest, mypy, and Ruff for the initial scaffold.
+- `uv.lock` is present, and the initial plan verified `uv sync --locked`, pytest, mypy, Ruff check, and Ruff format-check.
+- Broader validation assets remain the validation contracts and factory procedures until later feature phases add domain behavior.
 
 ## Test Framework
 
 **Runner:**
 - Intended runner: `pytest`, documented in `AGENTS.md` and `.factory/skills/python-worker/SKILL.md`.
 - Intended command runner/package manager: `uv`, documented in `.factory/library/environment.md`, `.factory/services.yaml`, and `.factory/skills/python-worker/SKILL.md`.
-- Config: Not detected. No tracked `pyproject.toml`, `pytest.ini`, or `tox.ini` exists in the mapped scope.
+- Config: `pyproject.toml` sets `testpaths = ["tests"]` and `pythonpath = ["src"]`.
 
 **Assertion Library:**
 - Intended assertion library: native `pytest` assertions.
@@ -42,6 +42,8 @@ python3 -m pytest              # Intended command from AGENTS.md for all tests
 python3 -m mypy src/           # Intended type check command from AGENTS.md
 python3 -m ruff check .        # Intended lint command from AGENTS.md
 python3 -m ruff format .       # Intended formatter command from AGENTS.md
+uv sync --locked               # Locked dependency sync from uv.lock
+uv run pytest                  # Current executable pytest suite
 uv run pytest tests/ -x -q     # Factory test command from .factory/services.yaml
 uv run mypy src/               # Factory typecheck command from .factory/services.yaml
 uv run ruff check .            # Factory lint command from .factory/services.yaml
@@ -70,11 +72,14 @@ uv run ruff format --check src/copysnipin/ tests/   # Package/test format check 
 **Structure:**
 ```text
 src/copysnipin/
-  <feature modules>
+  __init__.py
+  py.typed
+  <feature modules added by later phases/plans>
 
 tests/
-  test_<module>.py
-  <subpackages mirroring src/copysnipin/ as needed>
+  copysnipin/
+    test_imports.py
+  <additional mirrored package tests as needed>
 ```
 
 ## Test Structure
