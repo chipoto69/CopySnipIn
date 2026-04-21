@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Executable Scaffold & Factory Portability** - Create the Python package, tests, quality gates, entry points, and portable factory commands.
 - [x] **Phase 2: Safety, Configuration & Data Backbone** - Lock in zero-execution mode, typed settings, redaction, durable schema, idempotent repositories, Redis coordination, heartbeats, and validation ownership.
-- [ ] **Phase 3: Provider Fixtures & Domain Math** - Prove Polymarket/Pyth parsing and all financial/qualification math against deterministic fixtures.
+- [x] **Phase 3: Provider Fixtures & Domain Math** - Prove Polymarket/Pyth parsing and all financial/qualification math against deterministic fixtures.
 - [ ] **Phase 4: Hermes Scanner** - Discover and qualify wallets through non-overlapping read-only Polymarket scan cycles with persisted evidence and alerts.
 - [ ] **Phase 5: Trade Tracker** - Poll active wallets into canonical durable trades with watermarks, deduplication, and degraded-state reporting.
 - [ ] **Phase 6: Simulation Engine** - Convert canonical trades into restart-safe paper portfolios with constraints, skipped-trade evidence, and performance metrics.
@@ -67,7 +67,9 @@ Plans:
   2. Developer can run fixture tests for Pyth subscription, price decode, stale, reconnect, and malformed response cases.
   3. Operator-visible Sharpe, drawdown, qualification, and simulation accounting states match validation vectors and boundary cases.
   4. Simulator math uses exact numeric accounting for prices, sizes, cash, positions, PnL, and portfolio value.
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 03-01-PLAN.md — Create provider fixtures, parser contracts, domain metrics, qualification filtering, and Decimal accounting primitives.
 
 ### Phase 4: Hermes Scanner
 **Goal**: Operators can discover qualifying wallets through safe, repeatable, read-only scanner cycles.
@@ -161,7 +163,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 |-------|----------------|--------|-----------|
 | 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
 | 2. Safety, Configuration & Data Backbone | 6/6 | Complete | 2026-04-21 |
-| 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
+| 3. Provider Fixtures & Domain Math | 1/1 | Complete | 2026-04-21 |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
 | 5. Trade Tracker | 0/TBD | Not started | - |
 | 6. Simulation Engine | 0/TBD | Not started | - |

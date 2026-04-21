@@ -21,10 +21,11 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 - [x] Establish a durable PostgreSQL schema and idempotent repository substrate for wallets, scans, trades, watermarks, simulations, prices, correlations, notifications, heartbeats, and validation evidence. Validated in Phase 2: Safety, Configuration & Data Backbone.
 - [x] Establish Redis owner-token coordination primitives without making Redis a durable source of truth. Validated in Phase 2: Safety, Configuration & Data Backbone.
 - [x] Map every current `VAL-*` assertion to an owner phase and evidence path through a committed validation index. Validated in Phase 2: Safety, Configuration & Data Backbone.
+- [x] Prove read-only Polymarket/Pyth fixture parsing and deterministic Sharpe, drawdown, qualification, and Decimal paper-accounting math. Validated in Phase 3: Provider Fixtures & Domain Math.
 
 ### Active
 
-- [ ] Implement a Hermes Scanner that periodically fetches Polymarket leaderboard/trader data, calculates Sharpe ratio and max drawdown, filters qualifying wallets, persists results, and emits alerts.
+- [ ] Implement a Hermes Scanner that periodically fetches Polymarket leaderboard/trader data, consumes validated domain math, filters qualifying wallets, persists results, and emits alerts.
 - [ ] Implement a Trade Tracker that polls tracked-wallet trade activity, handles pagination and rate limits, persists trades idempotently, and maintains durable per-wallet watermarks.
 - [ ] Implement a Simulation Engine that mirrors detected trades as paper trades with configurable sizing, cash constraints, realized/unrealized PnL, win rate, Sharpe ratio, and max drawdown.
 - [ ] Implement a Pyth price-feed pipeline that subscribes to configured assets, stores price updates with precise timestamps, exposes health/latency metrics, and correlates price movement with Polymarket market changes.
@@ -43,6 +44,7 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 
 - Phase 1 added `pyproject.toml`, `uv.lock`, `.python-version`, `src/copysnipin/`, and `tests/copysnipin/`.
 - Phase 2 added typed active settings, future-scope environment classification, reusable redaction helpers, static zero-execution scans, SQLAlchemy/Alembic database substrate, baseline schema/migration, repository primitives, Redis locks, heartbeat persistence, and `docs/validation-index.md`.
+- Phase 3 added sanitized provider fixtures, typed Polymarket/Pyth parsers, deterministic Sharpe/drawdown/qualification helpers, and pure Decimal paper-accounting primitives.
 - The mapped starting codebase consisted of `AGENTS.md`, `.gitignore`, `.env.example`, `.factory/`, and three validation contract documents under `docs/`.
 - `.planning/codebase/` documents the current state:
   - `STACK.md` identifies Python 3.13+, `uv`, PostgreSQL, Redis, FastAPI, Textual, pytest, mypy, Ruff, curl, psql, redis-cli, and tuistory as the intended stack/tooling.
@@ -72,7 +74,7 @@ Operators can reliably identify qualifying Polymarket wallets and validate copyt
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Treat the current repo as a scaffold/validation-contract workspace | `.planning/codebase/` confirmed there was no executable source at project start, only mission infrastructure and validation contracts. | Completed in Phase 1 with a runnable safe scaffold |
-| Build read-only discovery and simulation before execution | The project is framed as a zero-execution copytrading bot, and validation focuses on scanner, tracking, simulation, price feed, and dashboard behavior. | Phase 2 codified the zero-execution guardrails; provider/domain behavior remains pending |
+| Build read-only discovery and simulation before execution | The project is framed as a zero-execution copytrading bot, and validation focuses on scanner, tracking, simulation, price feed, and dashboard behavior. | Phase 2 codified the zero-execution guardrails; Phase 3 validated provider/domain primitives |
 | Use Python 3.13+, `uv`, PostgreSQL, Redis, FastAPI, and Textual | These are the declared tools across `AGENTS.md`, `.factory/`, and validation docs. | Python 3.13+, `uv`, FastAPI, and Textual scaffold validated in Phase 1; PostgreSQL and Redis substrate validated in Phase 2 |
 | Use GSD saved workflow defaults | `$gsd-next` is a zero-friction advancement command; saved defaults enable committed docs, parallel work, research, plan checking, verification, and quality model profile. | — Pending |
 | Treat `.factory/` and validation docs as authoritative until source exists | They were the only project-specific implementation contracts at project start. | Phase 1 source now exists and remains aligned to those contracts |

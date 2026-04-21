@@ -1,0 +1,28 @@
+[
+  {
+    "proxyWallet": "0x1111111111111111111111111111111111111111",
+    "asset": "123456789",
+    "conditionId": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "size": "42.50000000",
+    "avgPrice": "0.42000000",
+    "initialValue": "17.85000000",
+    "currentValue": "19.12500000",
+    "cashPnl": "1.27500000",
+    "percentPnl": "7.14285714",
+    "totalBought": "42.50000000",
+    "realizedPnl": "0",
+    "percentRealizedPnl": "0",
+    "curPrice": "0.45000000",
+    "redeemable": false,
+    "mergeable": false,
+    "title": "Fixture market",
+    "slug": "fixture-market",
+    "eventSlug": "fixture-event",
+    "outcome": "Yes",
+    "outcomeIndex": 0,
+    "oppositeOutcome": "No",
+    "oppositeAsset": "987654321",
+    "endDate": "2026-12-31T00:00:00Z",
+    "negativeRisk": false
+  }
+]

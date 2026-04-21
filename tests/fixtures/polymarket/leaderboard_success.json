@@ -1,0 +1,22 @@
+[
+  {
+    "rank": "1",
+    "proxyWallet": "0x1111111111111111111111111111111111111111",
+    "userName": "fixture-alpha",
+    "vol": "15000.25",
+    "pnl": "1250.50",
+    "profileImage": "https://example.test/profile-alpha.png",
+    "xUsername": "fixture_alpha",
+    "verifiedBadge": true
+  },
+  {
+    "rank": "2",
+    "proxyWallet": "0x2222222222222222222222222222222222222222",
+    "userName": null,
+    "vol": 7250,
+    "pnl": "-50.75",
+    "profileImage": "https://example.test/profile-beta.png",
+    "xUsername": null,
+    "verifiedBadge": false
+  }
+]
