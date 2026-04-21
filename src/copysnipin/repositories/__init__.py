@@ -23,8 +23,11 @@ class SessionFactory(Protocol):
 
 __all__ = [
     "RepositoryWriteResult",
+    "NotificationRepository",
     "SessionFactory",
+    "SimulationRepository",
     "TradeRepository",
+    "ValidationEvidenceRepository",
     "WalletRepository",
     "WatermarkRepository",
 ]
@@ -35,6 +38,18 @@ def __getattr__(name: str) -> object:
         from copysnipin.repositories.trades import TradeRepository
 
         return TradeRepository
+    if name == "NotificationRepository":
+        from copysnipin.repositories.notifications import NotificationRepository
+
+        return NotificationRepository
+    if name == "SimulationRepository":
+        from copysnipin.repositories.simulations import SimulationRepository
+
+        return SimulationRepository
+    if name == "ValidationEvidenceRepository":
+        from copysnipin.repositories.validation import ValidationEvidenceRepository
+
+        return ValidationEvidenceRepository
     if name == "WalletRepository":
         from copysnipin.repositories.wallets import WalletRepository
 
