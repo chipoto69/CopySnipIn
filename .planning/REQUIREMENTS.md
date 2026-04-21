@@ -26,7 +26,7 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 ### Persistence And Coordination
 
 - [x] **DATA-01**: Alembic migrations create PostgreSQL tables for wallets, scanner runs, qualification evidence, trades, watermarks, simulation portfolios, simulated trades, positions, price updates, correlations, notifications, component heartbeats, and validation evidence.
-- [ ] **DATA-02**: Repository methods use transactions and schema-level uniqueness to make wallet discovery, trade ingestion, watermarks, simulation writes, and notification records idempotent.
+- [x] **DATA-02**: Repository methods use transactions and schema-level uniqueness to make wallet discovery, trade ingestion, watermarks, simulation writes, and notification records idempotent.
 - [ ] **DATA-03**: Redis coordination provides owner-token locks for scanner overlap prevention and short-lived rate/cache state without becoming the durable source of truth.
 - [ ] **DATA-04**: Component heartbeat rows record last success, last error, degraded/stale state, and freshness timestamps for scanner, tracker, simulator, Pyth feed, API, and dashboard-visible systems.
 
@@ -165,7 +165,7 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | SAFE-04 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
-| DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
 | DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
 | MATH-01 | Phase 3: Provider Fixtures & Domain Math | Pending |
