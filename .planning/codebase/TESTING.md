@@ -269,7 +269,7 @@ def test_filter_threshold_boundaries(...):
 
 **Service commands:**
 - Use `.factory/services.yaml` as the command registry for install, typecheck, build, test, lint, lint-fix, PostgreSQL health, Redis health, API startup, scanner startup, and dashboard startup.
-- Note that the hard-coded path `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN` was removed from `.factory/services.yaml`. All commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` for portability. Test `tests/copysnipin/test_factory_portability.py` asserts the old path is absent.
+- The hard-coded path was removed and `ROOT="$(git rev-parse --show-toplevel)"` is now used. The test `tests/copysnipin/test_factory_portability.py` asserts the old path is absent.
 
 **Handoff evidence:**
 - Include test commands, exit codes, observations, interactive checks, added tests, and discovered issues in the worker handoff format specified by `.factory/skills/python-worker/SKILL.md`.

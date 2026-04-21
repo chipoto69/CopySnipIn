@@ -123,9 +123,9 @@
 
 ## Module Design
 
-**Exports:** Package exports defined in `src/copysnipin/__init__.py` for version metadata. Scaffold modules exist for main, scanner, tracker, simulator, pyth_feed, and dashboard.
+**Exports:** The `src/copysnipin/` package exports `__version__` from `__init__.py` and provides scaffold entry points for `main`, `scanner`, `tracker`, `simulator`, `pyth_feed`, and `dashboard` modules.
 
-**Barrel Files:** Not used in the current scaffold structure. Individual modules are imported directly.
+**Barrel Files:** The package uses a standard module structure under `src/copysnipin/` with individual module files. No explicit barrel pattern is currently used beyond the package-level `__init__.py`.
 
 **Intended package boundaries:**
 - Place application source in `src/copysnipin/`, matching `.factory/skills/python-worker/SKILL.md` and `.factory/services.yaml`.

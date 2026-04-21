@@ -32,16 +32,24 @@ if ! pg_isready -h localhost -p 5432 &>/dev/null; then
     exit 1
 fi
 
-# Test PostgreSQL credentials first
+# Verify PostgreSQL credentials and check database existence
 if ! psql -h localhost -p 5432 -d postgres -c "SELECT 1" &>/dev/null; then
-    echo "ERROR: Cannot authenticate to PostgreSQL. Check credentials or pg_hba.conf."
+    echo "ERROR: Cannot connect to PostgreSQL with current credentials"
     exit 1
 fi
 
-# Check if copysnipin database exists
-if ! psql -h localhost -p 5432 -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='copysnipin'" | grep -q 1; then
+DB_EXISTS=$(psql -h localhost -p 5432 -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='copysnipin'" 2>&1)
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to query database list: $DB_EXISTS"
+    exit 1
+fi
+
+if [ -z "$DB_EXISTS" ]; then
     echo "Creating database 'copysnipin'..."
-    createdb -h localhost -p 5432 copysnipin
+    if ! createdb -h localhost -p 5432 copysnipin 2>&1; then
+        echo "ERROR: Failed to create database 'copysnipin'"
+        exit 1
+    fi
 else
     echo "Database 'copysnipin' exists"
 fi
