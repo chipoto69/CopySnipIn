@@ -48,6 +48,16 @@ def _future_word(*parts: str) -> str:
 # __COPYSNIPIN_FUTURE_SCOPE_START__
 FUTURE_SCOPE_SETTINGS = (
     FutureScopeSetting(
+        env_var=_future_env_name("POLYMARKET", "WS", "URL"),
+        disabled=True,
+        reason="Disabled future scope; v1 scanner/tracker fixtures use HTTP data APIs first.",
+    ),
+    FutureScopeSetting(
+        env_var=_future_env_name("PYTH", "TOKEN"),
+        disabled=True,
+        reason="Disabled future scope; current scaffold does not open provider streams.",
+    ),
+    FutureScopeSetting(
         env_var=_future_env_name("SOLANA", "PRIVATE", "KEY"),
         disabled=True,
         reason="Disabled future scope; v1 has no signing or fund movement.",
@@ -56,6 +66,16 @@ FUTURE_SCOPE_SETTINGS = (
         env_var=_future_env_name("HELIUS", "API", "KEY"),
         disabled=True,
         reason="Disabled future scope; v1 does not use authenticated watch paths.",
+    ),
+    FutureScopeSetting(
+        env_var=_future_env_name("HELIUS", "RPC", "URL"),
+        disabled=True,
+        reason="Disabled future scope; v1 does not use authenticated watch paths.",
+    ),
+    FutureScopeSetting(
+        env_var=_future_env_name("SOLANA", "RPC", "URL"),
+        disabled=True,
+        reason="Disabled future scope; v1 has no chain RPC dependency.",
     ),
     FutureScopeSetting(
         env_var=_future_env_name(_future_word("LASER", "STREAM"), "URL"),
