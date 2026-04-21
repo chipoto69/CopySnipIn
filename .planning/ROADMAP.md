@@ -33,7 +33,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Developer can run pytest, mypy, Ruff check, and Ruff format-check successfully on the scaffold.
   4. Developer can run `.factory` commands from a Conductor workspace without hard-coded checkout paths.
   5. Developer can find a committed `tests/` tree that mirrors the source package layout.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Create uv package metadata, lockfile, base package, and initial import/tooling tests.
+- [ ] 01-02-PLAN.md — Create safe scaffold entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard.
+- [ ] 01-03-PLAN.md — Make factory setup/services workspace-portable and add portability regression tests.
 
 ### Phase 2: Safety, Configuration & Data Backbone
 **Goal**: CopySnipIn starts from a secret-safe, zero-execution, durable foundation before provider loops or UI are built.
