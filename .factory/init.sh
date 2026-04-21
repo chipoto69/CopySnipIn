@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel 2>/dev/null || (cd "$SCRIPT_DIR/.." && pwd))"
 cd "$PROJECT_DIR"
 
 echo "=== CopySnipIn Environment Setup ==="
@@ -21,9 +22,34 @@ fi
 echo "uv: $(uv --version)"
 
 # Create database if not exists
-if ! psql -h localhost -p 5432 -lqt 2>/dev/null | cut -d \| -f 1 | grep -qw copysnipin; then
+if ! command -v psql &>/dev/null || ! command -v createdb &>/dev/null || ! command -v pg_isready &>/dev/null; then
+    echo "ERROR: PostgreSQL client tools not found"
+    exit 1
+fi
+
+if ! pg_isready -h localhost -p 5432 &>/dev/null; then
+    echo "ERROR: PostgreSQL not responding on localhost:5432"
+    exit 1
+fi
+
+# Verify PostgreSQL credentials and check database existence
+if ! psql -h localhost -p 5432 -d postgres -c "SELECT 1" &>/dev/null; then
+    echo "ERROR: Cannot connect to PostgreSQL with current credentials"
+    exit 1
+fi
+
+DB_EXISTS=$(psql -h localhost -p 5432 -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='copysnipin'" 2>&1)
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to query database list: $DB_EXISTS"
+    exit 1
+fi
+
+if [ -z "$DB_EXISTS" ]; then
     echo "Creating database 'copysnipin'..."
-    createdb copysnipin 2>/dev/null || echo "Database may already exist"
+    if ! createdb -h localhost -p 5432 copysnipin 2>&1; then
+        echo "ERROR: Failed to create database 'copysnipin'"
+        exit 1
+    fi
 else
     echo "Database 'copysnipin' exists"
 fi
@@ -36,7 +62,10 @@ else
 fi
 
 # Install dependencies
-if [ -f "pyproject.toml" ]; then
+if [ -f "uv.lock" ]; then
+    echo "Installing dependencies from uv.lock..."
+    uv sync --locked
+elif [ -f "pyproject.toml" ]; then
     echo "Installing dependencies..."
     uv sync
 else

@@ -45,6 +45,10 @@ target/
 *.swo
 *~
 
+# Local agent/session state
+.claude/
+.omc/
+
 # OS
 .DS_Store
 Thumbs.db
