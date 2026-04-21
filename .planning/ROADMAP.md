@@ -49,7 +49,11 @@ Plans:
   3. Developer can run migrations that create durable tables for wallets, scans, trades, simulations, prices, correlations, notifications, heartbeats, and validation evidence.
   4. Developer can rely on transactional repository methods and schema uniqueness for idempotent writes and restart safety.
   5. Developer can inspect a validation index that assigns every `VAL-*` assertion to one owner phase and evidence path.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — Create typed settings, redaction, zero-execution guardrails, and reconciled environment contracts.
+- [ ] 02-02-PLAN.md — Create SQLAlchemy/Alembic data backbone metadata, baseline migration, and idempotent transaction primitives.
+- [ ] 02-03-PLAN.md — Create Redis coordination locks, heartbeat/validation repositories, and validation index coverage.
 
 ### Phase 3: Provider Fixtures & Domain Math
 **Goal**: Provider parsing and financial calculations are deterministic before worker behavior depends on them.
