@@ -21,7 +21,6 @@
 | `src/copysnipin/safety.py` | utility | batch | `tests/copysnipin/test_safety_scaffold.py` | data-flow-match |
 | `alembic.ini` | config | batch | No codebase analog | none |
 | `src/copysnipin/db/__init__.py` | config | CRUD | `src/copysnipin/__init__.py` | role-match |
-| `src/copysnipin/db/base.py` | model | CRUD | No codebase analog | none |
 | `src/copysnipin/db/models.py` | model | CRUD | No codebase analog | none |
 | `src/copysnipin/db/session.py` | service | CRUD | No codebase analog | none |
 | `src/copysnipin/db/migrations/env.py` | migration | batch | No codebase analog | none |
@@ -652,7 +651,6 @@ Files with no close match in the codebase. Planner should use `02-RESEARCH.md` p
 | File | Role | Data Flow | Reason |
 |------|------|-----------|--------|
 | `alembic.ini` | config | batch | No Alembic environment exists. |
-| `src/copysnipin/db/base.py` | model | CRUD | No SQLAlchemy metadata exists. |
 | `src/copysnipin/db/models.py` | model | CRUD | No ORM/data model layer exists. |
 | `src/copysnipin/db/session.py` | service | CRUD | No database engine/session factory exists. |
 | `src/copysnipin/db/migrations/env.py` | migration | batch | No migration runner exists. |

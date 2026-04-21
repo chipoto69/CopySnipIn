@@ -594,20 +594,19 @@ The heartbeat table should have a unique component key so every component has on
 | A4 | Python-side duplicate checks can fail under restarts or concurrent workers. | Common Pitfalls | If the system stays single-process longer than expected, this is less urgent, but database uniqueness is still required by DATA-02. |
 | A5 | Pydantic v2 era moved settings out of the old v1 import path. | State of the Art | If compatibility shim behavior changes, import guidance may need update. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should Phase 02 add opt-in live database tests or only metadata/offline migration tests?** [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`]
-   - What we know: Default tests must remain independent from live PostgreSQL and Redis. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`]
-   - What's unclear: Whether the planner should add a gated `COPYSNIPIN_INTEGRATION_DB=1` path in Phase 02 or leave live migration proof to manual factory verification. [ASSUMED]
-   - Recommendation: Include metadata/offline tests by default and a separate documented `uv run alembic upgrade head` manual/factory check. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`; CITED: Context7 `/websites/alembic_sqlalchemy`]
+   - RESOLVED: Default automated tests will use metadata, SQL compilation, repository statement inspection, and local/fake dependencies only. They must not require live PostgreSQL or Redis. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`]
+   - RESOLVED: Live database proof belongs in opt-in/manual verification commands documented in the relevant plan: `uv run alembic upgrade head` and `psql "$DATABASE_URL" ...` after the operator intentionally provides a local database. [CITED: Context7 `/websites/alembic_sqlalchemy`]
 2. **What exact columns should each baseline table contain?** [VERIFIED: `.planning/REQUIREMENTS.md`]
-   - What we know: Required table families are fixed by `DATA-01`. [VERIFIED: `.planning/REQUIREMENTS.md`]
-   - What's unclear: Provider payload field names and trade identity details will be better known after Phase 03 fixture discovery. [VERIFIED: `.planning/STATE.md`; ASSUMED]
-   - Recommendation: Use stable canonical IDs, timestamps, JSON payload/evidence columns, and uniqueness constraints now, and leave provider-specific detail columns for later migrations. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`; ASSUMED]
+   - RESOLVED: The baseline schema must include the full `DATA-01` table family list: wallets, scanner runs, qualification evidence, trades, watermarks, simulation portfolios, simulated trades, positions, price updates, correlations, notifications, component heartbeats, and validation evidence. [VERIFIED: `.planning/REQUIREMENTS.md`]
+   - RESOLVED: Each baseline table should include stable canonical identifiers, timestamps, state/status fields where required by validation contracts, JSON payload/evidence columns for provider-shaped data, and deterministic indexes/unique constraints that support `DATA-02`. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`; CITED: Context7 `/websites/sqlalchemy_en_20`]
+   - RESOLVED: Provider-specific parsing and derived financial calculations are not part of the baseline schema task; the schema must still expose enough durable columns for later phases to attach parsed fields without replacing the canonical table model. [VERIFIED: `.planning/ROADMAP.md`; VERIFIED: `.planning/REQUIREMENTS.md`]
 3. **Should validation index be Markdown only or also stored in DB?** [VERIFIED: `.planning/REQUIREMENTS.md`]
-   - What we know: `VAL-01` requires an inspectable index, and `DATA-01` requires a validation evidence table. [VERIFIED: `.planning/REQUIREMENTS.md`]
-   - What's unclear: Whether Phase 02 should seed the DB table from the Markdown index. [ASSUMED]
-   - Recommendation: Commit Markdown as source of truth now, create DB table for future evidence observations, and defer seeding unless a plan needs it. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`; ASSUMED]
+   - RESOLVED: `docs/validation-index.md` is the committed operator-readable source for `VAL-01` ownership. [VERIFIED: `.planning/REQUIREMENTS.md`]
+   - RESOLVED: The database baseline must still create `validation_evidence` for durable evidence observations, and repository primitives must support idempotent upserts keyed by validation assertion/evidence identity. [VERIFIED: `.planning/REQUIREMENTS.md`]
+   - RESOLVED: Phase 02 does not need a database seed from the Markdown index; exact index coverage is enforced by pytest parsing all validation docs and `docs/validation-index.md`. [VERIFIED: `.planning/phases/02-safety-configuration-data-backbone/02-CONTEXT.md`]
 
 ## Environment Availability
 
