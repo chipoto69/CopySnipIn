@@ -224,6 +224,22 @@ REQUIRED_INDEXES = {
     "validation_evidence": {"ix_validation_evidence_assertion_id_status"},
 }
 
+DEPENDENCY_SAFE_DROP_ORDER = [
+    "validation_evidence",
+    "component_heartbeats",
+    "notifications",
+    "correlations",
+    "price_updates",
+    "positions",
+    "simulated_trades",
+    "simulation_portfolios",
+    "watermarks",
+    "trades",
+    "qualification_evidence",
+    "scanner_runs",
+    "wallets",
+]
+
 
 def test_metadata_declares_required_data_backbone_tables() -> None:
     assert set(Base.metadata.tables) == REQUIRED_TABLES
@@ -248,6 +264,47 @@ def test_metadata_declares_query_indexes() -> None:
         table = Base.metadata.tables[table_name]
 
         assert index_names(table).issuperset(required_indexes)
+
+
+def test_baseline_migration_declares_revision_and_operations() -> None:
+    migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
+
+    assert 'revision: str = "02_baseline"' in migration_source
+    assert 'down_revision: str | None = "01_db_substrate"' in migration_source
+    assert "def upgrade() -> None:" in migration_source
+    assert "def downgrade() -> None:" in migration_source
+
+
+def test_baseline_migration_creates_required_tables() -> None:
+    migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
+
+    for table_name in REQUIRED_TABLES:
+        assert f'op.create_table("{table_name}"' in migration_source
+        assert f'op.drop_table("{table_name}")' in migration_source
+
+
+def test_baseline_migration_names_required_constraints_and_indexes() -> None:
+    migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
+
+    for required_constraints in REQUIRED_UNIQUE_CONSTRAINTS.values():
+        for constraint_name in required_constraints:
+            assert f'name="{constraint_name}"' in migration_source
+
+    for required_indexes in REQUIRED_INDEXES.values():
+        for index_name in required_indexes:
+            assert f'op.create_index("{index_name}"' in migration_source
+            assert f'op.drop_index("{index_name}"' in migration_source
+
+
+def test_baseline_migration_downgrades_in_dependency_safe_order() -> None:
+    migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
+
+    drop_positions = [
+        migration_source.index(f'op.drop_table("{table_name}")')
+        for table_name in DEPENDENCY_SAFE_DROP_ORDER
+    ]
+
+    assert drop_positions == sorted(drop_positions)
 
 
 def unique_constraint_names(table: Table) -> set[str]:
