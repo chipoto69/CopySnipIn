@@ -168,8 +168,7 @@ def test_watermark_writes_use_wallet_component_source_conflict_target(
     assert isinstance(statement, Insert)
     assert "INSERT INTO watermarks" in sql
     assert (
-        "ON CONFLICT ON CONSTRAINT "
-        "uq_watermarks_wallet_id_component_source DO UPDATE"
+        "ON CONFLICT ON CONSTRAINT uq_watermarks_wallet_id_component_source DO UPDATE"
     ) in sql
     assert "RETURNING watermarks.id" in sql
 
@@ -190,9 +189,7 @@ def test_simulation_portfolio_upsert_uses_name_conflict_target() -> None:
     sql = normalize_sql(statement)
 
     assert "INSERT INTO simulation_portfolios" in sql
-    assert (
-        "ON CONFLICT ON CONSTRAINT uq_simulation_portfolios_name DO UPDATE"
-    ) in sql
+    assert ("ON CONFLICT ON CONSTRAINT uq_simulation_portfolios_name DO UPDATE") in sql
     assert "RETURNING simulation_portfolios.id" in sql
 
 
