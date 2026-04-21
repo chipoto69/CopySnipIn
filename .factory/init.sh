@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_DIR="/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel 2>/dev/null || (cd "$SCRIPT_DIR/.." && pwd))"
 cd "$PROJECT_DIR"
 
 echo "=== CopySnipIn Environment Setup ==="
@@ -36,7 +37,10 @@ else
 fi
 
 # Install dependencies
-if [ -f "pyproject.toml" ]; then
+if [ -f "uv.lock" ]; then
+    echo "Installing dependencies from uv.lock..."
+    uv sync --locked
+elif [ -f "pyproject.toml" ]; then
     echo "Installing dependencies..."
     uv sync
 else
