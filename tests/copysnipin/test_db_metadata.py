@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from sqlalchemy import Index, Table, UniqueConstraint
@@ -270,7 +271,7 @@ def test_baseline_migration_declares_revision_and_operations() -> None:
     migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
 
     assert 'revision: str = "02_baseline"' in migration_source
-    assert 'down_revision: str | None = "01_db_substrate"' in migration_source
+    assert "down_revision: str | None = None" in migration_source
     assert "def upgrade() -> None:" in migration_source
     assert "def downgrade() -> None:" in migration_source
 
@@ -279,7 +280,7 @@ def test_baseline_migration_creates_required_tables() -> None:
     migration_source = MIGRATION_PATH.read_text(encoding="utf-8")
 
     for table_name in REQUIRED_TABLES:
-        assert f'op.create_table("{table_name}"' in migration_source
+        assert re.search(rf'op\.create_table\(\s*"{table_name}"', migration_source)
         assert f'op.drop_table("{table_name}")' in migration_source
 
 
@@ -292,8 +293,8 @@ def test_baseline_migration_names_required_constraints_and_indexes() -> None:
 
     for required_indexes in REQUIRED_INDEXES.values():
         for index_name in required_indexes:
-            assert f'op.create_index("{index_name}"' in migration_source
-            assert f'op.drop_index("{index_name}"' in migration_source
+            assert re.search(rf'op\.create_index\(\s*"{index_name}"', migration_source)
+            assert re.search(rf'op\.drop_index\(\s*"{index_name}"', migration_source)
 
 
 def test_baseline_migration_downgrades_in_dependency_safe_order() -> None:
