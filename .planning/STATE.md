@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_plan
-stopped_at: Phase 1 verified and complete; next step is `/gsd-discuss-phase 2`.
-last_updated: "2026-04-21T13:09:42Z"
-last_activity: 2026-04-21 - Phase 1 completed and verified; ready to discuss Phase 2.
+status: ready_to_discuss
+stopped_at: Phase 2 verified and complete; next step is `/gsd-discuss-phase 3`.
+last_updated: "2026-04-21T20:45:00Z"
+last_activity: 2026-04-21 - Phase 2 completed and verified; ready to discuss Phase 3.
 progress:
   total_phases: 8
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 13
+  completed_phases: 2
+  total_plans: 9
+  completed_plans: 9
+  percent: 25
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Operators can reliably identify qualifying Polymarket wallets and validate copytrading decisions through read-only tracking and paper-trading before risking capital.
-**Current focus:** Phase 2 - Safety, Configuration & Data Backbone
+**Current focus:** Phase 3 - Provider Fixtures & Domain Math
 
 ## Current Position
 
-Phase: 2 of 8 (Safety, Configuration & Data Backbone)
-Plan: TBD in current phase
-Status: Ready to plan
-Last activity: 2026-04-21 - Phase 1 completed and verified; ready to discuss Phase 2.
+Phase: 3 of 8 (provider fixtures & domain math)
+Plan: Not started
+Status: Ready to discuss
+Last activity: 2026-04-21 - Phase 2 completed and verified; ready to discuss Phase 3.
 
-Progress: [█---------] 13%
+Progress: [███-------] 25%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 3
+- Total plans completed: 9
 - Average duration: 3 min
 - Total execution time: 10 min
 
@@ -45,6 +45,7 @@ Progress: [█---------] 13%
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-executable-scaffold-factory-portability | 3 | 10 min | 3 min |
+| 02 | 6 | - | - |
 
 **Recent Trend:**
 
@@ -52,6 +53,12 @@ Progress: [█---------] 13%
 - Trend: Stable
 
 *Updated after each plan completion*
+| Phase 02-safety-configuration-data-backbone P01 | 10min | 2 tasks | 9 files |
+| Phase 02-safety-configuration-data-backbone P02 | 9min | 2 tasks | 8 files |
+| Phase 02-safety-configuration-data-backbone P03 | 7min | 2 tasks | 10 files |
+| Phase 02-safety-configuration-data-backbone P04 | 9min | 2 tasks | 4 files |
+| Phase 02-safety-configuration-data-backbone P05 | 8min | 2 tasks | 8 files |
+| Phase 02-safety-configuration-data-backbone P06 | 9min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -73,6 +80,25 @@ Recent decisions affecting current work:
 - [Phase 01 Plan 03]: Used process-specific stop commands so API and worker shutdown no longer kills arbitrary processes by API port 8090.
 - [Phase 01 Plan 03]: Hardened factory setup so missing PostgreSQL client tools or unavailable localhost PostgreSQL fail clearly instead of being masked as success.
 - [Phase 01 Plan 03]: Kept the old checkout path only as an intentional regression-test constant, never in factory runtime files.
+- [Phase 02 Plan 01]: Settings startup uses environment variables and scaffold-safe defaults without reading a real .env file.
+- [Phase 02 Plan 01]: Execution-adjacent environment names are runtime-classified as disabled future scope and excluded from ActiveSettings.
+- [Phase 02 Plan 01]: Healthy /health output stays compatible with the Phase 1 scaffold payload; invalid configuration returns redacted configuration_errors.
+- [Phase 02 Plan 02]: Zero-execution scanning covers active source, project scripts, and factory commands, while docs/examples are checked by environment-contract tests.
+- [Phase 02 Plan 02]: Only two spans are stripped before banned-token matching: the safety policy declaration and the config future-scope classification block.
+- [Phase 02 Plan 02]: Provider credentials and execution-adjacent names such as PYTH_TOKEN, Helius, Solana RPC/private key, LaserStream, Jito, and live-funded validation stay disabled future scope.
+- [Phase 02 Plan 03]: PostgreSQL URLs are normalized to postgresql+psycopg so the new driver dependency is used without adding legacy psycopg2.
+- [Phase 02 Plan 03]: Alembic online migrations call load_settings(), while import/offline metadata checks do not open provider or database connections.
+- [Phase 02 Plan 03]: Plan 03 intentionally leaves Base.metadata empty; durable table models and baseline migration remain Plan 04 scope.
+- [Phase 02 Plan 04]: The baseline uses wallets as canonical wallet identity; scanner, tracker, and simulation tables reference it instead of creating competing wallet tables.
+- [Phase 02 Plan 04]: 02_baseline is the first Alembic revision with down_revision=None because Plan 03 created the Alembic substrate but no prior revision file.
+- [Phase 02 Plan 04]: Default migration verification inspects SQLAlchemy metadata and migration source only; live alembic upgrade remains optional/manual.
+- [Phase 02 Plan 04]: Idempotency-critical tables have explicit named unique constraints for future Plan 05 repository upserts.
+- [Phase 02 Plan 05]: Repository writes return RepositoryWriteResult(row_id=...) instead of ORM objects so callers get a small typed persistence result.
+- [Phase 02 Plan 05]: Trade ingestion requires an explicit caller-supplied dedupe key so future tracker phases can preserve distinct split fills.
+- [Phase 02 Plan 05]: Notification repositories persist attempt state only and do not import or call Discord, Telegram, webhook, or HTTP clients.
+- [Phase 02 Plan 06]: Redis is runtime dependency scope, while fakeredis remains dev-only for service-free default tests.
+- [Phase 02 Plan 06]: Heartbeat writes preserve durable status in PostgreSQL and do not expose Redis-backed business-state methods.
+- [Phase 02 Plan 06]: Validation index rows assign future implementation ownership by roadmap phase and leave later-phase evidence explicitly pending or manual-gated.
 
 ### Pending Todos
 
@@ -95,6 +121,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-21T13:09:42Z
-Stopped at: Phase 1 verified and complete; next step is `/gsd-discuss-phase 2`.
-Resume file: .planning/ROADMAP.md
+Last session: 2026-04-21T20:24:08.152Z
+Stopped at: Completed 02-06-PLAN.md
+Resume file: None

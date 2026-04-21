@@ -13,7 +13,7 @@ CopySnipIn v1 turns the current validation-contract workspace into an executable
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Executable Scaffold & Factory Portability** - Create the Python package, tests, quality gates, entry points, and portable factory commands.
-- [ ] **Phase 2: Safety, Configuration & Data Backbone** - Lock in zero-execution mode, typed settings, redaction, durable schema, idempotent repositories, Redis coordination, heartbeats, and validation ownership.
+- [x] **Phase 2: Safety, Configuration & Data Backbone** - Lock in zero-execution mode, typed settings, redaction, durable schema, idempotent repositories, Redis coordination, heartbeats, and validation ownership.
 - [ ] **Phase 3: Provider Fixtures & Domain Math** - Prove Polymarket/Pyth parsing and all financial/qualification math against deterministic fixtures.
 - [ ] **Phase 4: Hermes Scanner** - Discover and qualify wallets through non-overlapping read-only Polymarket scan cycles with persisted evidence and alerts.
 - [ ] **Phase 5: Trade Tracker** - Poll active wallets into canonical durable trades with watermarks, deduplication, and degraded-state reporting.
@@ -49,7 +49,14 @@ Plans:
   3. Developer can run migrations that create durable tables for wallets, scans, trades, simulations, prices, correlations, notifications, heartbeats, and validation evidence.
   4. Developer can rely on transactional repository methods and schema uniqueness for idempotent writes and restart safety.
   5. Developer can inspect a validation index that assigns every `VAL-*` assertion to one owner phase and evidence path.
-**Plans**: TBD
+**Plans**: 6 plans
+Plans:
+- [x] 02-01-PLAN.md — Create typed settings, central redaction, and safe startup integration.
+- [x] 02-02-PLAN.md — Create zero-execution scans and reconcile active/disabled environment contracts.
+- [x] 02-03-PLAN.md — Create database dependency, session, and Alembic substrate.
+- [x] 02-04-PLAN.md — Create SQLAlchemy schema metadata, baseline migration, and schema coverage tests.
+- [x] 02-05-PLAN.md — Create idempotent repository primitives for wallets, trades, watermarks, simulations, notifications, and validation evidence.
+- [x] 02-06-PLAN.md — Create Redis coordination locks, heartbeat repository, validation index coverage, and integrated checks.
 
 ### Phase 3: Provider Fixtures & Domain Math
 **Goal**: Provider parsing and financial calculations are deterministic before worker behavior depends on them.
@@ -153,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
-| 2. Safety, Configuration & Data Backbone | 0/TBD | Not started | - |
+| 2. Safety, Configuration & Data Backbone | 6/6 | Complete | 2026-04-21 |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
 | 5. Trade Tracker | 0/TBD | Not started | - |
