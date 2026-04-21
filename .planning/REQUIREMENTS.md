@@ -17,11 +17,11 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 ### Safety And Configuration
 
-- [ ] **SAFE-01**: Application startup loads typed settings from environment variables with Pydantic and rejects missing required active settings with clear redacted errors.
-- [ ] **SAFE-02**: Real secrets are never logged, returned by API endpoints, rendered in the dashboard, or committed in fixtures/docs.
+- [x] **SAFE-01**: Application startup loads typed settings from environment variables with Pydantic and rejects missing required active settings with clear redacted errors.
+- [x] **SAFE-02**: Real secrets are never logged, returned by API endpoints, rendered in the dashboard, or committed in fixtures/docs.
 - [ ] **SAFE-03**: The app defaults to zero-execution mode and exposes no route, command, client, import, or config path that can sign, submit, cancel, bridge, approve, fund, or execute real trades.
 - [ ] **SAFE-04**: `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs agree on active v1 environment variables.
-- [ ] **SAFE-05**: Future/execution-adjacent variables such as private keys, Helius/LaserStream/Jito execution settings, and live-funded validation settings are classified as disabled or future scope.
+- [x] **SAFE-05**: Future/execution-adjacent variables such as private keys, Helius/LaserStream/Jito execution settings, and live-funded validation settings are classified as disabled or future scope.
 
 ### Persistence And Coordination
 
@@ -159,11 +159,11 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | FOUND-03 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-04 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-05 | Phase 1: Executable Scaffold & Factory Portability | Complete |
-| SAFE-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| SAFE-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | SAFE-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
 | SAFE-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
 | DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
 | DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |

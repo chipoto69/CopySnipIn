@@ -51,7 +51,7 @@ Plans:
   5. Developer can inspect a validation index that assigns every `VAL-*` assertion to one owner phase and evidence path.
 **Plans**: 6 plans
 Plans:
-- [ ] 02-01-PLAN.md — Create typed settings, central redaction, and safe startup integration.
+- [x] 02-01-PLAN.md — Create typed settings, central redaction, and safe startup integration.
 - [ ] 02-02-PLAN.md — Create zero-execution scans and reconcile active/disabled environment contracts.
 - [ ] 02-03-PLAN.md — Create database dependency, session, and Alembic substrate.
 - [ ] 02-04-PLAN.md — Create SQLAlchemy schema metadata, baseline migration, and schema coverage tests.
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
-| 2. Safety, Configuration & Data Backbone | 0/6 | Not started | - |
+| 2. Safety, Configuration & Data Backbone | 1/6 | In progress | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
 | 5. Trade Tracker | 0/TBD | Not started | - |
