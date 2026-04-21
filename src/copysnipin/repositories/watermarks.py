@@ -116,7 +116,7 @@ class WatermarkRepository:
                 Watermark.last_seen_trade_timestamp.is_(None)
                 | (
                     base_statement.excluded.last_seen_trade_timestamp
-                    >= Watermark.last_seen_trade_timestamp
+                    > Watermark.last_seen_trade_timestamp
                 )
             ),
         ).returning(Watermark.id)

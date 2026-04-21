@@ -18,6 +18,20 @@ def test_redact_value_masks_database_and_redis_dsn_credentials() -> None:
     assert "localhost:6379/0" in redacted_redis
 
 
+def test_redact_value_drops_dsn_query_strings() -> None:
+    dsn_with_query = (
+        "postgresql://copy:super-secret@localhost:5432/copysnipin"
+        "?password=query-secret&sslmode=require"
+    )
+
+    redacted = redact_value(dsn_with_query)
+
+    assert "super-secret" not in redacted
+    assert "query-secret" not in redacted
+    assert "password=" not in redacted
+    assert redacted == "postgresql://***@localhost:5432/copysnipin"
+
+
 def test_redact_value_masks_webhook_urls_and_token_values() -> None:
     webhook_url = "https://discord.com/api/webhooks/123456/webhook-secret-token-value"
     pyth_token = "pyth-token-with-enough-entropy"

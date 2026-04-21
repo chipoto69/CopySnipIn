@@ -119,7 +119,7 @@ def _redact_dsn(value: str) -> str:
         scheme=parsed.scheme,
         netloc=netloc,
         path=parsed.path,
-        query=parsed.query,
+        query="",
         fragment="",
     )
     return urlunsplit(safe)
