@@ -1,0 +1,30 @@
+{
+  "binary": {
+    "encoding": "hex",
+    "data": [
+      "504e415501000000"
+    ]
+  },
+  "parsed": [
+    {
+      "id": "e62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
+      "price": {
+        "price": "6163260000000",
+        "conf": "3268548079",
+        "expo": -8,
+        "publish_time": 1714748300
+      },
+      "ema_price": {
+        "price": "6130098800000",
+        "conf": "3587162000",
+        "expo": -8,
+        "publish_time": 1714748300
+      },
+      "metadata": {
+        "slot": 138886134,
+        "proof_available_time": 1714748302,
+        "prev_publish_time": 1714748298
+      }
+    }
+  ]
+}

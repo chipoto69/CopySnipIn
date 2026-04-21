@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 2 shipped — PR #5"
-stopped_at: Completed 02-06-PLAN.md
-last_updated: "2026-04-21T21:37:54.899Z"
+status: "Phase 3 shipped — PR #6"
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-04-21T22:21:07.775Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
-  completed_phases: 2
-  total_plans: 9
-  completed_plans: 9
+  completed_phases: 3
+  total_plans: 10
+  completed_plans: 10
   percent: 100
 ---
 
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** Operators can reliably identify qualifying Polymarket wallets and validate copytrading decisions through read-only tracking and paper-trading before risking capital.
-**Current focus:** Phase 3 - Provider Fixtures & Domain Math
+**Current focus:** Phase 4 - Hermes Scanner
 
 ## Current Position
 
-Phase: 3 of 8 (provider fixtures & domain math)
+Phase: 4 of 8 (Hermes Scanner)
 Plan: Not started
-Status: Phase 2 shipped — PR #5
+Status: Phase 3 shipped — PR #6
 Last activity: 2026-04-21
 
-Progress: [███-------] 25%
+Progress: [████------] 38%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 9
+- Total plans completed: 10
 - Average duration: 3 min
 - Total execution time: 10 min
 
@@ -46,6 +46,7 @@ Progress: [███-------] 25%
 |-------|-------|-------|----------|
 | 01-executable-scaffold-factory-portability | 3 | 10 min | 3 min |
 | 02 | 6 | - | - |
+| 03-provider-fixtures-domain-math | 1 | - | - |
 
 **Recent Trend:**
 
@@ -59,6 +60,7 @@ Progress: [███-------] 25%
 | Phase 02-safety-configuration-data-backbone P04 | 9min | 2 tasks | 4 files |
 | Phase 02-safety-configuration-data-backbone P05 | 8min | 2 tasks | 8 files |
 | Phase 02-safety-configuration-data-backbone P06 | 9min | 3 tasks | 10 files |
+| Phase 03-provider-fixtures-domain-math P01 | - | 8 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -99,6 +101,11 @@ Recent decisions affecting current work:
 - [Phase 02 Plan 06]: Redis is runtime dependency scope, while fakeredis remains dev-only for service-free default tests.
 - [Phase 02 Plan 06]: Heartbeat writes preserve durable status in PostgreSQL and do not expose Redis-backed business-state methods.
 - [Phase 02 Plan 06]: Validation index rows assign future implementation ownership by roadmap phase and leave later-phase evidence explicitly pending or manual-gated.
+- [Phase 03 Plan 01]: Provider fixtures stay committed, sanitized, and service-free; default tests make no live Polymarket or Pyth calls.
+- [Phase 03 Plan 01]: Polymarket parser outputs preserve `TradeSide`, Decimal prices/sizes, sub-second timestamps, and split-fill dedupe keys.
+- [Phase 03 Plan 01]: Pyth parser outputs decode price and confidence with Decimal exponent scaling and expose stale/reconnect control states.
+- [Phase 03 Plan 01]: Qualification normalizes drawdown values before comparing ratio metrics with percent-style thresholds.
+- [Phase 03 Plan 01]: The `VAL-SCAN-007` Sharpe vector has a documented arithmetic mismatch; implementation keeps exact population math.
 
 ### Pending Todos
 
@@ -107,7 +114,7 @@ None yet.
 ### Blockers/Concerns
 
 - [Phase 2]: Environment contracts are split across `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs.
-- [Phase 3+]: Live Polymarket and Pyth payload details need sanitized fixture capture before provider adapter behavior can be trusted.
+- [Phase 4+]: Live Polymarket and Pyth payload details should be compared against the sanitized Phase 3 fixture shapes before long-running provider workers are trusted.
 
 ## Deferred Items
 
@@ -121,6 +128,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-21T20:24:08.152Z
-Stopped at: Completed 02-06-PLAN.md
-Resume file: None
+Last session: --stopped-at
+Stopped at: Completed 03-01-PLAN.md
+Resume file: --resume-file

@@ -32,12 +32,12 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 ### Provider Fixtures And Domain Math
 
-- [ ] **MATH-01**: Sanitized Polymarket fixtures cover leaderboard, trader profile, positions, trades, pagination, 429, 5xx, timeout, empty, and malformed payload cases.
-- [ ] **MATH-02**: Sanitized Pyth fixtures cover subscription acknowledgements, price updates, confidence/exponent decoding, stale prices, reconnects, and malformed payloads.
-- [ ] **MATH-03**: Sharpe ratio calculation matches the validation contract vectors and returns an explicit undefined state for insufficient or zero-variance data.
-- [ ] **MATH-04**: Max drawdown calculation matches the validation contract vectors and handles monotonic, flat, single-point, total-loss, and negative-equity cases.
-- [ ] **MATH-05**: Qualification filtering enforces Sharpe, drawdown, trade count, and volume thresholds with exact boundary behavior and per-wallet exclusion reasons.
-- [ ] **MATH-06**: Simulation accounting uses `Decimal` or scaled integer math for prices, sizes, cash, positions, realized PnL, unrealized PnL, and portfolio value.
+- [x] **MATH-01**: Sanitized Polymarket fixtures cover leaderboard, trader profile, positions, trades, pagination, 429, 5xx, timeout, empty, and malformed payload cases.
+- [x] **MATH-02**: Sanitized Pyth fixtures cover subscription acknowledgements, price updates, confidence/exponent decoding, stale prices, reconnects, and malformed payloads.
+- [x] **MATH-03**: Sharpe ratio calculation matches the validation contract vectors and returns an explicit undefined state for insufficient or zero-variance data.
+- [x] **MATH-04**: Max drawdown calculation matches the validation contract vectors and handles monotonic, flat, single-point, total-loss, and negative-equity cases.
+- [x] **MATH-05**: Qualification filtering enforces Sharpe, drawdown, trade count, and volume thresholds with exact boundary behavior and per-wallet exclusion reasons.
+- [x] **MATH-06**: Simulation accounting uses `Decimal` or scaled integer math for prices, sizes, cash, positions, realized PnL, unrealized PnL, and portfolio value.
 
 ### Hermes Scanner
 
@@ -168,12 +168,12 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Complete |
-| MATH-01 | Phase 3: Provider Fixtures & Domain Math | Pending |
-| MATH-02 | Phase 3: Provider Fixtures & Domain Math | Pending |
-| MATH-03 | Phase 3: Provider Fixtures & Domain Math | Pending |
-| MATH-04 | Phase 3: Provider Fixtures & Domain Math | Pending |
-| MATH-05 | Phase 3: Provider Fixtures & Domain Math | Pending |
-| MATH-06 | Phase 3: Provider Fixtures & Domain Math | Pending |
+| MATH-01 | Phase 3: Provider Fixtures & Domain Math | Complete |
+| MATH-02 | Phase 3: Provider Fixtures & Domain Math | Complete |
+| MATH-03 | Phase 3: Provider Fixtures & Domain Math | Complete |
+| MATH-04 | Phase 3: Provider Fixtures & Domain Math | Complete |
+| MATH-05 | Phase 3: Provider Fixtures & Domain Math | Complete |
+| MATH-06 | Phase 3: Provider Fixtures & Domain Math | Complete |
 | SCAN-01 | Phase 4: Hermes Scanner | Pending |
 | SCAN-02 | Phase 4: Hermes Scanner | Pending |
 | SCAN-03 | Phase 4: Hermes Scanner | Pending |
@@ -227,4 +227,4 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 
 ---
 *Requirements defined: 2026-04-21*
-*Last updated: 2026-04-21 after roadmap creation*
+*Last updated: 2026-04-21 after Phase 3 completion*
