@@ -17,18 +17,18 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 ### Safety And Configuration
 
-- [ ] **SAFE-01**: Application startup loads typed settings from environment variables with Pydantic and rejects missing required active settings with clear redacted errors.
-- [ ] **SAFE-02**: Real secrets are never logged, returned by API endpoints, rendered in the dashboard, or committed in fixtures/docs.
-- [ ] **SAFE-03**: The app defaults to zero-execution mode and exposes no route, command, client, import, or config path that can sign, submit, cancel, bridge, approve, fund, or execute real trades.
-- [ ] **SAFE-04**: `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs agree on active v1 environment variables.
-- [ ] **SAFE-05**: Future/execution-adjacent variables such as private keys, Helius/LaserStream/Jito execution settings, and live-funded validation settings are classified as disabled or future scope.
+- [x] **SAFE-01**: Application startup loads typed settings from environment variables with Pydantic and rejects missing required active settings with clear redacted errors.
+- [x] **SAFE-02**: Real secrets are never logged, returned by API endpoints, rendered in the dashboard, or committed in fixtures/docs.
+- [x] **SAFE-03**: The app defaults to zero-execution mode and exposes no route, command, client, import, or config path that can sign, submit, cancel, bridge, approve, fund, or execute real trades.
+- [x] **SAFE-04**: `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs agree on active v1 environment variables.
+- [x] **SAFE-05**: Future/execution-adjacent variables such as private keys, Helius/LaserStream/Jito execution settings, and live-funded validation settings are classified as disabled or future scope.
 
 ### Persistence And Coordination
 
-- [ ] **DATA-01**: Alembic migrations create PostgreSQL tables for wallets, scanner runs, qualification evidence, trades, watermarks, simulation portfolios, simulated trades, positions, price updates, correlations, notifications, component heartbeats, and validation evidence.
-- [ ] **DATA-02**: Repository methods use transactions and schema-level uniqueness to make wallet discovery, trade ingestion, watermarks, simulation writes, and notification records idempotent.
-- [ ] **DATA-03**: Redis coordination provides owner-token locks for scanner overlap prevention and short-lived rate/cache state without becoming the durable source of truth.
-- [ ] **DATA-04**: Component heartbeat rows record last success, last error, degraded/stale state, and freshness timestamps for scanner, tracker, simulator, Pyth feed, API, and dashboard-visible systems.
+- [x] **DATA-01**: Alembic migrations create PostgreSQL tables for wallets, scanner runs, qualification evidence, trades, watermarks, simulation portfolios, simulated trades, positions, price updates, correlations, notifications, component heartbeats, and validation evidence.
+- [x] **DATA-02**: Repository methods use transactions and schema-level uniqueness to make wallet discovery, trade ingestion, watermarks, simulation writes, and notification records idempotent.
+- [x] **DATA-03**: Redis coordination provides owner-token locks for scanner overlap prevention and short-lived rate/cache state without becoming the durable source of truth.
+- [x] **DATA-04**: Component heartbeat rows record last success, last error, degraded/stale state, and freshness timestamps for scanner, tracker, simulator, Pyth feed, API, and dashboard-visible systems.
 
 ### Provider Fixtures And Domain Math
 
@@ -96,7 +96,7 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 ### Validation Evidence
 
-- [ ] **VAL-01**: A validation index maps every `VAL-DASH-*`, `VAL-PYTH-*`, `VAL-CROSS-*`, `VAL-SCAN-*`, `VAL-TRACK-*`, and `VAL-SIM-*` assertion to owner phase, automation/manual status, evidence command, and current state.
+- [x] **VAL-01**: A validation index maps every `VAL-DASH-*`, `VAL-PYTH-*`, `VAL-CROSS-*`, `VAL-SCAN-*`, `VAL-TRACK-*`, and `VAL-SIM-*` assertion to owner phase, automation/manual status, evidence command, and current state.
 - [ ] **VAL-02**: Automated pytest suites cover scaffold, config, safety boundary, provider fixtures, domain math, scanner, tracker, simulator, API, and persistence behavior.
 - [ ] **VAL-03**: `tuistory` dashboard checks cover launch, layout, keyboard navigation, refresh, resize, empty states, degraded states, and wallet detail navigation.
 - [ ] **VAL-04**: Manual/live provider checks are read-only, separately gated, documented with evidence commands, and never run as unsafe CI defaults.
@@ -159,15 +159,15 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | FOUND-03 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-04 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-05 | Phase 1: Executable Scaffold & Factory Portability | Complete |
-| SAFE-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| SAFE-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| SAFE-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| SAFE-03 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| SAFE-04 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | MATH-01 | Phase 3: Provider Fixtures & Domain Math | Pending |
 | MATH-02 | Phase 3: Provider Fixtures & Domain Math | Pending |
 | MATH-03 | Phase 3: Provider Fixtures & Domain Math | Pending |
@@ -211,7 +211,7 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | PYTH-03 | Phase 7: Pyth Feed & Correlation | Pending |
 | PYTH-04 | Phase 7: Pyth Feed & Correlation | Pending |
 | PYTH-05 | Phase 7: Pyth Feed & Correlation | Pending |
-| VAL-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| VAL-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | VAL-02 | Phase 8: API, Dashboard & Validation Evidence | Pending |
 | VAL-03 | Phase 8: API, Dashboard & Validation Evidence | Pending |
 | VAL-04 | Phase 8: API, Dashboard & Validation Evidence | Pending |
