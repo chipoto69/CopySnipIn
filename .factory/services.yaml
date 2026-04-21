@@ -32,13 +32,15 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/api.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.main:app"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/api.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null &&
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.main:app"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac &&
       curl -sf http://localhost:8090/health
     port: 8090
     depends_on: [postgres, redis]
@@ -54,13 +56,15 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/scanner.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.scanner"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/scanner.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.scanner"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac
     port: 0
     depends_on: [postgres, redis, api]
 
@@ -75,13 +79,15 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/tracker.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.tracker"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/tracker.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.tracker"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac
     port: 0
     depends_on: [postgres, redis, api]
 
@@ -96,13 +102,15 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/simulator.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.simulator"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/simulator.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.simulator"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac
     port: 0
     depends_on: [postgres, redis, api]
 
@@ -117,13 +125,15 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/pyth_feed.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.pyth_feed"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/pyth_feed.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.pyth_feed"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac
     port: 0
     depends_on: [postgres, redis, api]
 
@@ -138,12 +148,14 @@ services:
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/dashboard.pid" &&
       if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
-      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null || true)";
+      case "$CMD" in *"copysnipin.dashboard"*) kill "$PID" ;; esac;
       rm -f "$PIDFILE"; fi
     healthcheck: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/dashboard.pid" &&
       test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
-      kill -0 "$PID" 2>/dev/null
+      CMD="$(ps -p "$PID" -o args= 2>/dev/null)" &&
+      case "$CMD" in *"copysnipin.dashboard"*) kill -0 "$PID" 2>/dev/null ;; *) exit 1 ;; esac
     port: 0
     depends_on: [api]

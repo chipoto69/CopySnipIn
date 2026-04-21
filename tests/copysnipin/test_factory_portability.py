@@ -18,6 +18,14 @@ SCAFFOLD_TARGETS = (
 )
 PID_FILE_SERVICES = ("api", "scanner", "tracker", "simulator", "pyth_feed", "dashboard")
 WORKER_SERVICES = ("scanner", "tracker", "simulator", "pyth_feed", "dashboard")
+SERVICE_MARKERS = {
+    "api": "copysnipin.main:app",
+    "scanner": "copysnipin.scanner",
+    "tracker": "copysnipin.tracker",
+    "simulator": "copysnipin.simulator",
+    "pyth_feed": "copysnipin.pyth_feed",
+    "dashboard": "copysnipin.dashboard",
+}
 
 
 def read_project_file(path: Path) -> str:
@@ -73,6 +81,8 @@ def test_service_stops_use_pid_files_not_global_process_matching() -> None:
         assert f".factory/run/{service_name}.pid" in block
         assert 'PIDFILE=".factory/run/' in block
         assert 'PID="$(cat "$PIDFILE")"' in block
+        assert 'CMD="$(ps -p "$PID" -o args=' in block
+        assert SERVICE_MARKERS[service_name] in block
         assert 'kill -0 "$PID"' in block
         assert 'kill "$PID"' in block
 
@@ -85,6 +95,8 @@ def test_worker_healthchecks_check_existing_pid_not_new_smoke_process() -> None:
         healthcheck_block = block.split("healthcheck: >-", 1)[1]
 
         assert f".factory/run/{service_name}.pid" in healthcheck_block
+        assert 'CMD="$(ps -p "$PID" -o args=' in healthcheck_block
+        assert SERVICE_MARKERS[service_name] in healthcheck_block
         assert 'kill -0 "$PID"' in healthcheck_block
         assert "uv run python -m" not in healthcheck_block
 
@@ -95,5 +107,7 @@ def test_api_healthcheck_requires_pid_and_http_health() -> None:
     healthcheck_block = api_block.split("healthcheck: >-", 1)[1]
 
     assert ".factory/run/api.pid" in healthcheck_block
+    assert 'CMD="$(ps -p "$PID" -o args=' in healthcheck_block
+    assert SERVICE_MARKERS["api"] in healthcheck_block
     assert 'kill -0 "$PID"' in healthcheck_block
     assert "curl -sf http://localhost:8090/health" in healthcheck_block
