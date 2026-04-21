@@ -4,11 +4,11 @@
 
 ## Tech Debt
 
-**Planning contracts exist without implementation substrate:**
-- Issue: The authoritative project shape is currently `.factory/` plus validation contracts, while implementation paths referenced by the docs are absent from the tracked project files.
+**Planning contracts still exceed scaffold behavior:**
+- Issue: The authoritative project shape is now `.factory/`, validation contracts, and scaffold source modules, but most behavior referenced by the docs is intentionally absent.
 - Files: `AGENTS.md`, `.factory/services.yaml`, `.factory/skills/python-worker/SKILL.md`, `.factory/library/architecture.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`
-- Impact: Commands and workers reference `src/`, `tests/`, `src/copysnipin/`, `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard`, but those modules are not present in the tracked workspace. Future agents can accidentally assume code exists because the service contract is written as if it does.
-- Fix approach: Scaffold `pyproject.toml`, `src/copysnipin/`, `tests/`, and initial executable entry points before assigning implementation work. Until then, treat `copysnipin.main`, `copysnipin.scanner`, and `copysnipin.dashboard` as planned module names only.
+- Impact: Future agents can accidentally treat scaffold entry points as implemented scanner, tracker, simulator, Pyth, API read-model, or dashboard behavior.
+- Fix approach: Preserve explicit `status=scaffold` and `not_implemented` states until the owner phase replaces each stub with tested behavior.
 
 **Hard-coded checkout path mismatch:**
 - Issue: Project commands point to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
@@ -16,11 +16,11 @@
 - Impact: `.factory/init.sh` and every `.factory/services.yaml` command can operate in the wrong checkout or fail before reaching the current workspace. This also makes worker reproducibility fragile across Conductor workspaces.
 - Fix approach: Resolve paths relative to the repository root, for example with `git rev-parse --show-toplevel` or the script directory, and remove absolute checkout paths from service definitions.
 
-**Factory service commands assume undeclared package tooling:**
-- Issue: Factory commands require `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, but no tracked package manifest or lockfile defines dependencies.
+**Factory service commands still need portability fixes:**
+- Issue: Factory commands require `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and the package tooling now exists, but the factory commands still use the old absolute checkout path.
 - Files: `.factory/services.yaml`, `.factory/init.sh`, `AGENTS.md`, `.factory/skills/python-worker/SKILL.md`
-- Impact: Install, build, test, typecheck, lint, and service start commands are aspirational rather than executable from the tracked project state.
-- Fix approach: Add a package manifest with runtime and dev dependencies before relying on factory commands as gates.
+- Impact: Install, build, test, typecheck, lint, and service start commands can run in the wrong checkout or fail from Conductor workspaces.
+- Fix approach: Plan 03 should replace absolute paths with repository-root discovery and verify commands from the active workspace.
 
 **Validation contract surface is far larger than the current project substrate:**
 - Issue: The validation docs define 148 unique assertion IDs across dashboard, Pyth, cross-area flows, scanner, tracker, and simulation, but no test harness or source implementation is tracked.
@@ -179,17 +179,13 @@
 
 ## Missing Critical Features
 
-**Source implementation:**
-- Problem: No tracked source package exists for the services described by `.factory/` and `docs/`.
-- Blocks: Running API, scanner, tracker, simulation, dashboard, Pyth feed, or any validation contract.
+**Domain implementation beyond scaffold:**
+- Problem: Source modules exist only as safe scaffold entry points.
+- Blocks: Real scanner cycles, trade tracking, simulation accounting, Pyth ingestion, API read models, dashboard screens, and validation contract behavior.
 
-**Package manifest and lockfile:**
-- Problem: No tracked Python package manifest defines project metadata, commands, dependencies, or dev tools.
-- Blocks: `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff` from `.factory/services.yaml`.
-
-**Tests and fixtures:**
-- Problem: No tracked tests, fixtures, mocked API responses, or validation harness exist.
-- Blocks: TDD flow in `.factory/skills/python-worker/SKILL.md` and all validation evidence requirements in `docs/`.
+**Provider fixtures and validation harness:**
+- Problem: No tracked provider fixtures, mocked API responses, or validation index exist yet.
+- Blocks: TDD flow for provider/domain behavior and all validation evidence requirements in `docs/`.
 
 **Database migrations:**
 - Problem: No tracked schema/migration layer exists for wallet, trade, simulation, Pyth, correlation, lock, or watermark state.

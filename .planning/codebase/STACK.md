@@ -5,7 +5,7 @@
 ## Languages
 
 **Primary:**
-- Python 3.13+ - Primary implementation language for CopySnipIn services. The base package now exists under `src/copysnipin/` with a version export and typed-package marker; service modules are still pending later Phase 1 plans.
+- Python 3.13+ - Primary implementation language for CopySnipIn services. The package now exists under `src/copysnipin/` with a version export, typed-package marker, and safe scaffold entry modules for API, scanner, tracker, simulator, Pyth feed, and dashboard.
 
 **Secondary:**
 - Bash - Setup automation in `.factory/init.sh`.
@@ -18,7 +18,7 @@
 **Environment:**
 - Python 3.13+ is the intended runtime according to `AGENTS.md` and `.factory/library/environment.md`.
 - `.python-version` selects Python `3.13` for uv workflows.
-- The workspace now has package metadata in `pyproject.toml`, a generated `uv.lock`, a base source package in `src/copysnipin/`, and import smoke coverage in `tests/copysnipin/`.
+- The workspace now has package metadata in `pyproject.toml`, a generated `uv.lock`, scaffold source modules in `src/copysnipin/`, and smoke/safety coverage in `tests/copysnipin/`.
 - `.factory/init.sh` checks for `python3`, `uv`, PostgreSQL, Redis, and `.env`; it can run `uv sync` now that `pyproject.toml` exists, but factory portability is still pending Plan 03.
 
 **Package Manager:**
@@ -29,12 +29,12 @@
 ## Frameworks
 
 **Core:**
-- FastAPI - Declared runtime dependency for the planned backend. `.factory/library/architecture.md` defines a FastAPI backend reading PostgreSQL and serving the TUI dashboard via REST/WebSocket, and `.factory/services.yaml` configures `uvicorn copysnipin.main:app` on port `8090`. `copysnipin.main` is still pending Plan 02.
-- Textual - Declared runtime dependency for the planned terminal UI. `.factory/library/architecture.md` and `docs/validation-contract.md` define a Textual-based TUI dashboard. `copysnipin.dashboard` is still pending Plan 02.
+- FastAPI - Declared runtime dependency and used by `src/copysnipin/main.py` for the scaffold `copysnipin.main:app` and `/health` route. Full database, Redis, worker, and read-model health remain deferred.
+- Textual - Declared runtime dependency and imported by `src/copysnipin/dashboard.py` for the scaffold `CopySnipInDashboard` class. Full terminal UI behavior remains deferred.
 - Python worker pattern - `.factory/skills/python-worker/SKILL.md` defines the expected implementation workflow for FastAPI endpoints, scanner services, trade tracking, simulation logic, database models, and calculation utilities.
 
 **Testing:**
-- pytest - Configured test runner in `pyproject.toml`, with initial import smoke coverage under `tests/copysnipin/test_imports.py`.
+- pytest - Configured test runner in `pyproject.toml`, with import, health, entry-point, and safety scaffold coverage under `tests/copysnipin/`.
 - tuistory - Planned TUI validation tool in `.factory/library/user-testing.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, and `docs/validation-tracker-simulation.md`.
 - curl - Planned API validation tool in `.factory/library/user-testing.md` and validation contracts.
 - psql - Planned database verification tool in `.factory/library/user-testing.md` and `.factory/init.sh`.

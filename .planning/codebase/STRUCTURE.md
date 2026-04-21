@@ -19,7 +19,17 @@ This structure map covers tracked/project files only:
 - `uv.lock`
 - `src/copysnipin/__init__.py`
 - `src/copysnipin/py.typed`
+- `src/copysnipin/_scaffold.py`
+- `src/copysnipin/main.py`
+- `src/copysnipin/scanner.py`
+- `src/copysnipin/tracker.py`
+- `src/copysnipin/simulator.py`
+- `src/copysnipin/pyth_feed.py`
+- `src/copysnipin/dashboard.py`
 - `tests/copysnipin/test_imports.py`
+- `tests/copysnipin/test_health.py`
+- `tests/copysnipin/test_entrypoints.py`
+- `tests/copysnipin/test_safety_scaffold.py`
 - `docs/validation-contract.md`
 - `docs/validation-hermes-scanner.md`
 - `docs/validation-tracker-simulation.md`
@@ -49,10 +59,20 @@ raleigh/
 ├── src/
 │   └── copysnipin/
 │       ├── __init__.py                    # Base package version export
-│       └── py.typed                       # PEP 561 typed-package marker
+│       ├── py.typed                       # PEP 561 typed-package marker
+│       ├── _scaffold.py                   # Shared scaffold status helper
+│       ├── main.py                        # FastAPI scaffold app and API smoke main
+│       ├── scanner.py                     # Scanner scaffold smoke entry point
+│       ├── tracker.py                     # Tracker scaffold smoke entry point
+│       ├── simulator.py                   # Simulator scaffold smoke entry point
+│       ├── pyth_feed.py                   # Pyth feed scaffold smoke entry point
+│       └── dashboard.py                   # Textual dashboard shell and smoke main
 ├── tests/
 │   └── copysnipin/
-│       └── test_imports.py                # Import and package metadata smoke tests
+│       ├── test_imports.py                # Import and package metadata smoke tests
+│       ├── test_health.py                 # Scaffold /health response tests
+│       ├── test_entrypoints.py            # Subprocess smoke tests for module entry points
+│       └── test_safety_scaffold.py        # Source scan for execution-capable tokens
 └── docs/                                  # Behavioral validation contracts
     ├── validation-contract.md             # Dashboard, Pyth, and cross-area validation assertions
     ├── validation-hermes-scanner.md       # Hermes Scanner validation assertions
@@ -64,8 +84,8 @@ raleigh/
 **Project Root:**
 - Purpose: Holds repository guidance, environment example, ignore rules, factory metadata, and validation contracts.
 - Contains: `AGENTS.md`, `.python-version`, `pyproject.toml`, `uv.lock`, `.env.example`, `.gitignore`, `.factory/`, `src/`, `tests/`, `docs/`.
-- Key files: `pyproject.toml`, `uv.lock`, `src/copysnipin/__init__.py`, `tests/copysnipin/test_imports.py`, `.factory/services.yaml`, `.factory/library/architecture.md`, `docs/validation-contract.md`.
-- Implementation status: Package substrate exists; process entry modules, README, factory portability changes, API, scanner, tracker, simulator, Pyth feed, dashboard behavior, persistence, and provider logic are still pending later plans/phases.
+- Key files: `pyproject.toml`, `uv.lock`, `src/copysnipin/main.py`, `src/copysnipin/_scaffold.py`, `tests/copysnipin/test_entrypoints.py`, `.factory/services.yaml`, `.factory/library/architecture.md`, `docs/validation-contract.md`.
+- Implementation status: Package substrate and safe process entry modules exist; README, factory portability changes, API read models, scanner, tracker, simulator, Pyth feed, dashboard behavior, persistence, and provider logic are still pending later plans/phases.
 
 **`.factory/`:**
 - Purpose: Current authoritative project shape for service orchestration and implementation guidance.
@@ -95,9 +115,11 @@ raleigh/
 
 **Entry Points:**
 - `.factory/init.sh`: Actual tracked setup script for checking Python/uv, creating the `copysnipin` database, checking Redis, running `uv sync` when `pyproject.toml` exists, and warning about missing real `.env`.
-- `pyproject.toml`: Declares console scripts for API, scanner, tracker, simulator, Pyth feed, and dashboard. The script targets are scaffold names for Plan 02; modules beyond the base package are not implemented yet.
+- `pyproject.toml`: Declares console scripts for API, scanner, tracker, simulator, Pyth feed, and dashboard.
+- `src/copysnipin/main.py`: Defines the scaffold FastAPI app target `copysnipin.main:app`, `/health`, and API smoke main.
+- `src/copysnipin/scanner.py`, `tracker.py`, `simulator.py`, `pyth_feed.py`, `dashboard.py`: Define inert scaffold smoke entry points for planned processes.
 - `.factory/services.yaml`: Intended service runner contract for install, typecheck, build, test, lint, PostgreSQL, Redis, API, scanner, and dashboard.
-- `.factory/services.yaml`: Defines intended API target `copysnipin.main:app`, scanner target `copysnipin.scanner`, and dashboard target `copysnipin.dashboard`; these module paths are not implemented in tracked files.
+- `.factory/services.yaml`: Defines intended API target `copysnipin.main:app`, scanner target `copysnipin.scanner`, and dashboard target `copysnipin.dashboard`; these module paths now exist as scaffold targets, while service portability remains pending.
 
 **Configuration:**
 - `.env.example`: Example configuration for Polymarket URLs, Helius, LaserStream, Jito, PostgreSQL, Redis, dashboard/API, scanner thresholds, and notifications.
@@ -118,6 +140,9 @@ raleigh/
 - `.factory/library/user-testing.md`: Defines validation surfaces for FastAPI Backend, TUI Dashboard, and Full Pipeline; tools are `curl`, `tuistory`, log analysis, `psql`, and `redis-cli`.
 - `.factory/skills/python-worker/SKILL.md`: Defines future TDD workflow with tests under `tests/`, `uv run pytest`, `uv run mypy`, `uv run ruff check`, and `uv run ruff format --check`.
 - `tests/copysnipin/test_imports.py`: Initial executable pytest smoke coverage for package import and installed metadata version.
+- `tests/copysnipin/test_health.py`: Exact scaffold `/health` payload coverage.
+- `tests/copysnipin/test_entrypoints.py`: Subprocess smoke coverage for API, scanner, tracker, simulator, Pyth feed, and dashboard modules.
+- `tests/copysnipin/test_safety_scaffold.py`: Source scan for execution-capable tokens in scaffold modules.
 - `docs/validation-contract.md`: Defines `VAL-DASH-*`, `VAL-PYTH-*`, and `VAL-CROSS-*` assertions.
 - `docs/validation-hermes-scanner.md`: Defines `VAL-SCAN-*` assertions.
 - `docs/validation-tracker-simulation.md`: Defines `VAL-TRACK-*` and `VAL-SIM-*` assertions.

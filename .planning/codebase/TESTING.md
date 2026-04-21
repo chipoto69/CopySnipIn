@@ -20,7 +20,8 @@
 
 **Current executable test status:**
 - `tests/copysnipin/test_imports.py` is present and verifies package import plus installed metadata version.
-- `src/copysnipin/` is present with the base package version contract and `py.typed` marker.
+- `tests/copysnipin/test_health.py`, `test_entrypoints.py`, and `test_safety_scaffold.py` cover scaffold health, module smoke runs, and source safety scanning.
+- `src/copysnipin/` is present with the base package version contract, `py.typed` marker, shared scaffold helper, and safe entry-point modules.
 - `pyproject.toml` configures pytest, mypy, and Ruff for the initial scaffold.
 - `uv.lock` is present, and the initial plan verified `uv sync --locked`, pytest, mypy, Ruff check, and Ruff format-check.
 - Broader validation assets remain the validation contracts and factory procedures until later feature phases add domain behavior.
@@ -74,12 +75,20 @@ uv run ruff format --check src/copysnipin/ tests/   # Package/test format check 
 src/copysnipin/
   __init__.py
   py.typed
-  <feature modules added by later phases/plans>
+  _scaffold.py
+  main.py
+  scanner.py
+  tracker.py
+  simulator.py
+  pyth_feed.py
+  dashboard.py
 
 tests/
   copysnipin/
     test_imports.py
-  <additional mirrored package tests as needed>
+    test_health.py
+    test_entrypoints.py
+    test_safety_scaffold.py
 ```
 
 ## Test Structure

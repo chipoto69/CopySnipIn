@@ -10,7 +10,7 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 ### Foundation
 
 - [x] **FOUND-01**: Developer can install dependencies with `uv sync` from a tracked `pyproject.toml` and lockfile.
-- [ ] **FOUND-02**: Developer can run package entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard from `src/copysnipin/`.
+- [x] **FOUND-02**: Developer can run package entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard from `src/copysnipin/`.
 - [x] **FOUND-03**: Developer can run `uv run pytest`, `uv run mypy`, `uv run ruff check`, and `uv run ruff format --check` successfully on the scaffold.
 - [ ] **FOUND-04**: `.factory/init.sh` and `.factory/services.yaml` resolve the active repository root dynamically instead of hard-coding an absolute checkout path.
 - [x] **FOUND-05**: The repository contains a committed `tests/` tree mirroring the `src/copysnipin/` package layout.
@@ -155,7 +155,7 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | FOUND-01 | Phase 1: Executable Scaffold & Factory Portability | Complete |
-| FOUND-02 | Phase 1: Executable Scaffold & Factory Portability | Pending |
+| FOUND-02 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-03 | Phase 1: Executable Scaffold & Factory Portability | Complete |
 | FOUND-04 | Phase 1: Executable Scaffold & Factory Portability | Pending |
 | FOUND-05 | Phase 1: Executable Scaffold & Factory Portability | Complete |

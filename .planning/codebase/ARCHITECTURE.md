@@ -12,9 +12,9 @@
 - Implementation workflow: `.factory/skills/python-worker/SKILL.md`
 
 **Implemented Source Status:**
-- The package substrate exists: `pyproject.toml`, `uv.lock`, `src/copysnipin/__init__.py`, `src/copysnipin/py.typed`, and `tests/copysnipin/test_imports.py`.
-- Module paths in `.factory/services.yaml` and `pyproject.toml` such as `copysnipin.main:app`, `copysnipin.scanner`, and `copysnipin.dashboard` are still intended launch targets only until Plan 02 creates safe scaffold modules.
-- Future code should treat `.factory/`, `docs/validation-*.md`, `pyproject.toml`, and the base `src/copysnipin/` package as the current project contract.
+- The package substrate exists: `pyproject.toml`, `uv.lock`, `src/copysnipin/__init__.py`, `src/copysnipin/py.typed`, and tests under `tests/copysnipin/`.
+- Safe scaffold module targets now exist for `copysnipin.main:app`, `copysnipin.scanner`, `copysnipin.tracker`, `copysnipin.simulator`, `copysnipin.pyth_feed`, and `copysnipin.dashboard`.
+- Future code should treat `.factory/`, `docs/validation-*.md`, `pyproject.toml`, and the scaffold `src/copysnipin/` package as the current project contract.
 
 ## Pattern Overview
 
@@ -35,7 +35,7 @@
 - Contains: `.factory/services.yaml`, `.factory/init.sh`, `.factory/skills/python-worker/SKILL.md`
 - Depends on: Python 3.13+, `uv`, local PostgreSQL on port 5432, local Redis on port 6379.
 - Used by: Agents and developers starting intended services and implementing features.
-- Implementation status: Shell/YAML control files and package metadata exist; referenced service module targets are not implemented in tracked source yet.
+- Implementation status: Shell/YAML control files, package metadata, and safe scaffold service module targets exist; factory root portability remains pending Plan 03.
 
 **Environment Configuration Layer:**
 - Purpose: Define required environment variables and external dependency expectations.
@@ -51,7 +51,7 @@
 - Contains: Scheduler contract, overlap guard, Polymarket API fetching, Sharpe/drawdown calculations, threshold filtering, wallet persistence, Discord/Telegram alerting, startup/shutdown behavior.
 - Depends on: Polymarket Gamma/Data APIs, PostgreSQL, Redis lock key `hermes:scanner:lock`, scanner threshold env vars, optional `DISCORD_WEBHOOK_URL`, optional `TELEGRAM_BOT_TOKEN`.
 - Used by: Trade Tracker, Dashboard, and Cross-Area validation flows.
-- Implementation status: No tracked `copysnipin.scanner` module exists; `.factory/services.yaml` only defines the intended command.
+- Implementation status: `src/copysnipin/scanner.py` exists only as an inert scaffold smoke entry point. Scanner cycles, provider reads, persistence, Redis locks, and alerts are not implemented.
 
 **Trade Tracker Layer:**
 - Purpose: Poll tracked wallets for recent Polymarket trades, detect new trades with persistent watermarks, deduplicate, and persist all detected trades.
@@ -59,7 +59,7 @@
 - Contains: New trade detection, BUY/SELL parsing, precise trade field storage, duplicate detection, multi-wallet polling, rate limit handling, DB buffering, query indexes.
 - Depends on: PostgreSQL tracked-wallet store, Polymarket Data API, per-wallet watermark persistence, rate-limit configuration.
 - Used by: Simulation Engine and Dashboard trade feed.
-- Implementation status: No tracked trade tracker source module exists.
+- Implementation status: `src/copysnipin/tracker.py` exists only as an inert scaffold smoke entry point. Trade polling, watermarks, persistence, and rate-limit handling are not implemented.
 
 **Simulation Engine Layer:**
 - Purpose: Mirror detected trades into one or more paper-trade strategies and compute portfolio performance.
@@ -67,7 +67,7 @@
 - Contains: Trade mirroring, sell inventory validation, fixed-amount and portfolio-percent sizing, cash/position accounting, realized/unrealized PnL, win rate, Sharpe, drawdown, actual-vs-simulated comparison, strategy isolation.
 - Depends on: `trades` data, `simulated_trades` storage, market prices from Pyth or latest trade prices, `SIMULATION_SEED_USD`.
 - Used by: FastAPI Backend, TUI Dashboard, Cross-Area validation flows.
-- Implementation status: No tracked simulation source module exists.
+- Implementation status: `src/copysnipin/simulator.py` exists only as an inert scaffold smoke entry point. Paper-trade accounting and portfolio state are not implemented.
 
 **Pyth Price Feed and Correlation Layer:**
 - Purpose: Subscribe to Pyth Pro WebSocket price updates, store high-resolution price history, and correlate Pyth movements with Polymarket market changes.
@@ -75,7 +75,7 @@
 - Contains: WebSocket connection/reconnect, price decoding, confidence interval storage, staleness detection, 200 ms update handling, latency measurement, price correlation records.
 - Depends on: `PYTH_TOKEN`, configured Pyth assets, PostgreSQL `pyth_prices` and `price_correlations` stores.
 - Used by: Simulation Engine, Dashboard status, Cross-Area Pyth-to-trade validation.
-- Implementation status: No tracked Pyth feed source module exists.
+- Implementation status: `src/copysnipin/pyth_feed.py` exists only as an inert scaffold smoke entry point. Pyth subscription, decoding, storage, and correlation are not implemented.
 
 **FastAPI Backend Layer:**
 - Purpose: Expose API endpoints and likely WebSocket updates for health, wallet lists, trades, simulation summaries, Pyth status, metrics, and dashboard reads.
@@ -83,7 +83,7 @@
 - Contains: Intended health endpoint at `http://localhost:8090/health` and API surfaces for wallet/trade/simulation/Pyth data.
 - Depends on: PostgreSQL, Redis, scanner/tracker/simulation/Pyth persisted data.
 - Used by: TUI Dashboard and curl-based validation.
-- Implementation status: No tracked `copysnipin.main:app` source exists.
+- Implementation status: `src/copysnipin/main.py` exposes `copysnipin.main:app` with a scaffold `/health` route only. Database, Redis, worker, freshness, and read-model health are not implemented.
 
 **TUI Dashboard Layer:**
 - Purpose: Provide a Textual-based terminal dashboard for tracked wallets, live trades, simulation PnL, wallet detail, and system status.
@@ -91,7 +91,7 @@
 - Contains: Wallet table, trade feed, simulation PnL panel, wallet detail view, status panel, auto-refresh, keyboard navigation.
 - Depends on: FastAPI Backend, dashboard refresh config, current DB-backed state.
 - Used by: Operators and `tuistory` validation.
-- Implementation status: No tracked `copysnipin.dashboard` source exists.
+- Implementation status: `src/copysnipin/dashboard.py` imports Textual and defines `CopySnipInDashboard`, but smoke execution does not run the app and no dashboard screens are implemented.
 
 **Storage and Coordination Layer:**
 - Purpose: Persist system state and coordinate background work.

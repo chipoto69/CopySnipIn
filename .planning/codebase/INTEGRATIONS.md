@@ -41,9 +41,10 @@
 
 **Internal/Local API:**
 - FastAPI backend - Planned local REST/WebSocket API for dashboard, health, metrics, wallet, trade, simulation, and Pyth status queries.
-  - SDK/Client: FastAPI and uvicorn are declared in `pyproject.toml`; `copysnipin.main` is still pending Plan 02.
+  - SDK/Client: FastAPI and uvicorn are declared in `pyproject.toml`; `copysnipin.main` now exposes a scaffold app and `/health` route.
   - Auth: Not detected in tracked files.
   - Local URL: `http://localhost:8090/health` in `.factory/services.yaml`.
+  - Current status: Scaffold only; no database, Redis, provider, worker, or dashboard read models are implemented.
 
 ## Data Storage
 

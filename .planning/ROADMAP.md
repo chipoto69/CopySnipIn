@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 Plans:
 - [x] 01-01-PLAN.md — Create uv package metadata, lockfile, base package, and initial import/tooling tests.
-- [ ] 01-02-PLAN.md — Create safe scaffold entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard.
+- [x] 01-02-PLAN.md — Create safe scaffold entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard.
 - [ ] 01-03-PLAN.md — Make factory setup/services workspace-portable and add portability regression tests.
 
 ### Phase 2: Safety, Configuration & Data Backbone
@@ -152,7 +152,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Executable Scaffold & Factory Portability | 1/3 | In Progress | - |
+| 1. Executable Scaffold & Factory Portability | 2/3 | In Progress | - |
 | 2. Safety, Configuration & Data Backbone | 0/TBD | Not started | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
