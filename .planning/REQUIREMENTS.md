@@ -27,8 +27,8 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 - [x] **DATA-01**: Alembic migrations create PostgreSQL tables for wallets, scanner runs, qualification evidence, trades, watermarks, simulation portfolios, simulated trades, positions, price updates, correlations, notifications, component heartbeats, and validation evidence.
 - [x] **DATA-02**: Repository methods use transactions and schema-level uniqueness to make wallet discovery, trade ingestion, watermarks, simulation writes, and notification records idempotent.
-- [ ] **DATA-03**: Redis coordination provides owner-token locks for scanner overlap prevention and short-lived rate/cache state without becoming the durable source of truth.
-- [ ] **DATA-04**: Component heartbeat rows record last success, last error, degraded/stale state, and freshness timestamps for scanner, tracker, simulator, Pyth feed, API, and dashboard-visible systems.
+- [x] **DATA-03**: Redis coordination provides owner-token locks for scanner overlap prevention and short-lived rate/cache state without becoming the durable source of truth.
+- [x] **DATA-04**: Component heartbeat rows record last success, last error, degraded/stale state, and freshness timestamps for scanner, tracker, simulator, Pyth feed, API, and dashboard-visible systems.
 
 ### Provider Fixtures And Domain Math
 
@@ -96,7 +96,7 @@ Requirements for the initial local, zero-execution CopySnipIn workbench. Each re
 
 ### Validation Evidence
 
-- [ ] **VAL-01**: A validation index maps every `VAL-DASH-*`, `VAL-PYTH-*`, `VAL-CROSS-*`, `VAL-SCAN-*`, `VAL-TRACK-*`, and `VAL-SIM-*` assertion to owner phase, automation/manual status, evidence command, and current state.
+- [x] **VAL-01**: A validation index maps every `VAL-DASH-*`, `VAL-PYTH-*`, `VAL-CROSS-*`, `VAL-SCAN-*`, `VAL-TRACK-*`, and `VAL-SIM-*` assertion to owner phase, automation/manual status, evidence command, and current state.
 - [ ] **VAL-02**: Automated pytest suites cover scaffold, config, safety boundary, provider fixtures, domain math, scanner, tracker, simulator, API, and persistence behavior.
 - [ ] **VAL-03**: `tuistory` dashboard checks cover launch, layout, keyboard navigation, refresh, resize, empty states, degraded states, and wallet detail navigation.
 - [ ] **VAL-04**: Manual/live provider checks are read-only, separately gated, documented with evidence commands, and never run as unsafe CI defaults.
@@ -166,8 +166,8 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | SAFE-05 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | DATA-02 | Phase 2: Safety, Configuration & Data Backbone | Complete |
-| DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Pending |
-| DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| DATA-03 | Phase 2: Safety, Configuration & Data Backbone | Complete |
+| DATA-04 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | MATH-01 | Phase 3: Provider Fixtures & Domain Math | Pending |
 | MATH-02 | Phase 3: Provider Fixtures & Domain Math | Pending |
 | MATH-03 | Phase 3: Provider Fixtures & Domain Math | Pending |
@@ -211,7 +211,7 @@ Roadmap mapping created on 2026-04-21. Each v1 requirement maps to exactly one p
 | PYTH-03 | Phase 7: Pyth Feed & Correlation | Pending |
 | PYTH-04 | Phase 7: Pyth Feed & Correlation | Pending |
 | PYTH-05 | Phase 7: Pyth Feed & Correlation | Pending |
-| VAL-01 | Phase 2: Safety, Configuration & Data Backbone | Pending |
+| VAL-01 | Phase 2: Safety, Configuration & Data Backbone | Complete |
 | VAL-02 | Phase 8: API, Dashboard & Validation Evidence | Pending |
 | VAL-03 | Phase 8: API, Dashboard & Validation Evidence | Pending |
 | VAL-04 | Phase 8: API, Dashboard & Validation Evidence | Pending |
