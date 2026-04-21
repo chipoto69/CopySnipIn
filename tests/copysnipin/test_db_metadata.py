@@ -233,7 +233,7 @@ def test_metadata_declares_required_columns() -> None:
     for table_name, required_columns in REQUIRED_COLUMNS.items():
         table = Base.metadata.tables[table_name]
 
-        assert set(table.columns).issuperset(required_columns)
+        assert set(table.columns.keys()).issuperset(required_columns)
 
 
 def test_metadata_declares_idempotency_unique_constraints() -> None:

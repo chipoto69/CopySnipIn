@@ -21,7 +21,7 @@ def test_declarative_base_has_deterministic_naming_convention() -> None:
         "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
         "pk": "pk_%(table_name)s",
     }
-    assert Base.metadata.tables == {}
+    assert "wallets" in Base.metadata.tables
 
 
 def test_engine_factory_uses_active_settings_without_connecting() -> None:
