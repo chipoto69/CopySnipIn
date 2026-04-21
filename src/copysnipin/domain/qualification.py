@@ -45,8 +45,8 @@ def evaluate_qualification(
             f"{thresholds.min_sharpe_ratio}"
         )
 
-    candidate_drawdown = _drawdown_as_ratio(candidate.max_drawdown_pct)
-    threshold_drawdown = _drawdown_as_ratio(thresholds.max_drawdown_pct)
+    candidate_drawdown = _candidate_drawdown_as_ratio(candidate.max_drawdown_pct)
+    threshold_drawdown = _threshold_percent_as_ratio(thresholds.max_drawdown_pct)
     if candidate_drawdown >= threshold_drawdown:
         reasons.append(
             "max_drawdown_pct "
@@ -70,7 +70,11 @@ def evaluate_qualification(
     return QualificationResult(qualifies=not reasons, reasons=tuple(reasons))
 
 
-def _drawdown_as_ratio(value: Decimal) -> Decimal:
+def _candidate_drawdown_as_ratio(value: Decimal) -> Decimal:
     if value > 1:
         return value / Decimal("100")
     return value
+
+
+def _threshold_percent_as_ratio(value: Decimal) -> Decimal:
+    return value / Decimal("100")

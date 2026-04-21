@@ -125,6 +125,29 @@ def test_qualification_normalizes_drawdown_ratio_against_percent_threshold() -> 
     assert result.reasons == ("max_drawdown_pct 0.40 >= MAX_DRAWDOWN_PCT 10.0",)
 
 
+def test_qualification_treats_small_drawdown_threshold_as_percentage() -> None:
+    thresholds = QualificationThresholds(
+        min_sharpe_ratio=Decimal("2.0"),
+        max_drawdown_pct=Decimal("1"),
+        min_trades=20,
+        min_volume_usd=Decimal("10000"),
+    )
+
+    result = evaluate_qualification(
+        QualificationInput(
+            wallet_address="0x3333333333333333333333333333333333333333",
+            sharpe_ratio=Decimal("3"),
+            max_drawdown_pct=Decimal("0.08"),
+            total_trades=20,
+            total_volume_usd=Decimal("10000"),
+        ),
+        thresholds,
+    )
+
+    assert result.qualifies is False
+    assert result.reasons == ("max_drawdown_pct 0.08 >= MAX_DRAWDOWN_PCT 1",)
+
+
 def test_accounting_applies_buy_sell_and_mark_to_market_with_decimal_math() -> None:
     portfolio = PortfolioState(cash=Decimal("100.00"))
 

@@ -123,7 +123,7 @@ def _decimal(data: dict[str, Any], key: str) -> Decimal:
 def _int(data: dict[str, Any], key: str) -> int:
     try:
         return int(_required(data, key))
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise PythPayloadError(f"invalid integer field {key!r}") from exc
 
 
@@ -132,5 +132,5 @@ def _optional_int(value: Any, label: str) -> int | None:
         return None
     try:
         return int(value)
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise PythPayloadError(f"invalid integer field {label}") from exc

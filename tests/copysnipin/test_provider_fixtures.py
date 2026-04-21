@@ -115,6 +115,25 @@ def test_parse_polymarket_trades_preserves_split_fill_dedupe_keys() -> None:
     assert trades[0].price == Decimal("0.42000000")
 
 
+def test_parse_polymarket_trade_dedupe_key_includes_asset() -> None:
+    payload = load_fixture("polymarket/trades_success.json")
+    assert isinstance(payload, list)
+    assert len(payload) >= 2
+
+    first = dict(payload[0])
+    second = dict(payload[0])
+    first["asset"] = "111"
+    second["asset"] = "222"
+    first["transactionHash"] = None
+    second["transactionHash"] = None
+
+    trades = parse_trades([first, second])
+
+    assert trades[0].condition_id == trades[1].condition_id
+    assert trades[0].asset != trades[1].asset
+    assert trades[0].dedupe_key != trades[1].dedupe_key
+
+
 def test_parse_polymarket_bad_numeric_field_raises_provider_error() -> None:
     payload = load_fixture("polymarket/trades_success.json")
     assert isinstance(payload, list)
@@ -122,6 +141,15 @@ def test_parse_polymarket_bad_numeric_field_raises_provider_error() -> None:
 
     with pytest.raises(ProviderPayloadError, match="invalid decimal field 'price'"):
         parse_trades(payload)
+
+
+def test_parse_polymarket_invalid_integer_type_raises_provider_error() -> None:
+    payload = load_fixture("polymarket/leaderboard_success.json")
+    assert isinstance(payload, list)
+    payload[0]["rank"] = {"unexpected": "mapping"}
+
+    with pytest.raises(ProviderPayloadError, match="invalid integer field 'rank'"):
+        parse_leaderboard(payload)
 
 
 def test_parse_polymarket_subsecond_timestamp_is_preserved() -> None:
@@ -182,4 +210,15 @@ def test_parse_pyth_bad_numeric_field_raises_pyth_error() -> None:
     parsed[0]["price"]["conf"] = "not-a-number"
 
     with pytest.raises(PythPayloadError, match="invalid decimal field 'conf'"):
+        parse_price_update(payload)
+
+
+def test_parse_pyth_invalid_integer_type_raises_pyth_error() -> None:
+    payload = load_fixture("pyth/price_update_success.json")
+    assert isinstance(payload, dict)
+    parsed = payload["parsed"]
+    assert isinstance(parsed, list)
+    parsed[0]["price"]["expo"] = {"unexpected": "mapping"}
+
+    with pytest.raises(PythPayloadError, match="invalid integer field 'expo'"):
         parse_price_update(payload)

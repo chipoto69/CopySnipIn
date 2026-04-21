@@ -165,6 +165,7 @@ def _parse_trade(row: Any) -> PolymarketTrade:
         ) from exc
 
     wallet_address = str(_required(data, "proxyWallet"))
+    asset = str(_required(data, "asset"))
     condition_id = str(_required(data, "conditionId"))
     size = _decimal(data, "size")
     price = _decimal(data, "price")
@@ -173,6 +174,7 @@ def _parse_trade(row: Any) -> PolymarketTrade:
     dedupe_key = "|".join(
         [
             wallet_address,
+            asset,
             condition_id,
             side.value,
             str(timestamp),
@@ -184,7 +186,7 @@ def _parse_trade(row: Any) -> PolymarketTrade:
     return PolymarketTrade(
         wallet_address=wallet_address,
         side=side,
-        asset=str(_required(data, "asset")),
+        asset=asset,
         condition_id=condition_id,
         size=size,
         price=price,
@@ -225,7 +227,7 @@ def _decimal(data: dict[str, Any], key: str) -> Decimal:
 def _int(data: dict[str, Any], key: str) -> int:
     try:
         return int(_required(data, key))
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise ProviderPayloadError(f"invalid integer field {key!r}") from exc
 
 
@@ -240,5 +242,5 @@ def _optional_int(value: Any) -> int | None:
         return None
     try:
         return int(value)
-    except ValueError as exc:
+    except (TypeError, ValueError) as exc:
         raise ProviderPayloadError("invalid integer value") from exc
