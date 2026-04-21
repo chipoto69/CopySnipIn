@@ -12,7 +12,7 @@ CopySnipIn v1 turns the current validation-contract workspace into an executable
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Executable Scaffold & Factory Portability** - Create the Python package, tests, quality gates, entry points, and portable factory commands.
+- [x] **Phase 1: Executable Scaffold & Factory Portability** - Create the Python package, tests, quality gates, entry points, and portable factory commands.
 - [ ] **Phase 2: Safety, Configuration & Data Backbone** - Lock in zero-execution mode, typed settings, redaction, durable schema, idempotent repositories, Redis coordination, heartbeats, and validation ownership.
 - [ ] **Phase 3: Provider Fixtures & Domain Math** - Prove Polymarket/Pyth parsing and all financial/qualification math against deterministic fixtures.
 - [ ] **Phase 4: Hermes Scanner** - Discover and qualify wallets through non-overlapping read-only Polymarket scan cycles with persisted evidence and alerts.
@@ -37,7 +37,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Create uv package metadata, lockfile, base package, and initial import/tooling tests.
 - [x] 01-02-PLAN.md — Create safe scaffold entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard.
-- [ ] 01-03-PLAN.md — Make factory setup/services workspace-portable and add portability regression tests.
+- [x] 01-03-PLAN.md — Make factory setup/services workspace-portable and add portability regression tests.
 
 ### Phase 2: Safety, Configuration & Data Backbone
 **Goal**: CopySnipIn starts from a secret-safe, zero-execution, durable foundation before provider loops or UI are built.
@@ -152,7 +152,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Executable Scaffold & Factory Portability | 2/3 | In Progress | - |
+| 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
 | 2. Safety, Configuration & Data Backbone | 0/TBD | Not started | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-04-21T12:39:07.919Z"
+status: verifying
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-04-21T12:49:40.772Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 100
 ---
 
 # Project State
@@ -25,30 +25,30 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 
 ## Current Position
 
-Phase: 01 (executable-scaffold-factory-portability) — EXECUTING
+Phase: 01 (executable-scaffold-factory-portability) — COMPLETE
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-21
 
-Progress: [███████░░░] 67%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 2
-- Average duration: 4 min
-- Total execution time: 7 min
+- Total plans completed: 3
+- Average duration: 3 min
+- Total execution time: 10 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-executable-scaffold-factory-portability | 2 | 7 min | 4 min |
+| 01-executable-scaffold-factory-portability | 3 | 10 min | 3 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-01 (4 min), 01-02 (3 min)
+- Last 5 plans: 01-01 (4 min), 01-02 (3 min), 01-03 (3 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -69,6 +69,9 @@ Recent decisions affecting current work:
 - [Phase 01 Plan 02]: Centralized scaffold status output in `copysnipin._scaffold` for all no-op process entry points.
 - [Phase 01 Plan 02]: Kept `/health` in scaffold mode and marked deferred systems `not_implemented` instead of probing PostgreSQL, Redis, providers, or workers.
 - [Phase 01 Plan 02]: Imported Textual for the dashboard shell without calling `App.run()` during smoke execution.
+- [Phase 01 Plan 03]: Kept factory commands pointed only at scaffold entry points and local development service URLs.
+- [Phase 01 Plan 03]: Used process-specific worker stop commands so scanner shutdown no longer touches API port 8090.
+- [Phase 01 Plan 03]: Kept the old checkout path only as an intentional regression-test constant, never in factory runtime files.
 
 ### Pending Todos
 
@@ -76,8 +79,6 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1]: Factory portability still needs Plan 03.
-- [Phase 1]: `.factory` commands currently assume an absolute organized checkout path instead of the active workspace.
 - [Phase 2]: Environment contracts are split across `.env.example`, `.factory/library/environment.md`, `.factory/services.yaml`, and validation docs.
 - [Phase 3+]: Live Polymarket and Pyth payload details need sanitized fixture capture before provider adapter behavior can be trusted.
 
@@ -93,6 +94,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-21T12:39:07.919Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-04-21T12:49:40.768Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
