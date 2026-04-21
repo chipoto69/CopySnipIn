@@ -1,10 +1,10 @@
 commands:
-  install: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv sync
-  typecheck: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv run mypy src/
-  build: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv build
-  test: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv run pytest tests/ -x -q
-  lint: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv run ruff check . && uv run ruff format --check .
-  lint-fix: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && uv run ruff check --fix . && uv run ruff format .
+  install: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv sync --locked
+  typecheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run mypy src/
+  build: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv build
+  test: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run pytest tests/ -x -q
+  lint: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run ruff check . && uv run ruff format --check .
+  lint-fix: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run ruff check --fix . && uv run ruff format .
 
 services:
   postgres:
@@ -22,22 +22,43 @@ services:
     depends_on: []
 
   api:
-    start: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090
-    stop: lsof -ti :8090 | xargs kill
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090
+    stop: PIDS="$(lsof -ti :8090 || true)"; if [ -n "$PIDS" ]; then kill $PIDS; fi
     healthcheck: curl -sf http://localhost:8090/health
     port: 8090
     depends_on: [postgres, redis]
 
   scanner:
-    start: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.scanner
-    stop: lsof -ti :8090 | xargs kill 2>/dev/null; pkill -f "copysnipin.scanner" || true
-    healthcheck: curl -sf http://localhost:8090/health 2>/dev/null && echo "scanner:check_via_api"
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.scanner
+    stop: pkill -f "copysnipin.scanner" || true
+    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.scanner >/dev/null
+    port: 0
+    depends_on: [postgres, redis, api]
+
+  tracker:
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.tracker
+    stop: pkill -f "copysnipin.tracker" || true
+    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.tracker >/dev/null
+    port: 0
+    depends_on: [postgres, redis, api]
+
+  simulator:
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.simulator
+    stop: pkill -f "copysnipin.simulator" || true
+    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.simulator >/dev/null
+    port: 0
+    depends_on: [postgres, redis, api]
+
+  pyth_feed:
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.pyth_feed
+    stop: pkill -f "copysnipin.pyth_feed" || true
+    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.pyth_feed >/dev/null
     port: 0
     depends_on: [postgres, redis, api]
 
   dashboard:
-    start: cd /Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.dashboard
+    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.dashboard
     stop: pkill -f "copysnipin.dashboard" || true
-    healthcheck: echo "dashboard:terminal_no_http"
+    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.dashboard >/dev/null
     port: 0
     depends_on: [api]
