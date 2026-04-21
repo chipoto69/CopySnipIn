@@ -10,7 +10,7 @@ requires:
 provides:
   - Workspace-portable `.factory/init.sh` root discovery
   - Root-discovered `.factory/services.yaml` commands for scaffold services
-  - Stop-safe scanner, tracker, simulator, Pyth feed, and dashboard commands
+  - Stop-safe API, scanner, tracker, simulator, Pyth feed, and dashboard commands
   - Static pytest regression coverage for factory portability
 affects: [phase-01, factory, service-commands, scaffold, tests]
 
@@ -61,7 +61,8 @@ completed: 2026-04-21
 - Replaced `.factory/init.sh`'s hard-coded organized checkout path with script-relative repository root discovery and lockfile-aware `uv sync --locked`.
 - Replaced `.factory/services.yaml` absolute `cd` commands with active-checkout root discovery for install, build, test, lint, API, worker, feed, and dashboard scaffold commands.
 - Added tracker, simulator, and Pyth feed service entries so factory targets now match all six Phase 1 scaffold entry points.
-- Made worker stop commands process-specific; scanner shutdown no longer kills or probes API port `8090`.
+- Made API and worker stop commands process-specific; service shutdown no longer kills arbitrary processes by API port `8090`.
+- Hardened setup so missing PostgreSQL client tools, unavailable `localhost:5432`, and `createdb` failures stop setup instead of being reported as success.
 - Added static pytest coverage that guards factory portability, scaffold targets, and scanner stop safety.
 
 ## Task Commits
@@ -72,26 +73,30 @@ Each task was committed atomically:
 2. **Task 2: Make service commands root-discovered and stop-safe** - `df2ba2e` (fix)
 3. **Task 3: Add factory portability regression tests** - `7ee853b` (test)
 
-**Plan metadata:** pending final docs commit.
+**Plan metadata:** `a176929` (docs)
+**Post-review hardening:** `693bc21` (fix)
 
 ## Files Created/Modified
 
-- `.factory/init.sh` - Resolves the active repository root from the script path and syncs locked dependencies when `uv.lock` exists.
-- `.factory/services.yaml` - Runs `uv` commands from the active repository root, targets scaffold modules, and uses stop-safe process cleanup.
-- `tests/copysnipin/test_factory_portability.py` - Verifies factory files do not regress to the old checkout path, unsafe scanner stop, or missing scaffold targets.
+- `.factory/init.sh` - Resolves the active repository root from the script path, checks PostgreSQL tooling/connectivity explicitly, and syncs locked dependencies when `uv.lock` exists.
+- `.factory/services.yaml` - Runs `uv` commands from the active repository root, targets scaffold modules, and uses command-specific process cleanup.
+- `tests/copysnipin/test_factory_portability.py` - Verifies factory files do not regress to the old checkout path, unsafe stop commands, masked PostgreSQL setup, or missing scaffold targets.
 
 ## Decisions Made
 
 - Kept factory service starts limited to scaffold module targets and local development `DATABASE_URL`, `REDIS_URL`, and API port `8090`.
-- Used guarded API PID cleanup and process-specific `pkill -f "copysnipin.<module>"` for non-API services.
+- Used command-specific `pkill -f` cleanup for API and worker services instead of port-based process termination.
 - Kept the old organized checkout path only inside the regression test constant so factory runtime files remain portable.
 
 ## Deviations from Plan
 
-None - plan executed exactly as written.
+The advisory code review found two warning-level factory safety issues after the plan completed. Commit `693bc21` fixed both within Phase 1 scope:
 
-**Total deviations:** 0 auto-fixed.
-**Impact on plan:** No impact.
+- `.factory/init.sh` now fails clearly when PostgreSQL tools or localhost connectivity are unavailable.
+- `.factory/services.yaml` now stops the scaffold API by command pattern instead of by port ownership.
+
+**Total deviations:** 2 post-review fixes.
+**Impact on plan:** Strengthened the factory portability and local process-safety contract without changing scaffold scope.
 
 ## Issues Encountered
 
@@ -108,7 +113,7 @@ None. The plan changed local factory command wiring only and did not introduce n
 ## Verification
 
 - `bash -n .factory/init.sh` - passed.
-- `uv run pytest tests/copysnipin/test_factory_portability.py -x` - passed, 4 tests collected and passed.
+- `uv run pytest tests/copysnipin/test_factory_portability.py -x` - passed, 5 tests collected and passed after post-review hardening.
 - `uv run mypy src/` - passed.
 - `uv run ruff check .` - passed.
 - `uv run ruff format --check .` - passed.
@@ -124,7 +129,7 @@ Phase 1 foundation requirements are now complete. Phase 2 can build typed settin
 ## Self-Check: PASSED
 
 - Confirmed `.factory/init.sh`, `.factory/services.yaml`, `tests/copysnipin/test_factory_portability.py`, and this summary exist.
-- Confirmed task commits `c3e743b`, `df2ba2e`, and `7ee853b` exist in git history.
+- Confirmed task commits `c3e743b`, `df2ba2e`, `7ee853b`, and post-review hardening commit `693bc21` exist in git history.
 - Confirmed plan-level verification commands passed after task commits.
 
 ---
