@@ -536,22 +536,22 @@ This test directly guards the known portability bug. [VERIFIED: `.planning/codeb
 | A2 | Stdlib `main()` functions are enough for Phase 1 console scripts; Typer can wait until real CLI ergonomics are needed. [ASSUMED] | Standard Stack | If false, planner should add Typer and tests for command help/output. |
 | A3 | Lightweight source-only safety grep tests are acceptable in Phase 1. [ASSUMED] | Security Domain | If false, safety tests should be deferred to Phase 2 and Phase 1 should only avoid execution imports by review. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should Phase 1 commit `.python-version`?** [VERIFIED: local command `python3 --version`; VERIFIED: local command `python3.13 --version`]
+1. **RESOLVED: Phase 1 should commit `.python-version`.** [VERIFIED: local command `python3 --version`; VERIFIED: local command `python3.13 --version`]
    - What we know: `python3` is 3.12.12, `python3.13` is 3.13.5, and uv sees Python 3.13 interpreters. [VERIFIED: local commands]
    - What's unclear: Locked decisions require Python 3.13+ metadata but do not explicitly require `.python-version`. [VERIFIED: `.planning/phases/01-executable-scaffold-factory-portability/01-CONTEXT.md`]
-   - Recommendation: Commit `.python-version` with `3.13` so `uv sync` consistently selects a compliant interpreter. [ASSUMED]
+   - Selected answer: Commit `.python-version` with exactly `3.13` so `uv sync` consistently selects a compliant interpreter. [RESOLVED: `.planning/phases/01-executable-scaffold-factory-portability/01-01-PLAN.md`]
 
-2. **Should `.factory/services.yaml` gain tracker, simulator, and Pyth service entries in Phase 1?** [VERIFIED: `.factory/services.yaml`; VERIFIED: `.planning/ROADMAP.md`]
+2. **RESOLVED: `.factory/services.yaml` should gain tracker, simulator, and Pyth service entries in Phase 1.** [VERIFIED: `.factory/services.yaml`; VERIFIED: `.planning/ROADMAP.md`]
    - What we know: Current services include API, scanner, and dashboard; Phase 1 requires entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard. [VERIFIED: `.factory/services.yaml`; VERIFIED: `.planning/REQUIREMENTS.md`]
    - What's unclear: Locked decisions allow planner discretion on exact CLI style and factory command expansion. [VERIFIED: `.planning/phases/01-executable-scaffold-factory-portability/01-CONTEXT.md`]
-   - Recommendation: Add smoke-capable service or command entries for tracker, simulator, and Pyth feed so factory coverage matches FOUND-02. [ASSUMED]
+   - Selected answer: Add smoke-capable service or command entries for tracker, simulator, and Pyth feed so factory coverage matches FOUND-02. [RESOLVED: `.planning/phases/01-executable-scaffold-factory-portability/01-03-PLAN.md`]
 
-3. **Should `uv sync --locked` be used immediately after creating `uv.lock`?** [CITED: Context7 `/astral-sh/uv`; CITED: https://docs.astral.sh/uv/concepts/projects/sync/]
+3. **RESOLVED: use `uv sync --locked` after `uv.lock` exists.** [CITED: Context7 `/astral-sh/uv`; CITED: https://docs.astral.sh/uv/concepts/projects/sync/]
    - What we know: uv supports lock checking and `uv sync --locked`. [CITED: Context7 `/astral-sh/uv`]
    - What's unclear: First scaffold creation requires one normal `uv lock` or `uv sync` to create the lockfile. [CITED: https://docs.astral.sh/uv/concepts/projects/sync/]
-   - Recommendation: Planner should create the lockfile, then update factory install to `uv sync --locked`. [CITED: Context7 `/astral-sh/uv`]
+   - Selected answer: Create the lockfile in the package/tooling plan, then update factory install to run `uv sync --locked` when `uv.lock` exists. [RESOLVED: `.planning/phases/01-executable-scaffold-factory-portability/01-01-PLAN.md`; `.planning/phases/01-executable-scaffold-factory-portability/01-03-PLAN.md`]
 
 ## Environment Availability
 
