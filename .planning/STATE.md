@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-04-21T19:41:43.993Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-04-21T19:56:18.467Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 1
   total_plans: 9
-  completed_plans: 6
-  percent: 67
+  completed_plans: 7
+  percent: 78
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 2 of 8 (Safety, Configuration & Data Backbone) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Ready to execute
 Last activity: 2026-04-21
 
-Progress: [███████░░░] 67%
+Progress: [████████░░] 78%
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [███████░░░] 67%
 | Phase 02-safety-configuration-data-backbone P01 | 10min | 2 tasks | 9 files |
 | Phase 02-safety-configuration-data-backbone P02 | 9min | 2 tasks | 8 files |
 | Phase 02-safety-configuration-data-backbone P03 | 7min | 2 tasks | 10 files |
+| Phase 02-safety-configuration-data-backbone P04 | 9min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,10 @@ Recent decisions affecting current work:
 - [Phase 02 Plan 03]: PostgreSQL URLs are normalized to postgresql+psycopg so the new driver dependency is used without adding legacy psycopg2.
 - [Phase 02 Plan 03]: Alembic online migrations call load_settings(), while import/offline metadata checks do not open provider or database connections.
 - [Phase 02 Plan 03]: Plan 03 intentionally leaves Base.metadata empty; durable table models and baseline migration remain Plan 04 scope.
+- [Phase 02 Plan 04]: The baseline uses wallets as canonical wallet identity; scanner, tracker, and simulation tables reference it instead of creating competing wallet tables.
+- [Phase 02 Plan 04]: 02_baseline is the first Alembic revision with down_revision=None because Plan 03 created the Alembic substrate but no prior revision file.
+- [Phase 02 Plan 04]: Default migration verification inspects SQLAlchemy metadata and migration source only; live alembic upgrade remains optional/manual.
+- [Phase 02 Plan 04]: Idempotency-critical tables have explicit named unique constraints for future Plan 05 repository upserts.
 
 ### Pending Todos
 
@@ -107,6 +112,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-21T19:41:43.989Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-04-21T19:56:18.464Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
