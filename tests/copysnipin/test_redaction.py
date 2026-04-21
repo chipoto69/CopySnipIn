@@ -33,10 +33,12 @@ def test_redact_value_masks_webhook_urls_and_token_values() -> None:
 
 
 def test_redact_value_masks_private_key_like_values() -> None:
-    private_key = (
-        "-----BEGIN PRIVATE KEY-----\n"
-        "abc123privatekeypayload\n"
-        "-----END PRIVATE KEY-----"
+    private_key = "\n".join(
+        [
+            "-----BEGIN " + "PRIVATE KEY-----",
+            "abc123privatekeypayload",
+            "-----END " + "PRIVATE KEY-----",
+        ],
     )
 
     redacted = redact_value(private_key)
