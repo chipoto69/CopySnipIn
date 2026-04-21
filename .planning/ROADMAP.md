@@ -52,7 +52,7 @@ Plans:
 **Plans**: 6 plans
 Plans:
 - [x] 02-01-PLAN.md — Create typed settings, central redaction, and safe startup integration.
-- [ ] 02-02-PLAN.md — Create zero-execution scans and reconcile active/disabled environment contracts.
+- [x] 02-02-PLAN.md — Create zero-execution scans and reconcile active/disabled environment contracts.
 - [ ] 02-03-PLAN.md — Create database dependency, session, and Alembic substrate.
 - [ ] 02-04-PLAN.md — Create SQLAlchemy schema metadata, baseline migration, and schema coverage tests.
 - [ ] 02-05-PLAN.md — Create idempotent repository primitives for wallets, trades, watermarks, simulations, notifications, and validation evidence.
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Executable Scaffold & Factory Portability | 3/3 | Complete | 2026-04-21 |
-| 2. Safety, Configuration & Data Backbone | 1/6 | In progress | - |
+| 2. Safety, Configuration & Data Backbone | 2/6 | In progress | - |
 | 3. Provider Fixtures & Domain Math | 0/TBD | Not started | - |
 | 4. Hermes Scanner | 0/TBD | Not started | - |
 | 5. Trade Tracker | 0/TBD | Not started | - |
