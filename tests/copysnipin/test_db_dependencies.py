@@ -14,8 +14,8 @@ def test_database_substrate_dependencies_are_importable() -> None:
 def test_database_substrate_dependencies_are_declared() -> None:
     pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
 
-    dependencies = set(pyproject["project"]["dependencies"])
+    dependencies = {dependency.lower() for dependency in pyproject["project"]["dependencies"]}
 
-    assert "SQLAlchemy>=2.0,<2.1" in dependencies
+    assert "sqlalchemy>=2.0,<2.1" in dependencies
     assert "alembic>=1.18,<2" in dependencies
     assert "psycopg[binary]>=3.3,<4" in dependencies
