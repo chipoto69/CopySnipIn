@@ -13,6 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
+copysnipin-api = "copysnipin.main:run_api_server"
 copysnipin-api-smoke = "copysnipin.main:main"
 copysnipin-scanner = "copysnipin.scanner:main"
 copysnipin-tracker = "copysnipin.tracker:main"

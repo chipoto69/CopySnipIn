@@ -10,15 +10,17 @@
 - Impact: Future agents can accidentally treat scaffold entry points as implemented scanner, tracker, simulator, Pyth, API read-model, or dashboard behavior.
 - Fix approach: Preserve explicit `status=scaffold` and `not_implemented` states until the owner phase replaces each stub with tested behavior.
 
-**Hard-coded checkout path mismatch (RESOLVED):**
-- Issue: Project commands pointed to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace is `/Users/rudlord/conductor/workspaces/COPYSNIPIN/raleigh`.
-- Files: `.factory/init.sh`, `.factory/services.yaml`
-- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. `.factory/services.yaml` commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. The hard-coded path has been removed.
+## Recently Resolved
 
-**Factory service commands portability (RESOLVED - Plan 03 completed):**
-- Issue: Factory commands required `uv sync`, `uv build`, `uv run pytest`, `uv run mypy`, and `uv run ruff`, and used the old absolute checkout path.
+**Hard-coded checkout path mismatch (RESOLVED):**
+- Issue: Project commands pointed to `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN`, while the active workspace uses dynamic repository-root discovery.
+- Files: `.factory/init.sh`, `.factory/services.yaml`
+- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. `.factory/services.yaml` uses `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern for all commands.
+
+**Factory service commands portability (RESOLVED):**
+- Issue: Factory commands used absolute checkout paths making them fragile across Conductor workspaces.
 - Files: `.factory/services.yaml`, `.factory/init.sh`
-- Resolution: Plan 03 replaced absolute paths with repository-root discovery. All factory commands now use `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT"` pattern. Commands work correctly from the active workspace.
+- Resolution: All factory commands now use repository-root discovery via `git rev-parse --show-toplevel` and operate from the active workspace.
 
 **Validation contract surface is far larger than the current project substrate:**
 - Issue: The validation docs define 148 unique assertion IDs across dashboard, Pyth, cross-area flows, scanner, tracker, and simulation, but no test harness or source implementation is tracked.
@@ -40,28 +42,11 @@
 
 ## Known Bugs
 
-**Scanner stop command kills the API port:**
-- Symptoms: Stopping `scanner` runs `lsof -ti :8090 | xargs kill` before killing `copysnipin.scanner`.
-- Files: `.factory/services.yaml`
-- Trigger: Running the scanner service stop command while the API owns port `8090`.
-- Workaround: Use `pkill -f "copysnipin.scanner"` only for scanner shutdown until process supervision is defined.
-
-**API stop command can fail when no process is listening:**
-- Symptoms: `lsof -ti :8090 | xargs kill` can call `kill` with no PID and return a command error.
-- Files: `.factory/services.yaml`
-- Trigger: Stopping the API when nothing is listening on port `8090`.
-- Workaround: Guard with `xargs -r` where available or explicit PID checks; macOS compatibility needs a portable shell guard.
-
 **Scanner and dashboard health checks do not verify those services:**
 - Symptoms: The scanner healthcheck calls the API health endpoint, and the dashboard healthcheck always echoes a terminal status string.
 - Files: `.factory/services.yaml`
 - Trigger: A dead scanner or dashboard can still appear healthy if the API is healthy or the echo command succeeds.
 - Workaround: Add process-specific health signals, such as scanner heartbeat state and dashboard launch/snapshot checks.
-
-**Factory init directory resolution (RESOLVED):**
-- Symptoms: `.factory/init.sh` changed directory to the hard-coded organized checkout path before checking tools, database, dependencies, or `.env`.
-- Files: `.factory/init.sh`
-- Resolution: `.factory/init.sh` now uses `git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel` with script-directory fallback. The hard-coded `PROJECT_DIR` has been replaced with repository-root discovery.
 
 ## Security Considerations
 

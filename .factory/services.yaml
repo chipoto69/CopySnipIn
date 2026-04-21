@@ -25,10 +25,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run uvicorn copysnipin.main:app --host 127.0.0.1 --port 8090 &
-      echo $! > .factory/run/api.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run uvicorn copysnipin.main:app --host 127.0.0.1 --port 8090) &
+      echo $! > .factory/run/api.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/api.pid" &&
@@ -50,10 +49,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run python -m copysnipin.scanner &
-      echo $! > .factory/run/scanner.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run python -m copysnipin.scanner) &
+      echo $! > .factory/run/scanner.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/scanner.pid" &&
@@ -74,10 +72,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run python -m copysnipin.tracker &
-      echo $! > .factory/run/tracker.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run python -m copysnipin.tracker) &
+      echo $! > .factory/run/tracker.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/tracker.pid" &&
@@ -98,10 +95,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run python -m copysnipin.simulator &
-      echo $! > .factory/run/simulator.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run python -m copysnipin.simulator) &
+      echo $! > .factory/run/simulator.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/simulator.pid" &&
@@ -122,10 +118,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run python -m copysnipin.pyth_feed &
-      echo $! > .factory/run/pyth_feed.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run python -m copysnipin.pyth_feed) &
+      echo $! > .factory/run/pyth_feed.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/pyth_feed.pid" &&
@@ -146,10 +141,9 @@ services:
     start: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       mkdir -p .factory/run &&
-      DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
-      uv run python -m copysnipin.dashboard &
-      echo $! > .factory/run/dashboard.pid &&
-      wait $!
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      exec uv run python -m copysnipin.dashboard) &
+      echo $! > .factory/run/dashboard.pid
     stop: >-
       ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
       PIDFILE=".factory/run/dashboard.pid" &&

@@ -197,13 +197,13 @@
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.scanner`
 - Responsibilities: Run Hermes Scanner cycle.
-- Implementation status: Scaffold module exists (scanner.py); worker logic not yet implemented.
+- Implementation status: Scaffold module exists (src/copysnipin/scanner.py); worker logic not yet implemented.
 
 **Intended Dashboard Service:**
 - Location: `.factory/services.yaml`
 - Triggers: `uv run python -m copysnipin.dashboard`
 - Responsibilities: Launch Textual dashboard.
-- Implementation status: Scaffold module exists (dashboard.py, tracker.py, simulator.py, pyth_feed.py); worker logic not yet implemented.
+- Implementation status: Scaffold module exists (src/copysnipin/dashboard.py); worker logic not yet implemented.
 
 **Validation Entry Points:**
 - Location: `.factory/library/user-testing.md`, `docs/validation-contract.md`, `docs/validation-hermes-scanner.md`, `docs/validation-tracker-simulation.md`

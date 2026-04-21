@@ -25,7 +25,15 @@ async def health() -> dict[str, object]:
     }
 
 
+def run_api_server() -> None:
+    """Run the FastAPI application via uvicorn."""
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8090)
+
+
 def main() -> int:
+    """Scaffold status check; use run_api_server() to launch the actual server."""
     return scaffold_main("api")
 
 
