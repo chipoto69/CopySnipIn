@@ -69,6 +69,11 @@ def normalize_sql(statement: Any) -> str:
     return " ".join(str(compiled).split())
 
 
+def statement_params(statement: Any) -> dict[str, object]:
+    compiled = statement.compile(dialect=postgresql.dialect())
+    return dict(compiled.params)
+
+
 def assert_single_transaction(
     factory: RecordingSessionFactory,
     result: RepositoryWriteResult,
@@ -173,6 +178,28 @@ def test_watermark_writes_use_wallet_component_source_conflict_target(
     assert "RETURNING watermarks.id" in sql
 
 
+def test_advance_wallet_watermark_uses_monotonic_timestamp_guard() -> None:
+    factory = RecordingSessionFactory()
+    repository = WatermarkRepository(factory)
+
+    result = repository.advance_wallet_watermark(
+        wallet_id=7,
+        component="tracker",
+        source="polymarket",
+        last_seen_trade_id="trade-2",
+        last_seen_trade_timestamp=NOW,
+    )
+
+    statement = assert_single_transaction(factory, result)
+    sql = normalize_sql(statement)
+
+    assert "WHERE watermarks.last_seen_trade_timestamp IS NULL" in sql
+    assert (
+        "excluded.last_seen_trade_timestamp >= "
+        "watermarks.last_seen_trade_timestamp"
+    ) in sql
+
+
 def test_simulation_portfolio_upsert_uses_name_conflict_target() -> None:
     factory = RecordingSessionFactory()
     repository = SimulationRepository(factory)
@@ -243,6 +270,35 @@ def test_notification_record_uses_idempotency_key_without_provider_calls() -> No
     assert "INSERT INTO notifications" in sql
     assert "ON CONFLICT ON CONSTRAINT uq_notifications_idempotency_key DO UPDATE" in sql
     assert "RETURNING notifications.id" in sql
+
+
+def test_notification_record_redacts_error_message_before_persistence() -> None:
+    factory = RecordingSessionFactory()
+    repository = NotificationRepository(factory)
+
+    result = repository.record_notification_attempt(
+        wallet_id=7,
+        channel="discord",
+        event_type="wallet_qualified",
+        idempotency_key="wallet-7:scan-4",
+        status="failed",
+        sent_at=None,
+        error_message=(
+            "failed "
+            "https://discord.com/api/webhooks/123/raw-secret "
+            "postgresql://copy:db-secret@localhost/copysnipin"
+        ),
+        payload_ref="scan-4",
+    )
+
+    statement = assert_single_transaction(factory, result)
+    params = statement_params(statement)
+    persisted_error = str(params["error_message"])
+
+    assert "raw-secret" not in persisted_error
+    assert "db-secret" not in persisted_error
+    assert "https://discord.com/***" in persisted_error
+    assert "postgresql://***@localhost/copysnipin" in persisted_error
 
 
 def test_validation_evidence_upsert_uses_assertion_evidence_conflict_target() -> None:

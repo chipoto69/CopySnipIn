@@ -185,7 +185,7 @@ REQUIRED_UNIQUE_CONSTRAINTS = {
     "wallets": {"uq_wallets_address"},
     "scanner_runs": {"uq_scanner_runs_run_key"},
     "qualification_evidence": {"uq_qualification_evidence_scanner_run_id_wallet_id"},
-    "trades": {"uq_trades_provider_trade_id", "uq_trades_dedupe_key"},
+    "trades": {"uq_trades_dedupe_key"},
     "watermarks": {"uq_watermarks_wallet_id_component_source"},
     "simulation_portfolios": {"uq_simulation_portfolios_name"},
     "simulated_trades": {"uq_simulated_trades_portfolio_id_source_trade_id"},
@@ -204,6 +204,7 @@ REQUIRED_INDEXES = {
         "ix_qualification_evidence_qualified",
     },
     "trades": {
+        "ix_trades_provider_trade_id",
         "ix_trades_wallet_id_trade_timestamp",
         "ix_trades_market_id",
     },

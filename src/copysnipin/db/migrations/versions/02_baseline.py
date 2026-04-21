@@ -128,9 +128,9 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.ForeignKeyConstraint(["wallet_id"], ["wallets.id"]),
-        sa.UniqueConstraint("provider_trade_id", name="uq_trades_provider_trade_id"),
         sa.UniqueConstraint("dedupe_key", name="uq_trades_dedupe_key"),
     )
+    op.create_index("ix_trades_provider_trade_id", "trades", ["provider_trade_id"])
     op.create_index(
         "ix_trades_wallet_id_trade_timestamp",
         "trades",
@@ -451,6 +451,7 @@ def downgrade() -> None:
 
     op.drop_index("ix_trades_market_id", table_name="trades")
     op.drop_index("ix_trades_wallet_id_trade_timestamp", table_name="trades")
+    op.drop_index("ix_trades_provider_trade_id", table_name="trades")
     op.drop_table("trades")
 
     op.drop_index(

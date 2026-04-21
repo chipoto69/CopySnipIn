@@ -7,6 +7,7 @@ from sqlalchemy.sql.dml import Insert
 
 from copysnipin.db.models import Notification
 from copysnipin.repositories import RepositoryWriteResult, SessionFactory
+from copysnipin.security.redaction import redact_value
 
 
 class NotificationRepository:
@@ -55,6 +56,7 @@ class NotificationRepository:
         error_message: str | None,
         payload_ref: str | None,
     ) -> Insert:
+        safe_error_message = _redact_error_message(error_message)
         base_statement = insert(Notification).values(
             wallet_id=wallet_id,
             channel=channel,
@@ -62,7 +64,7 @@ class NotificationRepository:
             idempotency_key=idempotency_key,
             status=status,
             sent_at=sent_at,
-            error_message=error_message,
+            error_message=safe_error_message,
             payload_ref=payload_ref,
         )
         return base_statement.on_conflict_do_update(
@@ -77,3 +79,9 @@ class NotificationRepository:
                 "payload_ref": base_statement.excluded.payload_ref,
             },
         ).returning(Notification.id)
+
+
+def _redact_error_message(message: str | None) -> str | None:
+    if message is None:
+        return None
+    return " ".join(redact_value(part) for part in message.split())

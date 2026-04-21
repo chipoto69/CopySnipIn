@@ -146,8 +146,8 @@ class Trade(Base):
 
     __tablename__ = "trades"
     __table_args__ = (
-        UniqueConstraint("provider_trade_id", name="uq_trades_provider_trade_id"),
         UniqueConstraint("dedupe_key", name="uq_trades_dedupe_key"),
+        Index("ix_trades_provider_trade_id", "provider_trade_id"),
         Index("ix_trades_wallet_id_trade_timestamp", "wallet_id", "trade_timestamp"),
         Index("ix_trades_market_id", "market_id"),
     )

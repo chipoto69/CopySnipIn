@@ -10,7 +10,7 @@ from sqlalchemy.sql.dml import Insert
 
 from copysnipin.db.models import ComponentHeartbeat
 from copysnipin.repositories import RepositoryWriteResult, SessionFactory
-from copysnipin.security.redaction import redact_value
+from copysnipin.security.redaction import redact_mapping, redact_value
 
 
 class HeartbeatRepository:
@@ -121,6 +121,7 @@ class HeartbeatRepository:
         stale_after_seconds: int | None,
         details: Mapping[str, Any] | None,
     ) -> Insert:
+        safe_details = redact_mapping(details) if details is not None else None
         base_statement = insert(ComponentHeartbeat).values(
             component=component,
             state=state,
@@ -128,7 +129,7 @@ class HeartbeatRepository:
             last_error_at=last_error_at,
             last_error=last_error,
             stale_after_seconds=stale_after_seconds,
-            details=dict(details) if details is not None else None,
+            details=safe_details,
         )
         set_values: dict[str, Any] = {
             "state": base_statement.excluded.state,

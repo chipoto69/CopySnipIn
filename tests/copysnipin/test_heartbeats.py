@@ -127,6 +127,37 @@ def test_error_heartbeat_redacts_error_snippet_before_persistence() -> None:
     assert "postgresql://***@localhost:5432/copysnipin" in str(params["last_error"])
 
 
+def test_heartbeat_details_are_redacted_before_persistence() -> None:
+    factory = RecordingSessionFactory()
+    repository = HeartbeatRepository(factory)
+
+    result = repository.record_error(
+        component="tracker",
+        error="provider failed",
+        observed_at=NOW,
+        details={
+            "database_url": "postgresql://worker:super-secret@localhost/copysnipin",
+            "nested": {
+                "WebhookUrl": "https://discord.com/api/webhooks/123/raw-secret",
+                "normal": "operator-readable",
+            },
+        },
+    )
+
+    statement = assert_single_transaction(factory, result)
+    params = statement_params(statement)
+    details = params["details"]
+
+    assert isinstance(details, dict)
+    assert "super-secret" not in str(details)
+    assert "raw-secret" not in str(details)
+    assert details["database_url"] == "postgresql://***@localhost/copysnipin"
+    assert details["nested"] == {
+        "WebhookUrl": "[REDACTED]",
+        "normal": "operator-readable",
+    }
+
+
 def test_degraded_and_stale_heartbeats_persist_freshness_states() -> None:
     degraded_factory = RecordingSessionFactory()
     stale_factory = RecordingSessionFactory()

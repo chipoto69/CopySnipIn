@@ -49,7 +49,7 @@ class WatermarkRepository:
     ) -> RepositoryWriteResult:
         """Advance the durable checkpoint for a wallet consumer."""
 
-        statement = self._wallet_watermark_statement(
+        statement = self._advance_wallet_watermark_statement(
             wallet_id=wallet_id,
             component=component,
             source=source,
@@ -85,4 +85,38 @@ class WatermarkRepository:
                 ),
                 "updated_at": func.now(),
             },
+        ).returning(Watermark.id)
+
+    @staticmethod
+    def _advance_wallet_watermark_statement(
+        *,
+        wallet_id: int,
+        component: str,
+        source: str,
+        last_seen_trade_id: str | None,
+        last_seen_trade_timestamp: datetime | None,
+    ) -> Insert:
+        base_statement = insert(Watermark).values(
+            wallet_id=wallet_id,
+            component=component,
+            source=source,
+            last_seen_trade_id=last_seen_trade_id,
+            last_seen_trade_timestamp=last_seen_trade_timestamp,
+        )
+        return base_statement.on_conflict_do_update(
+            constraint="uq_watermarks_wallet_id_component_source",
+            set_={
+                "last_seen_trade_id": base_statement.excluded.last_seen_trade_id,
+                "last_seen_trade_timestamp": (
+                    base_statement.excluded.last_seen_trade_timestamp
+                ),
+                "updated_at": func.now(),
+            },
+            where=(
+                Watermark.last_seen_trade_timestamp.is_(None)
+                | (
+                    base_statement.excluded.last_seen_trade_timestamp
+                    >= Watermark.last_seen_trade_timestamp
+                )
+            ),
         ).returning(Watermark.id)
