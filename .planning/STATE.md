@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 3 shipped — PR #6"
-stopped_at: Phase 4 context gathered
-last_updated: "2026-04-21T23:12:47.690Z"
+status: "Phase 4 planned"
+stopped_at: Phase 4 plans ready for execution
+last_updated: "2026-04-21T23:34:07Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 3
-  total_plans: 10
+  total_plans: 14
   completed_plans: 10
-  percent: 100
+  percent: 71
 ---
 
 # Project State
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 4 of 8 (Hermes Scanner)
-Plan: Not started
-Status: Phase 3 shipped — PR #6
+Plan: 04-01 ready for execution
+Status: Phase 4 planned
 Last activity: 2026-04-21
 
 Progress: [████------] 38%
@@ -47,6 +47,7 @@ Progress: [████------] 38%
 | 01-executable-scaffold-factory-portability | 3 | 10 min | 3 min |
 | 02 | 6 | - | - |
 | 03-provider-fixtures-domain-math | 1 | - | - |
+| 04-hermes-scanner | 4 planned | - | - |
 
 **Recent Trend:**
 
@@ -106,6 +107,8 @@ Recent decisions affecting current work:
 - [Phase 03 Plan 01]: Pyth parser outputs decode price and confidence with Decimal exponent scaling and expose stale/reconnect control states.
 - [Phase 03 Plan 01]: Qualification normalizes drawdown values before comparing ratio metrics with percent-style thresholds.
 - [Phase 03 Plan 01]: The `VAL-SCAN-007` Sharpe vector has a documented arithmetic mismatch; implementation keeps exact population math.
+- [Phase 04 Planning]: The scanner implementation is split into provider/status contracts, durable evidence and wallet lifecycle persistence, lock-aware runtime scheduling, and notification/validation evidence.
+- [Phase 04 Planning]: Phase 04 must reuse the Phase 02 database/Redis/heartbeat/notification substrate and Phase 03 Polymarket parser/domain math instead of creating parallel infrastructure.
 
 ### Pending Todos
 
@@ -129,5 +132,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Phase 4 context gathered
+Stopped at: Phase 4 plans ready for execution
 Resume file: --resume-file
