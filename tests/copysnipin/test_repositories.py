@@ -195,8 +195,7 @@ def test_advance_wallet_watermark_uses_monotonic_timestamp_guard() -> None:
 
     assert "WHERE watermarks.last_seen_trade_timestamp IS NULL" in sql
     assert (
-        "excluded.last_seen_trade_timestamp >= "
-        "watermarks.last_seen_trade_timestamp"
+        "excluded.last_seen_trade_timestamp >= watermarks.last_seen_trade_timestamp"
     ) in sql
 
 
