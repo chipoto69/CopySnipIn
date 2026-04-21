@@ -6,13 +6,12 @@ from types import ModuleType
 
 from copysnipin.config import ActiveSettings
 
-
 ROOT = Path(__file__).resolve().parents[2]
 MIGRATIONS_DIR = ROOT / "src" / "copysnipin" / "db" / "migrations"
 
 
 def test_declarative_base_has_deterministic_naming_convention() -> None:
-    from copysnipin.db.models import Base, NAMING_CONVENTION
+    from copysnipin.db.models import NAMING_CONVENTION, Base
 
     assert Base.metadata.naming_convention == NAMING_CONVENTION
     assert NAMING_CONVENTION == {
