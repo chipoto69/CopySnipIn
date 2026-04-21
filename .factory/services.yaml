@@ -22,43 +22,128 @@ services:
     depends_on: []
 
   api:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090
-    stop: pkill -f "uvicorn copysnipin.main:app" || true
-    healthcheck: curl -sf http://localhost:8090/health
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090 &
+      echo $! > .factory/run/api.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/api.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/api.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null &&
+      curl -sf http://localhost:8090/health
     port: 8090
     depends_on: [postgres, redis]
 
   scanner:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.scanner
-    stop: pkill -f "copysnipin.scanner" || true
-    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.scanner >/dev/null
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run python -m copysnipin.scanner &
+      echo $! > .factory/run/scanner.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/scanner.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/scanner.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null
     port: 0
     depends_on: [postgres, redis, api]
 
   tracker:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.tracker
-    stop: pkill -f "copysnipin.tracker" || true
-    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.tracker >/dev/null
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run python -m copysnipin.tracker &
+      echo $! > .factory/run/tracker.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/tracker.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/tracker.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null
     port: 0
     depends_on: [postgres, redis, api]
 
   simulator:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.simulator
-    stop: pkill -f "copysnipin.simulator" || true
-    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.simulator >/dev/null
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run python -m copysnipin.simulator &
+      echo $! > .factory/run/simulator.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/simulator.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/simulator.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null
     port: 0
     depends_on: [postgres, redis, api]
 
   pyth_feed:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.pyth_feed
-    stop: pkill -f "copysnipin.pyth_feed" || true
-    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.pyth_feed >/dev/null
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run python -m copysnipin.pyth_feed &
+      echo $! > .factory/run/pyth_feed.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/pyth_feed.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/pyth_feed.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null
     port: 0
     depends_on: [postgres, redis, api]
 
   dashboard:
-    start: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0 uv run python -m copysnipin.dashboard
-    stop: pkill -f "copysnipin.dashboard" || true
-    healthcheck: ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && uv run python -m copysnipin.dashboard >/dev/null
+    start: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      mkdir -p .factory/run &&
+      (DATABASE_URL=postgresql://localhost:5432/copysnipin REDIS_URL=redis://localhost:6379/0
+      uv run python -m copysnipin.dashboard &
+      echo $! > .factory/run/dashboard.pid && wait $!)
+    stop: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/dashboard.pid" &&
+      if [ -f "$PIDFILE" ]; then PID="$(cat "$PIDFILE")";
+      if kill -0 "$PID" 2>/dev/null; then kill "$PID"; fi;
+      rm -f "$PIDFILE"; fi
+    healthcheck: >-
+      ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" &&
+      PIDFILE=".factory/run/dashboard.pid" &&
+      test -f "$PIDFILE" && PID="$(cat "$PIDFILE")" &&
+      kill -0 "$PID" 2>/dev/null
     port: 0
     depends_on: [api]

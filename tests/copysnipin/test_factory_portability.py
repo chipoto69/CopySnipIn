@@ -16,10 +16,23 @@ SCAFFOLD_TARGETS = (
     "python -m copysnipin.pyth_feed",
     "python -m copysnipin.dashboard",
 )
+PID_FILE_SERVICES = ("api", "scanner", "tracker", "simulator", "pyth_feed", "dashboard")
+WORKER_SERVICES = ("scanner", "tracker", "simulator", "pyth_feed", "dashboard")
 
 
 def read_project_file(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def service_block(services_text: str, service_name: str) -> str:
+    lines = services_text.splitlines()
+    start_index = lines.index(f"  {service_name}:")
+    block_lines: list[str] = []
+    for line in lines[start_index + 1 :]:
+        if line.startswith("  ") and not line.startswith("    ") and line.endswith(":"):
+            break
+        block_lines.append(line)
+    return "\n".join(block_lines)
 
 
 def test_factory_files_do_not_reference_old_checkout_path() -> None:
@@ -48,27 +61,39 @@ def test_services_use_portable_root_discovery_and_scaffold_targets() -> None:
         assert target in services_text
 
 
-def test_scanner_stop_does_not_clean_up_api_port() -> None:
+def test_service_stops_use_pid_files_not_global_process_matching() -> None:
     services_text = read_project_file(SERVICES_YAML)
-    scanner_block = services_text.split("\n  scanner:\n", 1)[1]
-    scanner_block = scanner_block.split("\n  tracker:\n", 1)[0]
-    scanner_stop_line = next(
-        line for line in scanner_block.splitlines() if line.strip().startswith("stop:")
-    )
 
-    assert "lsof -ti :8090" not in scanner_block
-    assert "lsof" not in scanner_stop_line
-    assert ":8090" not in scanner_stop_line
+    assert "pkill -f" not in services_text
+    assert "lsof -ti" not in services_text
+
+    for service_name in PID_FILE_SERVICES:
+        block = service_block(services_text, service_name)
+
+        assert f".factory/run/{service_name}.pid" in block
+        assert 'PIDFILE=".factory/run/' in block
+        assert 'PID="$(cat "$PIDFILE")"' in block
+        assert 'kill -0 "$PID"' in block
+        assert 'kill "$PID"' in block
 
 
-def test_api_stop_targets_scaffold_api_command_not_port() -> None:
+def test_worker_healthchecks_check_existing_pid_not_new_smoke_process() -> None:
     services_text = read_project_file(SERVICES_YAML)
-    api_block = services_text.split("\n  api:\n", 1)[1]
-    api_block = api_block.split("\n  scanner:\n", 1)[0]
-    api_stop_line = next(
-        line for line in api_block.splitlines() if line.strip().startswith("stop:")
-    )
 
-    assert "uvicorn copysnipin.main:app" in api_stop_line
-    assert "lsof" not in api_stop_line
-    assert ":8090" not in api_stop_line
+    for service_name in WORKER_SERVICES:
+        block = service_block(services_text, service_name)
+        healthcheck_block = block.split("healthcheck: >-", 1)[1]
+
+        assert f".factory/run/{service_name}.pid" in healthcheck_block
+        assert 'kill -0 "$PID"' in healthcheck_block
+        assert "uv run python -m" not in healthcheck_block
+
+
+def test_api_healthcheck_requires_pid_and_http_health() -> None:
+    services_text = read_project_file(SERVICES_YAML)
+    api_block = service_block(services_text, "api")
+    healthcheck_block = api_block.split("healthcheck: >-", 1)[1]
+
+    assert ".factory/run/api.pid" in healthcheck_block
+    assert 'kill -0 "$PID"' in healthcheck_block
+    assert "curl -sf http://localhost:8090/health" in healthcheck_block
