@@ -23,9 +23,9 @@ overrides_applied: 0
 | 2 | Developer can invoke API, scanner, tracker, simulator, Pyth feed, and dashboard entry points from `src/copysnipin/`. | VERIFIED | `src/copysnipin/main.py`, `scanner.py`, `tracker.py`, `simulator.py`, `pyth_feed.py`, and `dashboard.py` exist and are tracked; `uv run python -m copysnipin.<module>` exited 0 for all six. |
 | 3 | Console scripts target the same scaffold entry points. | VERIFIED | `pyproject.toml` defines all six scripts; `uv run copysnipin-api`, `copysnipin-scanner`, `copysnipin-tracker`, `copysnipin-simulator`, `copysnipin-pyth-feed`, and `copysnipin-dashboard` all exited 0 with scaffold output. |
 | 4 | API scaffold can be imported and `/health` can be called without opening a socket. | VERIFIED | `FastAPI TestClient(copysnipin.main.app).get("/health")` returned HTTP 200 with `status=ok`, `mode=scaffold`, `zero_execution=True`, API `ok`, and scanner/tracker/simulator/Pyth/dashboard `not_implemented`. |
-| 5 | Developer can run pytest, mypy, Ruff check, and Ruff format-check successfully on the scaffold. | VERIFIED | `uv run pytest` passed 10 tests; `uv run mypy src/`, `uv run ruff check .`, and `uv run ruff format --check .` all exited 0. |
+| 5 | Developer can run pytest, mypy, Ruff check, and Ruff format-check successfully on the scaffold. | VERIFIED | `uv run pytest` passed 11 tests; `uv run mypy src/`, `uv run ruff check .`, and `uv run ruff format --check .` all exited 0. |
 | 6 | `.factory/init.sh` and `.factory/services.yaml` are workspace-portable and no longer use hard-coded old checkout paths. | VERIFIED | Both files use Git/script root discovery; `rg` found no `/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN` in factory runtime files; root discovery worked from `.factory`; `bash -n .factory/init.sh` exited 0. |
-| 7 | The committed `tests/` tree mirrors the source package layout sufficiently for Phase 1. | VERIFIED | `tests/copysnipin/` is tracked and contains import, health, entry-point, safety, and factory portability tests; `uv run pytest --collect-only -q` collected 10 tests. |
+| 7 | The committed `tests/` tree mirrors the source package layout sufficiently for Phase 1. | VERIFIED | `tests/copysnipin/` is tracked and contains import, health, entry-point, safety, and factory portability tests; `uv run pytest --collect-only -q` collected 11 tests. |
 | 8 | Phase 1 remains a safe scaffold: no real provider calls, app DB/Redis behavior, private-key/signer/order behavior, or business logic was introduced. | VERIFIED | App source only imports FastAPI, Textual, dataclasses, and local helpers; `rg` found no provider/network/DB/order/signer tokens in `src/copysnipin`; worker/dashboard output is explicit `status=scaffold not_implemented=true zero_execution=true`. Factory files retain local setup/service command wiring only. |
 
 **Score:** 8/8 truths verified
@@ -60,7 +60,7 @@ overrides_applied: 0
 | `src/copysnipin/main.py` | `/health` | FastAPI route | WIRED | `@app.get("/health")` present and TestClient returned expected scaffold payload. |
 | worker/dashboard modules | `src/copysnipin/_scaffold.py` | `scaffold_main` import | WIRED | Scanner, tracker, simulator, Pyth feed, dashboard, and API smoke main delegate to `scaffold_main`. |
 | `.factory/services.yaml` | `copysnipin.main:app` | Uvicorn API start command | WIRED | `api.start` runs `uv run uvicorn copysnipin.main:app --host 0.0.0.0 --port 8090`. |
-| `.factory/services.yaml` | worker/dashboard modules | `python -m copysnipin.<module>` | WIRED | Scanner, tracker, simulator, Pyth feed, and dashboard start/healthcheck commands target scaffold modules. |
+| `.factory/services.yaml` | worker/dashboard modules | `python -m copysnipin.<module>` | WIRED | Scanner, tracker, simulator, Pyth feed, and dashboard start commands target scaffold modules; healthchecks validate service PID files and command lines instead of spawning fresh smoke processes. |
 
 Note: `gsd-sdk query verify.key-links` reported false negatives for regex-escaped patterns in two plans and for the pyproject-to-lock relationship. Manual source inspection and command execution verified those links.
 
@@ -79,7 +79,7 @@ Note: `gsd-sdk query verify.key-links` reported false negatives for regex-escape
 |----------|---------|--------|--------|
 | Locked dependency sync | `uv sync --locked` | Resolved/audited packages, exit 0 | PASS |
 | Lockfile consistency | `uv lock --check` | Resolved packages, exit 0 | PASS |
-| Test suite | `uv run pytest` | 10 passed in 0.51s | PASS |
+| Test suite | `uv run pytest` | 11 passed | PASS |
 | Type check | `uv run mypy src/` | Success, no issues in 8 source files | PASS |
 | Ruff lint | `uv run ruff check .` | All checks passed | PASS |
 | Ruff format check | `uv run ruff format --check .` | 13 files already formatted | PASS |
@@ -89,7 +89,7 @@ Note: `gsd-sdk query verify.key-links` reported false negatives for regex-escape
 | Factory shell syntax | `bash -n .factory/init.sh` | Exit 0 | PASS |
 | Factory old path absence | `rg -n "/Users/rudlord/ORGANIZED/TRADING/COPYSNIPIN" .factory/init.sh .factory/services.yaml` | No matches | PASS |
 | Factory root discovery from `.factory` | `ROOT="$(git rev-parse --show-toplevel)" && cd "$ROOT" && pwd` | Printed active Conductor workspace root | PASS |
-| Test collection mirror | `uv run pytest --collect-only -q` | 10 tests collected under `tests/copysnipin/` | PASS |
+| Test collection mirror | `uv run pytest --collect-only -q` | 11 tests collected under `tests/copysnipin/` | PASS |
 
 ### Requirements Coverage
 
@@ -99,7 +99,7 @@ Note: `gsd-sdk query verify.key-links` reported false negatives for regex-escape
 | FOUND-02 | 01-02 | Developer can run package entry points for API, scanner, tracker, simulator, Pyth feed, and dashboard from `src/copysnipin/`. | SATISFIED | Source modules exist; module and console-script smoke checks passed for all six entry points. |
 | FOUND-03 | 01-01, 01-02, 01-03 | Developer can run pytest, mypy, Ruff check, and Ruff format-check successfully on the scaffold. | SATISFIED | Full quality gate commands all passed. |
 | FOUND-04 | 01-03 | `.factory/init.sh` and `.factory/services.yaml` resolve active repository root dynamically instead of hard-coding an absolute checkout path. | SATISFIED | Runtime factory files contain root discovery and no old checkout path; portability tests pass. |
-| FOUND-05 | 01-01, 01-02, 01-03 | Repository contains committed `tests/` tree mirroring `src/copysnipin/` package layout. | SATISFIED | `git ls-files` shows `tests/copysnipin/` files tracked; collect-only found 10 tests. |
+| FOUND-05 | 01-01, 01-02, 01-03 | Repository contains committed `tests/` tree mirroring `src/copysnipin/` package layout. | SATISFIED | `git ls-files` shows `tests/copysnipin/` files tracked; collect-only found 11 tests. |
 
 No orphaned Phase 1 requirements were found. `.planning/REQUIREMENTS.md` maps exactly FOUND-01 through FOUND-05 to Phase 1.
 
