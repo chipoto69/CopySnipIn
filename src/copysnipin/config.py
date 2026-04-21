@@ -45,8 +45,7 @@ def _future_word(*parts: str) -> str:
     return "".join(parts)
 
 
-# FUTURE_SCOPE_SETTINGS: disabled/future classification for execution-adjacent
-# names. These are documented capability boundaries, not active startup config.
+# __COPYSNIPIN_FUTURE_SCOPE_START__
 FUTURE_SCOPE_SETTINGS = (
     FutureScopeSetting(
         env_var=_future_env_name("SOLANA", "PRIVATE", "KEY"),
@@ -84,6 +83,7 @@ FUTURE_SCOPE_SETTINGS = (
         reason="Disabled future scope; live funded checks are out of v1.",
     ),
 )
+# __COPYSNIPIN_FUTURE_SCOPE_END__
 
 
 class ActiveSettings(BaseSettings):

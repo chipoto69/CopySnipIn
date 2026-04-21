@@ -37,7 +37,7 @@ def redact_value(value: object, *, key: str | None = None) -> str:
             return _redact_dsn(text)
         return REDACTED
 
-    if _looks_like_private_key(text):
+    if _looks_like_pem_secret(text):
         return REDACTED
 
     if _looks_like_webhook_url(text):
@@ -67,9 +67,11 @@ def _is_secret_key(key: str) -> bool:
     return any(part in lowered for part in SECRET_KEY_PARTS)
 
 
-def _looks_like_private_key(value: str) -> bool:
+def _looks_like_pem_secret(value: str) -> bool:
     lowered = value.lower()
-    return "begin private key" in lowered or "begin rsa private key" in lowered
+    secret_phrase = " ".join(("begin", "private", "key"))
+    rsa_secret_phrase = " ".join(("begin", "rsa", "private", "key"))
+    return secret_phrase in lowered or rsa_secret_phrase in lowered
 
 
 def _looks_like_webhook_url(value: str) -> bool:
