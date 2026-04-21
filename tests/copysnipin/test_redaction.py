@@ -19,10 +19,7 @@ def test_redact_value_masks_database_and_redis_dsn_credentials() -> None:
 
 
 def test_redact_value_masks_webhook_urls_and_token_values() -> None:
-    webhook_url = (
-        "https://discord.com/api/webhooks/123456/"
-        "webhook-secret-token-value"
-    )
+    webhook_url = "https://discord.com/api/webhooks/123456/webhook-secret-token-value"
     pyth_token = "pyth-token-with-enough-entropy"
 
     redacted_webhook = redact_value(webhook_url)

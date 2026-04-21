@@ -80,9 +80,7 @@ def test_optional_secret_settings_do_not_leak_in_safe_representations(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     clear_active_env(monkeypatch)
-    webhook_secret = (
-        "https://discord.com/api/webhooks/123456/raw-webhook-secret"
-    )
+    webhook_secret = "https://discord.com/api/webhooks/123456/raw-webhook-secret"
     telegram_token = "telegram-token-secret"
     monkeypatch.setenv("DISCORD_WEBHOOK_URL", webhook_secret)
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", telegram_token)
