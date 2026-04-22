@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 3 shipped — PR #6"
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-04-21T22:21:07.775Z"
-last_activity: 2026-04-21
+status: "Phase 4 plan 01 complete"
+stopped_at: Phase 4 plan 02 ready for execution
+last_updated: "2026-04-22T03:09:12Z"
+last_activity: 2026-04-22
 progress:
   total_phases: 8
   completed_phases: 3
-  total_plans: 10
-  completed_plans: 10
-  percent: 100
+  total_plans: 14
+  completed_plans: 11
+  percent: 79
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-04-21)
 ## Current Position
 
 Phase: 4 of 8 (Hermes Scanner)
-Plan: Not started
-Status: Phase 3 shipped — PR #6
-Last activity: 2026-04-21
+Plan: 04-02 ready for execution
+Status: Phase 4 plan 01 complete
+Last activity: 2026-04-22
 
 Progress: [████------] 38%
 
@@ -47,6 +47,7 @@ Progress: [████------] 38%
 | 01-executable-scaffold-factory-portability | 3 | 10 min | 3 min |
 | 02 | 6 | - | - |
 | 03-provider-fixtures-domain-math | 1 | - | - |
+| 04-hermes-scanner | 4 planned | - | - |
 
 **Recent Trend:**
 
@@ -61,6 +62,7 @@ Progress: [████------] 38%
 | Phase 02-safety-configuration-data-backbone P05 | 8min | 2 tasks | 8 files |
 | Phase 02-safety-configuration-data-backbone P06 | 9min | 3 tasks | 10 files |
 | Phase 03-provider-fixtures-domain-math P01 | - | 8 tasks | 21 files |
+| Phase 04-hermes-scanner P01 | - | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -106,6 +108,10 @@ Recent decisions affecting current work:
 - [Phase 03 Plan 01]: Pyth parser outputs decode price and confidence with Decimal exponent scaling and expose stale/reconnect control states.
 - [Phase 03 Plan 01]: Qualification normalizes drawdown values before comparing ratio metrics with percent-style thresholds.
 - [Phase 03 Plan 01]: The `VAL-SCAN-007` Sharpe vector has a documented arithmetic mismatch; implementation keeps exact population math.
+- [Phase 04 Planning]: The scanner implementation is split into provider/status contracts, durable evidence and wallet lifecycle persistence, lock-aware runtime scheduling, and notification/validation evidence.
+- [Phase 04 Planning]: Phase 04 must reuse the Phase 02 database/Redis/heartbeat/notification substrate and Phase 03 Polymarket parser/domain math instead of creating parallel infrastructure.
+- [Phase 04 Plan 01]: Scanner provider transport/retry behavior is separated from Phase 03 parser functions through `copysnipin.hermes_scanner`.
+- [Phase 04 Plan 01]: Default scanner provider tests use fake fixture-backed data and do not call live Polymarket or external services.
 
 ### Pending Todos
 
@@ -129,5 +135,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Completed 03-01-PLAN.md
+Stopped at: Phase 4 plan 02 ready for execution
 Resume file: --resume-file
