@@ -138,9 +138,11 @@ def test_total_api_failure_is_bounded_and_does_not_raise() -> None:
     calls = 0
 
     def fetch_page(
-        _limit: int,
-        _offset: int,
+        limit: int,
+        offset: int,
     ) -> tuple[tuple[object, ...], ParsedPage]:
+        assert limit == 50
+        assert offset == 0
         nonlocal calls
         calls += 1
         raise ProviderTransportError(
@@ -181,3 +183,47 @@ def test_individual_trader_failure_is_isolated_to_wallet_result() -> None:
     assert result.degraded is True
     assert result.statuses[0].source == "profile"
     assert result.statuses[0].status is ProviderStatus.MALFORMED
+
+
+def test_unexpected_wallet_exception_is_captured_as_failed_status() -> None:
+    provider = FakePolymarketScannerProvider(
+        leaderboard_pages={0: load_fixture("leaderboard_empty.json")},
+        profiles={WALLET: load_fixture("profile_success.json")},
+        positions_by_wallet={WALLET: load_fixture("positions_success.json")},
+        trades_by_wallet={WALLET: load_fixture("trades_success.json")},
+        profile_failures={WALLET: RuntimeError("boom")},
+    )
+
+    result = fetch_wallet_source_data(provider, WALLET)
+
+    assert result.profile is None
+    assert result.positions
+    assert result.trades
+    assert result.degraded is True
+    assert result.statuses[0].source == "profile"
+    assert result.statuses[0].status is ProviderStatus.FAILED
+    assert result.statuses[0].error_message == "boom"
+
+
+def test_max_pages_with_zero_next_offset_marks_result_degraded() -> None:
+    def fetch_page(
+        *,
+        limit: int,
+        offset: int,
+    ) -> tuple[tuple[object, ...], ParsedPage]:
+        assert limit == 0
+        assert offset == 0
+        return (), ParsedPage(item_count=0, next_offset=0)
+
+    result = fetch_all_leaderboard_pages(
+        fetch_page,  # type: ignore[arg-type]
+        limit=0,
+        retry_policy=RetryPolicy(max_pages=2),
+    )
+
+    assert len(result.statuses) == 3
+    assert result.statuses[-1].status is ProviderStatus.FAILED
+    assert (
+        result.statuses[-1].error_message == "maximum leaderboard page count exceeded"
+    )
+    assert result.degraded is True

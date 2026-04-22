@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from decimal import Decimal
+from time import sleep as sleep_seconds
 from typing import Protocol
 
 from copysnipin.hermes_scanner.types import (
@@ -29,10 +30,18 @@ from copysnipin.providers.polymarket import (
 )
 
 SleepFn = Callable[[Decimal], None]
-LeaderboardFetchFn = Callable[
-    [int, int],
-    tuple[tuple[PolymarketLeaderboardEntry, ...], ParsedPage],
-]
+
+
+class LeaderboardFetchFn(Protocol):
+    """Callable contract for scanner leaderboard page retrieval."""
+
+    def __call__(
+        self,
+        *,
+        limit: int,
+        offset: int,
+    ) -> tuple[tuple[PolymarketLeaderboardEntry, ...], ParsedPage]:
+        """Return one leaderboard page with pagination metadata."""
 
 
 class PolymarketScannerProvider(Protocol):
@@ -140,7 +149,7 @@ def fetch_all_leaderboard_pages(
     """Traverse leaderboard pages with bounded retry and fakeable sleeps."""
 
     policy = retry_policy or RetryPolicy()
-    sleeper = sleep or _no_sleep
+    sleeper = sleep or _sleep_for_delay
     offset = 0
     page_count = 0
     entries: list[PolymarketLeaderboardEntry] = []
@@ -162,7 +171,11 @@ def fetch_all_leaderboard_pages(
             break
         offset = status.next_offset
 
-    if page_count >= policy.max_pages and statuses and statuses[-1].next_offset:
+    if (
+        page_count >= policy.max_pages
+        and statuses
+        and statuses[-1].next_offset is not None
+    ):
         statuses.append(
             ProviderCallStatus(
                 source="leaderboard",
@@ -220,11 +233,13 @@ def _fetch_leaderboard_page_with_retry(
     retry_policy: RetryPolicy,
     sleep: SleepFn,
 ) -> tuple[tuple[PolymarketLeaderboardEntry, ...], ProviderCallStatus]:
+    """Fetch one page with bounded retries for retryable provider failures."""
+
     last_status: ProviderCallStatus | None = None
 
     for attempt in range(1, retry_policy.max_attempts + 1):
         try:
-            entries, page = fetch_page(limit, offset)
+            entries, page = fetch_page(limit=limit, offset=offset)
             status = _status_from_page(page, attempts=attempt, offset=offset)
         except ProviderPayloadError as exc:
             status = ProviderCallStatus(
@@ -267,6 +282,8 @@ def _safe_call[T](
     source: str,
     call: Callable[[], T],
 ) -> tuple[T | None, ProviderCallStatus]:
+    """Execute a provider call and convert failures into scanner status objects."""
+
     try:
         value = call()
     except ProviderPayloadError as exc:
@@ -288,6 +305,12 @@ def _safe_call[T](
             status=ProviderStatus.FAILED,
             error_message=str(exc),
         )
+    except Exception as exc:
+        return None, ProviderCallStatus(
+            source=source,
+            status=ProviderStatus.FAILED,
+            error_message=str(exc),
+        )
     return value, ProviderCallStatus(source=source, status=ProviderStatus.OK)
 
 
@@ -297,6 +320,8 @@ def _status_from_page(
     attempts: int,
     offset: int,
 ) -> ProviderCallStatus:
+    """Build one scanner-facing status object from parser page metadata."""
+
     return ProviderCallStatus(
         source="leaderboard",
         status=provider_status_from_failure(page.failure),
@@ -309,6 +334,8 @@ def _status_from_page(
 
 
 def _is_retryable(status: ProviderCallStatus) -> bool:
+    """Return whether a provider status should be retried by policy."""
+
     return status.status in {
         ProviderStatus.RATE_LIMITED,
         ProviderStatus.SERVER_ERROR,
@@ -320,10 +347,14 @@ def _delay_for_status(
     status: ProviderCallStatus,
     retry_policy: RetryPolicy,
 ) -> Decimal:
+    """Choose retry delay from `Retry-After` or the fallback retry policy."""
+
     if status.retry_after_seconds is not None:
         return Decimal(status.retry_after_seconds)
     return retry_policy.backoff_seconds
 
 
-def _no_sleep(_: Decimal) -> None:
-    return None
+def _sleep_for_delay(delay: Decimal) -> None:
+    """Sleep for the provided decimal delay value in seconds."""
+
+    sleep_seconds(float(delay))

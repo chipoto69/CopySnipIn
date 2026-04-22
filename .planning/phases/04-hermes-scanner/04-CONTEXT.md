@@ -148,7 +148,7 @@ accounts, or introduce execution-adjacent provider clients.
 ### Reusable Assets
 
 - `ActiveSettings` contains scanner interval and threshold values.
-- `RedisOwnerLock` can enforce scanner overlap protection without making Redis
+- `OwnerTokenRedisLock` can enforce scanner overlap protection without making Redis
   durable state.
 - `WalletRepository`, `NotificationRepository`, `ValidationEvidenceRepository`,
   and `HeartbeatRepository` provide persistence patterns that Phase 4 should

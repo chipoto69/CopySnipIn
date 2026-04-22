@@ -110,7 +110,7 @@ Recommended new source layout:
 
 ```text
 src/copysnipin/scanner.py
-src/copysnipin/scanner/
+src/copysnipin/hermes_scanner/
   __init__.py
   runtime.py
   service.py
@@ -120,9 +120,9 @@ src/copysnipin/scanner/
 src/copysnipin/repositories/scanner.py
 ```
 
-If a package/module name collision with the existing `scanner.py` would be too
-disruptive, use a package such as `src/copysnipin/hermes_scanner/` while keeping
-`src/copysnipin/scanner.py` as the entry point wrapper.
+`python -m copysnipin.scanner` currently uses `src/copysnipin/scanner.py` as the
+entry-point module. If scanner becomes a package entry point in the future, it
+must include `src/copysnipin/scanner/__main__.py`.
 
 Recommended tests:
 
@@ -157,4 +157,3 @@ tests/copysnipin/test_scanner_notifications.py
 - API/dashboard read models for scanner status are future scope, but Phase 04
   can expose status through durable heartbeats and scanner run records.
 - Phase 04 validation-index rows still point to pending evidence.
-
